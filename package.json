@@ -15,6 +15,7 @@
     "connect-mongo": "^1.1.0",
     "crypto-js": "^3.1.9-1",
     "ejs": "2.3.4",
+    "google-translate-api": "^2.3.0",
     "google-tts-api": "0.0.1",
     "gridfs-stream": "^1.1.1",
     "grunt": "0.4.5",
@@ -35,13 +36,15 @@
     "grunt-sails-linker": "~0.10.1",
     "grunt-sass": "^1.2.1",
     "grunt-sync": "0.2.4",
+    "hot-formula-parser": "^3.0.0",
     "include-all": "^0.1.6",
     "install": "^0.8.1",
     "ip": "^1.1.5",
     "jimp": "^0.2.27",
     "jquery-param": "^1.0.0",
     "json2xls": "^0.1.2",
-	"jsonwebtoken": "^8.2.1",
+    "jsonwebtoken": "^8.2.1",
+    "jssoup": "0.0.10",
     "lackey-mongoose-ref-validator": "0.0.3",
     "lodash": "^4.14.2",
     "md5": "^2.1.0",
@@ -76,6 +79,7 @@
     "sails-wohlig-controller": "latest",
     "sails-wohlig-service": "latest",
     "sails.io.js": "^1.1.13",
+    "secure-env": "^1.0.0",
     "sendgrid": "^5.0.0"
   },
   "scripts": {
@@ -102,4 +106,3 @@
     "nodemon": "^1.11.0"
   }
 }
-

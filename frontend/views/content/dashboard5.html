@@ -561,12 +561,12 @@
             </uib-tabset>
         </div> 
     </div>
-<div class="col-md-12 fspanel" style="display:none;">    
+<!-- <div class="col-md-12 fspanel" style="display:none;">    
     <div class="row">
         <div  class="col-md-12 oscr">
             <uib-tabset active="active" id="tab_data2" ng-init="indextab = 0" ng-show="fstabs.length>0" ng-style="{height: tabHeight + 'px'}">
                 <uib-tab index="$index"  class="collapseheading "     ng-repeat="row in fstabs track by $index"  ng-init="$tIndex2=$index" indval="{{$tIndex2}}"  >
-                    <!-- heading="{{row}}" -->
+                    
                     <uib-tab-heading>
                         {{row}}
                     </uib-tab-heading>
@@ -579,8 +579,6 @@
 					<div class ="tab-con2"  ng-if="row ==='Documents'" >
 					<p style="display:none">{{fstabvalue}}</p>
                         <div id="docs" ng-repeat="docss in fstabvalue[$tIndex2].docs track by $index">
-							<!--<a ng-href="{{serverip}}/cingulariti/uploads/{{fstabvalue[$index].title}}" target="_blank">{{fstabvalue[$index].title}}</a>-->
-							<!--<a ng-href="{{serverip}}/cingulariti/json/downloadfile?file={{docss.title}}"  download="{{docss.title}}" target="_blank">{{docss.title}}</a>-->
 							<a ng-href="{{dmpurl}}/downloads/downlibdata?filename={{docss.title}}"  download="{{docss.title}}" target="_blank">{{docss.title}}</a>
                         </div>
                     </div>
@@ -594,62 +592,30 @@
         <section class="panel">
             <div class="panel-body">
                 <div class="col-md-4 col-sm-4">
-                    <!-- <marquee direction="left" speed="normal" behavior="loop"  class="news_text yellowbg">Important Notice : Please update your personal details before 1st July 2017</marquee> -->
                     
                     <div class="row cards">
-                        <!-- <div class="col-md-3 dashboardtiles">
-                            <div class="widgetcard card " >
-                                <div class="  card-header" data-background-color="kotakblue">
-                                    <div class="">
-                                        <h3 class="card-title"><i class=" icon-search"></i> Top 5 searches &nbsp; &nbsp; &nbsp; &nbsp;</h3>
-                                        
-                                    </div>
-                                </div>
-                                <div class="table_panel">
-                                    <table id="topsearchtable" class="table table-hover  personal-task">
-                                        <tbody>
-                                            <tr>
-                                                <td>IFSC code for branch</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Location of Branch</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Change in contact details</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- ng-click="isCollapsed_c = !isCollapsed_c" -->
-                        <!-- uib-collapse="isCollapsed_c" -->
+                        
                         <div class="col-md-12 dashboardtiles">
                             <div class="widgetcard card c1" >
                                 <div class="card-header" data-background-color="kotakblue">
                                     <div class="">
                                         <h3 class="card-title"><i class="fa fa-cogs"></i> New Process 
                                             
-                                            <!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-right': isCollapsed_c, 'glyphicon-chevron-down': !isCollapsed_c}"></i> -->
                                         </h3>
                                         <div class="notify-row">
                                             <i class="fa fa-bell-o"></i>
                                             <span class="badge bg-warning" ng-if="noticount > 0">
 												{{noticount}}
-												<!--{{ journeycount }}-->
+												
 											</span>
                                         </div>
                                     </div>
-                                    <!-- <div class="exporttoexcl">
-                                        <button class="btn btn-primary btn-xs" ng-click="exportToExcel('#notificationtable')" type="button" >
-                                            <span class="glyphicon glyphicon-export"></span>Exoprt
-                                        </button>
-                                    </div> -->
+                                    
                                 </div>
                                 <div class="table_panel" >
                                     <table id="notificationtable" class="table table-hover  personal-task">
                                         <tbody>
-                                            <!--<tr ng-repeat="nt in myjourneys track by $index" data-id="{{myjourneys[$index]._id}}" data-index="{{$index}}">-->
+                                            
 											<tr ng-repeat="nt in notifications track by $index" data-id="{{notifications[$index]._id}}" data-index="{{$index}}">
                                                 <td ng-click="readnotiit(notifications[$index]._id);">
 													<p>
@@ -657,7 +623,7 @@
 															{{nt.Title}}
 														</span>
 														<span ng-if="nt.TickerType=='Documents' && nt.DocFile.length>0">
-															<!--<a ng-href="{{dmpurl}}/uploads/{{nt.DocFile[0]}}" target="_blank">{{nt.Title}}</a>-->
+															
 															<a ng-href="{{dmpurl}}/notification/downloadnotificationdata?filename={{nt.DocFile[0]}}" target="_blank">{{nt.Title}}</a>
 														</span>
 														<span ng-if="nt.TickerType=='Link'">
@@ -668,12 +634,6 @@
 													
                                                 </td>
                                             </tr>
-                                            <!-- <tr>
-                                                <td>Process to follow in-case of bad weather</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Queries related to new Rs.200 notes</td>
-                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -687,7 +647,6 @@
                                     <div class="">
                                         <h3 class="card-title"><i class="fa fa-envelope-o"></i> Message Centre &nbsp; &nbsp;  &nbsp; &nbsp;
                                             
-                                            <!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-right': isCollapsed_c1, 'glyphicon-chevron-down': !isCollapsed_c1}"></i> -->
                                         </h3>
                                         <div class="notify-row">
                                             <i class="fa fa-bell-o"></i>
@@ -698,9 +657,6 @@
                                 <div class="table_panel" >
                                     <table id="posttable" class="table table-hover  personal-task">
                                         <tbody>
-                                            <!-- <tr>
-                                                <td>Dummy text</td>
-                                            </tr> -->
                                              <tr ng-repeat="nt in postit track by $index" data-id="{{postit[$index]._id}}" data-index="{{$index}}">
                                                 <td ng-click="readpostit(postit[$index]._id);">
                                                     <p>
@@ -714,13 +670,6 @@
 															<a ng-href="{{nt.LinkURL}}" target="_blank">{{nt.Title}}</a>
 														</span>
 													</p>
-													<!--<p>{{nt.Title}}</p>
-                                                    <span ng-if="nt.DocFile.length>0">
-                                                        <a ng-href="{{serverip}}/cingulariti/uploads/{{nt.DocFile[0]}}" target="_blank">Click Here</a>
-                                                    </span>
-                                                    <span ng-if="nt.TickerType=='Link'">
-                                                        <a ng-href="{{nt.LinkURL}}" target="_blank">Click Here</a>
-                                                    </span>-->
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -736,18 +685,12 @@
                                     <div class="">
                                         <h3 class="card-title"><i class="icon-book"></i> Unanswered Queries
                                             
-                                            <!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-right': isCollapsed_c2, 'glyphicon-chevron-down': !isCollapsed_c2}"></i> -->
                                         </h3>
                                         <div class="notify-row">
                                             <i class="fa fa-bell-o"></i>
                                             <span class="badge bg-warning" ng-if="unansfcount > 0">{{unansfcount}}</span>
                                         </div>
                                     </div>
-                                    <!-- <div class="exporttoexcl">
-                                        <button class="btn btn-primary btn-xs" ng-click="exportToExcel('#unanstable')" type="button" >
-                                            <span class="glyphicon glyphicon-export"></span>Exoprt
-                                        </button>
-                                    </div> -->
                                 </div>
                                 <div class="table_panel" >
                                     <table id="unanstable" class="table table-hover  personal-task">
@@ -775,7 +718,7 @@
                                                     <div class="faqques">
                                                         <p class="lastmsg" >
                                                             <a href="#"  ng-class="{'answered':unansq.handle==1,'unanswered':unansq.handle==0}" ng-click="getunansq(unansq.new_question,2,$index,unansq.old_question,unansq.mainquery,unansq._id,unansq.conversationid,unansq.dthyperlink,unansq.interaction_index,$event);">
-                                                                <!--<span >{{unansq.mainquery}}</span> -->
+                                                                
 																<span ng-if="unansq.new_question==''">
 																	Query:{{unansq.mainquery}}
 																</span>
@@ -789,73 +732,6 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <!-- <tr>
-                                                <td>
-                                                    <div class="faqques">
-                                                        <p class="lastmsg" >
-                                                            <a href="#"  class="answered" ng-click="getunansq('dd issuance',$event);">
-                                                                <span >DD Issuance</span>
-                                                            </a>
-                                                        </p>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="faqques">
-                                                        <p class="lastmsg" >
-                                                            <a href="#" class="answered" ng-click="getunansq('ATM address for mahim',$event);">
-                                                                <span >ATM address for mahim</span>
-                                                            </a>
-                                                        </p>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="faqques">
-                                                        <p class="lastmsg" >
-                                                            <a href="#" class="unanswered" ng-click="getunansq('Test',$event);">
-                                                                <span >Test</span>
-                                                            </a>
-                                                        </p>
-                                                    </div>
-                                                </td>
-                                            </tr> -->
-                                            <!-- <tr>
-                                                <td>
-                                                    <div class="faqques">
-                                                        <p class="lastmsg" >
-                                                            <a href="#" >
-                                                                <span >Staff at Kalyan branch is very rude. I want to make a complaint, how do I do it?  </span>
-                                                            </a>
-                                                        </p>
-                                                    </div>
-                                                    <div class="faqans" style="display:none;">
-                                                            <span >
-                                                                We are sorry to hear that. Please mail us your complaint at the following email id (customer_complaints@kotak.com) with your contact details. We will connect with you within 24 hours.       
-                                                            </span>
-                                                        
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="faqques">
-                                                        <p class="lastmsg" >
-                                                            <a href="#" >
-                                                                <span >Please help me with loans?</span>
-                                                            </a>
-                                                        </p>
-                                                    </div>
-                                                    <div class="faqans" style="display:none;">
-                                                            <span >
-                                                                Please let us know whether you are looking for personal loan or a car loan. We will then assist you with details.
-                                                            </span>
-                                                        
-                                                    </div>
-                                                </td>
-                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -884,7 +760,11 @@
              </section>
         </div>                        
     </div>
-</div>
-<div id="chatImage"   class="step1click">
+</div> -->
+<!-- <div id="chatImage"   class="step1click">
     <img class="clickImage chatbotimg" id="clickImage" src="img/Kaira11.png"  id="stepclick1" ng-click="showChatwindow();">
+</div> -->
+<div id="chat-circle" class="btn btn-raised">
+    <div id="chat-overlay"></div>
+    <img src ="img/launcher-icon.png" class="clickImage chatbotimg" id="clickImage" id="stepclick1" ng-click="showChatwindow();">
 </div>

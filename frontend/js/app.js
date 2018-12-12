@@ -14,7 +14,7 @@ var myApp = angular.module('myApp', [
     'ngCookies',
     'ngResource',
     'ngIdle',
-    //'app.directives',
+    'app.directives',
     //'voiceRss',
     'jlareau.bowser',
     'ui.select2',
@@ -183,10 +183,10 @@ $rootScope.sailscsrf="111";
         $rootScope.browser = "samsungBrowser"; //native
     if ( bowser.msedge )
         $rootScope.browser = "msedge";
-    $rootScope.serverip="http://10.240.21.20";
-	$rootScope.dmpdomain=":8091/cingularitiprod";
-	$rootScope.dmpurl=$rootScope.serverip+":8091/cingularitiprod";
-	$rootScope.serverport = ":8003";
+    $rootScope.serverip="https://cingulariti.in";
+    $rootScope.dmpdomain="RBLdm";
+    $rootScope.dmpurl="http://cingulariti.in/RBLdm";
+	$rootScope.serverport = ":9003";
     $rootScope.transcript="";
     $rootScope.tabvalue={};
     $rootScope.rotated = false;

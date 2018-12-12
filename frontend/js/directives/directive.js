@@ -37,6 +37,224 @@ myApp.directive('img', function ($compile, $parse) {
             }
         };
     })
+    .directive('langCase1', function ($compile, $parse) {
+        return {
+            restrict: 'A',
+            replace: false,
+            link: function ($scope, element, attrs) {
+                var $element = $(element);
+                if (!attrs.noloading) {
+                    $element.after("<img src='img/loading.gif' class='loading' />");
+                    var $loading = $element.next(".loading");
+                    $element.load(function () {
+                        $loading.remove();
+                        $(this).addClass("doneLoading");
+                    });
+                } else {
+                    $($element).addClass("doneLoading");
+                }
+            }
+        };
+    })
+    .directive('compTranslate', function ($compile, apiService,$sce) {
+        return {
+            restrict: 'A',
+            scope: true,
+            priority: 0,
+            compile: function (element, attrs) {
+                var originalText = element.text();
+                //var originalTooltip = attrs['tooltip'];
+                //console.log(originalText);
+                return {
+                    pre: function (scope, element, attrs) {
+                        scope.originalText = originalText;
+                        //scope.originalTooltip = originalTooltip;
+                    
+                        
+                        var translationChangeOccurred = function () {
+                            attrs.$observe('compTranslate', function(value) {
+                                var languageid = $.jStorage.get("language");
+                                var formData = { "text": value,"language":languageid };
+                                //console.log(formData);
+                                //element.text(value);
+                                //element.html(apiService.translate(formdata));
+                                if(languageid == "en")
+                                {
+                                    
+                                    hcont=$.parseHTML(value);
+                                    element.html(hcont);
+                                    $( "ul.chat li:last-child" ).removeClass('langcase');
+                                }
+                                else 
+                                {
+                                    apiService.translate(formData).then( function (response) {
+                                        // html =$sce.trustAsHtml(response.data.data);
+                                        // bindhtml = "<span ng-bind-html='"+html+"'>{{"+html+"}}<span>";
+                                        //console.log(response.data.data);
+                                        element.html(response.data.data);
+                                        $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    });
+                                }
+                                    // if (scope.originalTooltip) {
+                                //     attrs.$set('tooltip', translationService.translate(scope.originalTooltip));
+                                // }
+                                $compile(element.contents())(scope);
+                                
+                            });
+                        };
+                        //translation changes by default while linking!
+                        translationChangeOccurred();
+            
+                        scope.$on('$translationLanguageChanged', translationChangeOccurred);
+                    },
+                    post: function () {
+                    }
+                };
+            }
+        };
+    })
+    .directive('filterTranslate', function ($compile, apiService,$sce) {
+        return {
+            restrict: 'A',
+            scope: true,
+            priority: 0,
+            compile: function (element, attrs) {
+                var originalText = element.text();
+                //var originalTooltip = attrs['tooltip'];
+                //console.log(originalText);
+                return {
+                    pre: function (scope, element, attrs) {
+                        scope.originalText = originalText;
+                        //scope.originalTooltip = originalTooltip;
+                    
+                        var translationChangeOccurred = function () {
+                            attrs.$observe('filterTranslate', function(value) {
+                                var languageid = $.jStorage.get("language");
+                                value = value.replace(new RegExp('('+$(".chatinput").val()+')', 'gi'),
+                                    '<span class="highlighted"> $& </span>');
+                                var formData = { "text": value,"language":languageid };
+                                //console.log(element);
+                                //element.text(value);
+                                //element.html(apiService.translate(formdata));
+                                
+                                //console.log(value);
+                                if(languageid == "en")
+                                {
+                                    hcont=$.parseHTML(value);
+                                    element.html(hcont);
+                                    $( "ul.chat li:last-child" ).removeClass('langcase');
+                                }
+                                else 
+                                {
+                                    apiService.translate(formData).then( function (response) {
+                                        // html =$sce.trustAsHtml(response.data.data);
+                                        // bindhtml = "<span ng-bind-html='"+html+"'>{{"+html+"}}<span>";
+                                        //console.log(response.data.data);
+                                        texttoreplace = response.data.data;
+                                        texttoreplace=texttoreplace.replace('<span class = \"highlighted\">', '<span class = "highlighted">'); 
+                                        texttoreplace=texttoreplace.replace('</ span>', '</span>'); 
+                                        element.html(texttoreplace);
+                                        $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    });
+                                }
+                                    // if (scope.originalTooltip) {
+                                //     attrs.$set('tooltip', translationService.translate(scope.originalTooltip));
+                                // }
+                                $compile(element.contents())(scope);
+                                
+                            });
+                        };
+                        //translation changes by default while linking!
+                        translationChangeOccurred();
+            
+                        scope.$on('$translationLanguageChanged', translationChangeOccurred);
+                    },
+                    post: function () {
+                    }
+                };
+            }
+        };
+    })
+    .directive('compTranslater', function ($compile, apiService,$sce) {
+        return {
+            restrict: 'EA',
+            scope: true,
+            priority: 0,
+            compile: function (element, attrs) {
+                var originalText = element.text();
+                //var originalTooltip = attrs['tooltip'];
+                //console.log(originalText);
+                return {
+                    pre: function (scope, element, attrs) {
+                        scope.originalText = originalText;
+                        //scope.originalTooltip = originalTooltip;
+                    
+                        var hcont = "";
+                        var translationChangeOccurred = function () {
+                            attrs.$observe('compTranslater', function(value) {
+                                var languageid = $.jStorage.get("language");
+                                contents = attrs.content;  
+                                contents=contents.replace('↵',' <br> ');  
+                                //contents=contents.replace(" ",' <br> '); 
+                                contents = contents.replace("\n","<br>");     
+                                contents = contents.replace(new RegExp("../static/data_excel/", 'g'), adminurl2+'static/data_excel/');     
+                                var formData = { "text": contents,"language":languageid };
+                                //element.text(value);
+                                //element.html(apiService.translate(formdata));
+                                if(languageid == "en")
+                                {
+                                    hcont=$.parseHTML(contents);
+                                    element.html(hcont);
+                                    $( "ul.chat li:last-child" ).removeClass('langcase');
+                                }
+                                else 
+                                {
+                                    apiService.translate(formData).then( function (response) {
+                                        // html =$sce.trustAsHtml(response.data.data);
+                                        // bindhtml = "<span ng-bind-html='"+html+"'>{{"+html+"}}<span>";
+                                        //hcont = $sce.trustAsHtml(response.data.data);
+                                        hcont=$.parseHTML(response.data.data);
+                                        
+                                        //hcont= $compile(hcont)(scope);
+                                        element.html(hcont);
+                                        $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    });
+                                // if (scope.originalTooltip) {
+                                //     attrs.$set('tooltip', translationService.translate(scope.originalTooltip));
+                                // }
+                                }
+                                $compile(element.contents())(scope);
+                                
+                            });
+                            // scope.$watch(
+                            //     function(scope) {
+                            //         return scope.$eval(attrs.compile);
+                            //         //$compile(element.contents())(scope);
+                            //     },
+                            //     function(value) {
+                            //         // when the 'compile' expression changes
+                            //         // assign it into the current DOM
+                            //         element.html(hcont);
+
+                            //         // compile the new DOM and link it to the current
+                            //         // scope.
+                            //         // NOTE: we only compile .childNodes so that
+                            //         // we don't get into infinite loop compiling ourselves
+                            //         $compile(element.contents())(scope);
+                            //     }                                    
+                            // );
+                        };
+                        //translation changes by default while linking!
+                        translationChangeOccurred();
+            
+                        scope.$on('$translationLanguageChanged', translationChangeOccurred);
+                    },
+                    post: function () {
+                    }
+                };
+            }
+        };
+    })
 	/*
 	.directive('fancyboxable', function ($document,$compile,$timeout) {
         return {

@@ -23,6 +23,17 @@
                 <div class="tab-content chattab-content">
                     
                     <div class="tab-pane active row" id="chattab" ng-show="chat_tab === 1">
+                    	<div class="form-group">
+                            <label for="language_list" class="col-sm-4 control-label">Language</label>
+                            <div class="col-sm-8">
+                                <select id="language_list" name="language_list"  ng-options="cat as cat.name for cat in languagelist" ng-model="selectedLanguage" ng-change="langchange(selectedLanguage);" class="form-control"  required>
+                            
+                                </select>
+                                <div class="pull-right" ng-repeat="(field,value) in login_form.language_list.$error" ng-show="login_form.language_list.$touched">
+                                    <span class="label label-danger" ng-if="field=='required' && value">Please Select  Language</span>
+                                </div>
+                            </div>
+                        </div>
                         <div class="panel-body" ng-style="{'height':chatpanelheight+ 'px'}"> 
                             <ul class="chat">
                                 
@@ -2517,7 +2528,7 @@
                                     <div class="loading">Typing</div>
 								</div>
 								
-                                <div class="input-group chatinputgroup" >
+                                <div class="input-group chatinputgroup" ng-controller="SpeechRecognitionController as speech">
 								  
 									 <div class="input-group-addon" ng-click="toggleMenu()">
                                         <span class=""  >
@@ -2539,12 +2550,19 @@
                                         
 									</audio> -->
 									<!-- ------------ -->
-									<div class="input-group-addon submit_btn chat_bot_btn_bckc">
-										<button class="btn chat_bot_btn_bckc chat_bot_btn_submit" ng-show="displaySubmitButton"
+									<div class="input-group-addon submit_btn chat_bot_btn_bckc" ng-speech-recognition-start="" ng-speech-recognition-end="speech.displayTranscript()">
+										<!-- <button class="btn chat_bot_btn_bckc chat_bot_btn_submit" ng-show="displaySubmitButton"
 										ng-click="enterChatMessage()" ng-disabled="(!getallsessionid || chatEnterDisabled) && !agentconnected">
-										<!-- <i class="fa fa-chevron-circle-right"></i> -->
+										
 											<img ng-src="img/send.png" alt="send"/>
-										</button>
+										</button> -->
+										<!-- <div class="input-group-addon" > -->
+                                        <span id="tooltip12" class="speechtotext fa fa-microphone fa-3" href="#" tooltip-placement="left" uib-tooltip="Hold to start,release to send"></span>    
+                                        <!-- <span class="speechtotext"  >
+                                            <i class="fa fa-microphone fa-3"></i>
+                                            
+                                        </span> -->
+                                    <!-- </div> -->
 									</div>
                                 </div>
                                 <input type="hidden"  name="user_id" id="user_id"  value="{{sessionId}}" />

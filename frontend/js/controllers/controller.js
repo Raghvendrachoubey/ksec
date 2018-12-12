@@ -2070,6 +2070,140 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
         
         
     })
+    .controller('SpeechRecognitionController', function ($scope, $rootScope) {
+
+        var vm = this;
+
+        vm.displayTranscript = displayTranscript;
+        vm.transcript = '';
+        function displayTranscript() {
+            vm.transcript = $rootScope.transcript;
+            // console.log("transcript",$rootScope.transcript);
+            $(".chatinput").val($rootScope.transcript);
+            // alert($rootScope.transcript);
+              //code for speaker 
+               // console.log("getsys -- chatlist aaa",$rootScope.chatlist) ;
+               // var lastItem = $rootScope.chatlist.pop();
+            if($rootScope.chatlist.length>1){
+                    var ch=$rootScope.chatlist[$rootScope.chatlist.length - 1];
+             // console.log("getsys -- chatlist last", ch.msg) ;
+                if(ch.msg.tiledlist){
+                  var zerotiledlist=ch.msg.tiledlist[0];
+                    //zerotiledlist[0];
+                    var found=false;
+                    if(zerotiledlist.DT){
+                        var DT=zerotiledlist.DT;
+                        console.log("this id DT",DT);
+                        for(var i = 0; i <= DT.length-1; i++){
+                            var reg2 = new RegExp("^"+$rootScope.transcript+"","i");
+                            console.log("DT[i]DT[i]",DT[i]);
+                            // var found = $rootScope.transcript.match(reg2);
+                            found = reg2.test(DT[i]);
+                            if(found)
+                            {
+                                if(!zerotiledlist.form_name)
+                                    zerotiledlist.form_name = "";
+                                $rootScope.getDthlinkRes(zerotiledlist.Stage,DT[i],zerotiledlist.form_name);
+                                // $rootScope.pushMsg(0,$rootScope.transcript,"");
+                                break;
+                            }
+                            
+                            
+                        }
+                        if(!found) {
+                            if($rootScope.transcript=='apply online'){
+                               $rootScope.showQuerybtn ();
+                            }else if($rootScope.transcript=='bill payment'){
+                                 $rootScope.showQuerybtn2();
+                            }else if($rootScope.transcript=='bank transfer'){
+                                 $scope.showbanktransfer();
+                            }else if($rootScope.transcript=='Statement'){
+                                $rootScope.getcommonquery();
+                            }else{
+                                 $rootScope.pushMsg(0,$rootScope.transcript,"");
+                            }
+                        }
+                    }
+                    else  {
+                        if($rootScope.transcript=='apply online'){
+                           $rootScope.showQuerybtn ();
+                        }else if($rootScope.transcript=='bill payment'){
+                             $rootScope.showQuerybtn2();
+                        }else if($rootScope.transcript=='bank transfer'){
+                             $scope.showbanktransfer();
+                        }else if($rootScope.transcript=='Statement'){
+                            $rootScope.getcommonquery();
+                        }else{
+                             $rootScope.pushMsg(0,$rootScope.transcript,"");
+                        }
+                    }
+                    //console.log("zero element", zerotiledlist[0]);
+                }
+                else {
+                    if($rootScope.transcript=='apply online'){
+                       $rootScope.showQuerybtn ();
+                    }else if($rootScope.transcript=='bill payment'){
+                         $rootScope.showQuerybtn2();
+                    }else if($rootScope.transcript=='bank transfer'){
+                         $scope.showbanktransfer();
+                    }else if($rootScope.transcript=='Statement'){
+                        $rootScope.getcommonquery();
+                    }else{
+                         $rootScope.pushMsg(0,$rootScope.transcript,"");
+                    }
+
+
+                    
+                }
+            }else{
+                if($rootScope.transcript=='apply online'){
+                   $rootScope.showQuerybtn ();
+                }else if($rootScope.transcript=='bill payment'){
+                     $rootScope.showQuerybtn2();
+                }else if($rootScope.transcript=='bank transfer'){
+                     $scope.showbanktransfer();
+                }else if($rootScope.transcript=='Statement'){
+                    $rootScope.getcommonquery();
+                }else{
+                     $rootScope.pushMsg(0,$rootScope.transcript,"");
+                }
+            }
+            $(".chatinput").val("");
+      //end of code for speaker
+            
+
+            //This is just to refresh the content in the view.
+            // if (!$scope.$$phase) {
+            //     $scope.$digest();
+            //     //console.log("transcript",$rootScope.transcript);
+            //     $(".chatinput").val("");
+            // }
+
+        }
+        $rootScope.startspeech = function() {
+            var recognition = new webkitSpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            // console.log("new func");
+        // recognition.onresult = function(event) 
+            { 
+                // console.log(event); 
+            }
+            recognition.start();
+          
+        };
+        /**
+         * Handle the received transcript here.
+         * The result from the Web Speech Recognition will
+         * be set inside a $rootScope variable. You can use it
+         * as you want.
+         */
+        $rootScope.speechStarted = function() {
+            console.log("speech Started");
+        };
+    
+
+    })
     // Example API Controller
     .controller('DemoAPICtrl', function ($scope, TemplateService, apiService, NavigationService, $timeout) {
         apiService.getDemo($scope.formData, function (data) {

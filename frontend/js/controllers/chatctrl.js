@@ -25,8 +25,36 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
     $rootScope.outprocessclick = 0;
     $rootScope.journeylist = [];
     $rootScope.displaySubmitButton = false;
-
-
+    $rootScope.languagelist = [
+        {id:"en" , name:"English"},
+        {id:"hi" , name:"Hindi"},
+        {id:"mr" , name:"Marathi"},
+        {id:"gu" , name:"Gujarati"},
+        {id:"ta" , name:"Tamil"},
+    ];
+    if(!$.jStorage.get("language"))
+    {
+        $rootScope.selectedLanguage = $rootScope.languagelist[0];
+        $.jStorage.set("language", $rootScope.selectedLanguage.id);
+    }
+    else 
+    {
+        
+        $rootScope.selectedLanguage = $.jStorage.get("language");
+        $("#language_list").val($rootScope.selectedLanguage).trigger('change');
+        
+        var v_obj = _.find($rootScope.languagelist, function(o) { return o.id == $rootScope.selectedLanguage; });
+        $rootScope.selectedLanguage=v_obj;
+        
+        var v_index = _.findIndex($rootScope.languagelist, function(o) { return o.id == $rootScope.selectedLanguage.id; });
+        var langname = v_obj.name;
+        $("#language_list option:contains(" + langname + ")").prop('selected', true);
+        //$('#language_list').find('option:nth-child('+v_index+')').prop('selected', true);            
+    }
+    $scope.langchange = function(sl) {
+        $rootScope.selectedLanguage = sl;
+        $.jStorage.set("language", $rootScope.selectedLanguage.id);
+    };
     $rootScope.menuOpen=false;
 
 
@@ -146,7 +174,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             greet = 'Good Afternoon';
         else if (hrs >= 17 && hrs <= 24)
             greet = 'Good Evening';
-        msg = {Text:greet+",I'm KAIRA How can I help you today?",type:"SYS_FIRST"};
+        msg = {Text:greet+",I'm MEERA How can I help you today?",type:"SYS_FIRST"};
         //msg = {Text:"Hi, How may I help you ?",type:"SYS_FIRST"};
         $rootScope.pushSystemMsg(0,msg);
         
@@ -531,7 +559,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             else if (hrs >= 17 && hrs <= 24)
                 greet = 'Good Evening';
             //console.log(greet);
-            msg = {Text:greet+",I'm KAIRA How can I help you today?",type:"SYS_FIRST"};
+            msg = {Text:greet+",I'm MEERA How can I help you today?",type:"SYS_FIRST"};
             $rootScope.pushSystemMsg(0,msg);  
         }
         $('#chat_panel').slideDown("slow");
@@ -540,8 +568,9 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         $('.panel-heading span.icon_minim').removeClass('panel-collapsed');
         $('.panel-heading span.icon_minim').removeClass('glyphicon-plus').addClass('glyphicon-minus');
         $timeout(function(){
-            $(".clickImage").hide();
-        },500);
+            // $(".clickImage").hide();
+             $("#chat-circle").toggle('scale');
+        },0);
         $rootScope.chatOpen = true;
         $rootScope.scrollChatWindow();
         if($(".expandable2").hasClass('col-md-12')) //-- menu closed
@@ -572,7 +601,8 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         //$('#chat_panel').find('.panel-footer').slideUp("fast");
         $('.panel-heading span.icon_minim').addClass('panel-collapsed');
         $('.panel-heading span.icon_minim').addClass('glyphicon-plus').removeClass('glyphicon-minus');
-        $(".clickImage").show( "fadeIn");
+        // $(".clickImage").show( "fadeIn");
+        $("#chat-circle").toggle('scale');
         if($(".expandable2").hasClass('col-md-8')) //-- menu is closed
         {
             $(".expandable2").removeClass('col-md-8');
