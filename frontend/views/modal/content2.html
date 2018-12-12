@@ -1,0 +1,48 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">{{modaltitle}}</h3>
+    <button type="button" class="close"  aria-hidden="true" ng-click="contentCancel2();">&times;</button>
+</div>
+<div class="modal-body" id="modal-body">
+    <!-- <div class ="tab-con"  ng-if="displaydata.type==='Address_Change'">
+        <p ng-repeat = "add_c in displaydata">
+            <ng-bind-html ng-bind-html="add_c">
+                {{add_c}}
+            </ng-bind-html>
+        </p>
+    </div>
+    <div class ="tab-con"  ng-if="displaydata.type==='Dormant_Activation'">
+        <p ng-repeat = "d_a in displaydata">
+            <ng-bind-html ng-bind-html="d_a">
+                {{d_a}}
+            </ng-bind-html>
+        </p>
+    </div>
+    <div class ="tab-con"  ng-if="displaydata.type==='verify_seeding_info'">
+        <p ng-repeat = "d_a in displaydata">
+            <ng-bind-html ng-bind-html="d_a">
+                {{d_a}}
+            </ng-bind-html>
+        </p>
+    </div>
+    <div class ="tab-con"  ng-if="displaydata.type==='name_mismatch_table'">
+        <p ng-repeat = "d_a in displaydata">
+            <ng-bind-html ng-bind-html="d_a">
+                {{d_a}}
+            </ng-bind-html>
+        </p>
+    </div> -->
+    <div class ="tab-con"  >
+        <!-- <p ng-repeat = "d_a in displaydata track by $index"> -->
+            <ng-bind-html ng-bind-html="trustedHtml(viewdata);">
+                {{viewdata}}
+            </ng-bind-html>
+        <!-- </p> -->
+    </div>
+    <div ng-if="image">
+        <img src="{{img}}" class="img-responsive">
+    </div>
+</div>
+<div class="modal-footer hidden">
+    <button class="btn btn-primary" type="button" ng-click="">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="">Cancel</button>
+</div>

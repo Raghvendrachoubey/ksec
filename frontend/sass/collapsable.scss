@@ -1,0 +1,160 @@
+// body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { margin:0; padding:0; }
+// table { border-collapse:collapse; border-spacing:0; }
+// fieldset,img { border:0; }
+// address,caption,cite,code,dfn,em,strong,th,var { font-style:normal; font-weight:normal; }
+// caption,th { text-align:left; }
+// h1,h2,h3,h4,h5,h6 { font-size:100%; font-weight:normal; }
+q:before,q:after { content:''; }
+abbr,acronym { border:0; }
+
+// body { background: #fff; }
+/* optional Container STYLES */
+.chart { height: 600px; margin: 5px; width: 900px; }
+.Treant > .node { padding: 3px; border: 1px solid #484848; border-radius: 3px; }
+.Treant > .node img { width: 100%; height: 100%; }
+
+.Treant .collapse-switch { width: 100%; height: 100%; border: none; }
+.Treant .node.collapsed { background-color: #DEF82D; }
+.Treant .node.collapsed .collapse-switch { background: none; }
+.Treant > p { font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; font-weight: bold; font-size: 12px; }
+.node-name { font-weight: bold;}
+
+.nodeExample1 {
+    padding: 2px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background-color: #ffffff;
+    border: 1px solid #000;
+    width: 200px;
+    font-family: Tahoma;
+    font-size: 12px;
+}
+
+.nodeExample1 img {
+    margin-right:  10px;
+}
+.node-data-parent, .node-data-information, .node-data-checks, .node-data-system, .node-data-script, .node-data-text {
+    display:none;
+}
+.Treant {
+    width:100%;
+    min-height:400px;
+}
+p.node-name {
+    text-align: center;
+    background: #003874;
+    color: #fff;
+    margin-bottom: 0px;
+}
+p.node-title {
+    padding: 8px 0;
+}
+.Treant > .node {
+    padding: 0px;
+    border: 1px solid #003874;
+}
+.orgchart .node .title
+{
+    padding: 0px 6px;
+}
+.orgchart .node .title, .orgchart .lines .downLine {
+    background-color: #003874 !important;
+}
+.orgchart .node .content {
+    border:1px solid #003874 !important; 
+}
+.orgchart .lines .rightLine {
+    border-right: 1px solid #003874 !important;
+}
+.orgchart .lines .leftLine {
+    border-left: 1px solid #003874 !important;
+}
+.orgchart .lines .topLine {
+    border-top:1px solid #003874 !important;
+}
+.orgchart .node {
+    // width:auto !important;
+}
+.orgchart {
+    background-image: none !important;
+}
+.orgchart .node .title i {
+    display: none !important;
+}
+.orgchart .second-menu-icon {
+    transition: opacity .5s;
+    opacity: 0;
+    right: -5px;
+    top: -5px;
+    z-index: 2;
+    color: rgba(68, 157, 68, 0.5);
+    font-size: 18px;
+    position: absolute;
+}
+.orgchart .node .second-menu {
+    display: none;
+    position: absolute;
+    top: -205px;
+    // right: -70px;
+    left:0px;
+    // border-radius: 35px;
+    box-shadow: 0 0 10px 1px #999;
+    background-color: #fff;
+    z-index: 1;
+    height: 200px;
+    overflow-y: auto;
+    width: 200px;
+}
+.orgchart .node:hover .second-menu-icon {
+    opacity: 1;
+}
+.orgchart .second-menu-icon:hover {
+    color: #449d44;
+}
+#diagram-example {
+    position: relative;
+}
+.orgchart.l2r .node .second-menu-icon {
+    transform: rotate(-90deg) translate(0px, 0px) rotateY(180deg);
+}
+.orgchart.l2r .node .second-menu-icon {
+    right: 35px;
+    top: 245px;
+}
+.orgchart.l2r .node, .orgchart.r2l .node {
+    min-height: 260px;
+}
+.orgchart.l2r .node .title {
+    min-width: 250px;
+    -webkit-transform: rotate(-90deg) translate(-105px, -105px) rotateY(180deg) !important;
+    transform: rotate(-90deg) translate(-105px, -105px) rotateY(180deg) !important;
+    -webkit-transform-origin: bottom center;
+}
+.orgchart.l2r .node .content {
+    min-width: 250px;
+    -webkit-transform: rotate(-90deg) translate(-105px, -105px) rotateY(180deg) !important;
+    transform: rotate(-90deg) translate(-105px, -105px) rotateY(180deg) !important;
+}
+.orgchart.l2r .node .second-menu {
+    transform: rotate(-90deg) translate(-10px, -205px) rotateY(180deg) !important;
+    -webkit-transform: rotate(-90deg) translate(-10px, -205px) rotateY(180deg) !important;
+    top: 45px !important;
+    text-align: left;
+    padding: 3px;
+}
+.orgchart.l2r .node .second-menu {
+    width: 250px;
+    // top: 18px !important;
+    // left: -24px !important;
+    top: 275px !important;
+    left: 183px !important;
+}
+.orgchart.l2r .node .content {
+    margin-top:0px !important;
+}
+span.removetab {
+    top: -7px;
+    right: -10px;
+    color: #737171;
+}

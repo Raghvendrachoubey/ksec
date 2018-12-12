@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Content</h3>
+    <button type="button" class="close"  aria-hidden="true" ng-click="viewcontentCancel();">&times;</button>
+</div>
+<div class="modal-body" id="modal-body">
+    
+    <div class ="tab-con "  >
+		<div class="tabledata" id="table_data{{items.id}}">
+            <ng-bind-html ng-bind-html="trustedHtml(items.viewdata);">
+                {{items.viewdata}}
+            </ng-bind-html>
+        </div>
+    </div>
+	<div class="">
+		<button class="btn btn-xs btn-primary" type="button" ng-click="copydata(items.table_data,items.id);copydata(items.table_data,items.id);">Copy</button>
+	</div>
+</div>
+<div class="modal-footer hidden">
+    <button class="btn btn-primary" type="button" ng-click="">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="">Cancel</button>
+</div>

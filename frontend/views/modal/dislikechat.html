@@ -1,0 +1,45 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Feedback</h3>
+    <button type="button" class="close"  aria-hidden="true" ng-click="dislikeCancel();">&times;</button>
+</div>
+<div class="modal-body" id="modal-body">
+    <form id="dislikesuggestion_form" name="dislikesuggestion_form">
+        <div class="form-group">
+            <div class="pull-left" ng-if="dislikesuggestionSuccess==1">
+                <span class="label label-success" >Thank You.</span>
+            </div>
+            <!-- <select id="dislikesuggestion" name="dislikesuggestion"  ng-options="cat as cat.name for cat in feedbacklist" ng-model="selectedFeedbackval" class="form-control"  required>
+                                    
+            </select>  -->
+            <select id="dislikesuggestion" name="dislikesuggestion"   ng-model="selectedFeedbackval" class="form-control"  required>
+                <option ng-repeat="option in feedbacklist" value="{{option.name}}">{{option.name}}</option>
+            </select>
+            <!-- <textarea class="form-control dislikesuggestion" id="dislikesuggestion"  name="dislikesuggestion" placeholder="Enter Suggestion" ng-model="user.dislikesuggestion" required></textarea> -->
+            <div class="pull-right" ng-repeat="(field,value) in dislikesuggestion_form.selectedFeedbackval.$error" ng-show="dislikesuggestion_form.selectedFeedbackval.$touched">
+                <span class="label label-danger" ng-if="value">Please Select Feedback</span>
+            </div>
+            
+            <label>Interaction</label>
+            <div>
+                <span ng-repeat="list in chatlist track by $index" ng-if="chatlist[$index].position==='right' && chatlist[$index].gotresponse">
+                    <span ng-if="list.msg.Text">
+                        <input type="checkbox" name="interactions[]" class="interactions"  data-index="{{$index}}" data-value="{{list.msg.Text}}" data-iind="{{list.id}}"> {{list.msg.Text}}
+                    </span>
+                    <span ng-if="list.msg && list.msg !='' && !list.msg.Text">
+                        <input type="checkbox" name="interactions[]" class="interactions" data-index="{{$index}}" data-value="{{list.msg}}" data-iind="{{list.id}}"> {{list.msg}}
+                    </span>
+                    <br>
+                </span>
+            </div>
+            <div class="pull-right"  ng-if="dislikesuggestionerror==-1">
+                <span class="label label-danger">Please Select Suggestion</span>
+            </div>
+            
+            <input class="form-control" id='dislikesuggestionsubmit' type="submit" name="dislikesuggestionsubmit" ng-disabled="dislikesuggestion_form.$invalid"  class="btn btn-primary btn-lg btn-block" value="Submit" ng-click="dislikesuggestionsubmit(selectedFeedbackval);">
+        </div>
+    </form>
+</div>
+<div class="modal-footer hidden">
+    <button class="btn btn-primary" type="button" ng-click="">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="">Cancel</button>
+</div>

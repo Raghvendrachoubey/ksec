@@ -1,0 +1,70 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Unanswered Query</h3>
+    <button type="button" class="close"  aria-hidden="true" ng-click="unansCancel();">&times;</button>
+</div>
+<div class="modal-body" id="modal-body">
+    <p>
+        <b>Your query has been answered, please <a href="#" ng-click='pushfromunans("",unansquery,"",unanstype,uformdata);'>click here</a> to view the answer in the bot</b>
+    </p>
+    <!-- {{unansdata}} -->
+	<!--
+	<div class="chatType" ng-if="unansdata.tiledlist[0].type==='product listing'">
+		<div class='carousel slide' id='myCarousel'>
+			<div class='carousel-inner'>
+				<div class='item carousel_item2' ng-class="{active:!$index}" ng-repeat="imagelist in unansdata.tiledlist[0].product_list track by $index">
+					<div >
+						<div class="col-xs-12" >
+							<div class="text-box" ng-if="imagelist.Brand_Name!=''">
+								<div class="imgtitle2">
+									<b><span>
+										<ng-bind-html  ng-bind-html="imagelist.Brand_Name">
+											{{imagelist.Brand_Name}}
+										</ng-bind-html>
+									</span></b>
+								</div>
+							</div> 
+							<div class="img-box2">
+								<a ng-href="http://10.240.21.21/cingulariti/uploads/instructions/{{imagelist.image_name}}"  data-fancybox="imggroup" rel="gallary" fancybox  data-caption="{{imagelist.details}}"  >
+									<img ng-src="http://10.240.21.21/cingulariti/uploads/instructions/{{imagelist.image_name}}" class="img-full">
+								</a>
+							</div>
+							
+							
+								
+						</div>
+					</div>
+				</div>
+			</div>
+			<a class='left carousel-control' href='#myCarousel' data-slide='prev'><i class='glyphicon glyphicon-chevron-left'></i></a>
+			<a class='right carousel-control' href='#myCarousel' data-slide='next'><i class='glyphicon glyphicon-chevron-right'></i></a>
+		</div>
+	</div>
+    <div class="chatType  boxme" ng-if="unansdata.tiledlist[0].type==='DTHyperlink'">
+                                                    
+        <ng-bind-html ng-if="unansdata.tiledlist[0].Text != '' && chatRes.Text" ng-bind-html="unansdata.tiledlist[0].Text|newlines">
+            <p class="lastmsg" >
+                {{unansdata.tiledlist[0].Text}}     
+            </p>
+        </ng-bind-html>
+       
+        
+        
+        <div class="container-fluid" ng-repeat="dthlink in unansdata.tiledlist[0].DT" ng-init="$dthindex = $index">
+            <div class="col-md-11 dthyperlink dthyperlink2 lastmsg changedthbg stage{{unansdata.tiledlist[0].bgstage}}"  data-id="{{dthlink}}" data-url-id="innerLink" data-stage="{{unansdata.tiledlist[0].Stage}}" data-bgstage="{{unansdata.tiledlist[0].bgstage}}" ng-if="unansdata.tiledlist[0].DT.length > 0 " data-index="{{$index}}"  ng-click="getDthlinkRes(unansdata.tiledlist[0].Stage,dthlink,unansdata.tiledlist[0]);" >
+                <span class="lefticon glyphicon glyphicon-chevron-left" style="display:none;"></span>
+                {{dthlink}}
+            </div>
+            
+        </div>
+        
+    </div>
+    <div class="chatType" ng-if="unansdata.tiledlist[0].type==='text'">
+        <p class="lastmsg" ng-bind-html = "to_trusted(unansdata.tiledlist[0].Text);">
+            
+        </p>
+    </div>-->
+</div>
+<div class="modal-footer hidden">
+    <!-- <button class="btn btn-primary" type="button" ng-click="">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="">Cancel</button> -->
+</div>
