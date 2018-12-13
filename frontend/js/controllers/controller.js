@@ -474,14 +474,14 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 			}
 		},1000);
 		$scope.callsession = function () {
-			apiService.gettoken({
+			/*apiService.gettoken({
 				data:{
 					user_id: $rootScope.email,
 					api_key:$rootScope.BACKEND_API_KEY
 				}
 			}).then(function (apiresponse){
 				$rootScope.djtoken=apiresponse.data;
-				$.jStorage.set('djtoken',apiresponse.data);
+				$.jStorage.set('djtoken',apiresponse.data);*/
 				////console.log(apiresponse.data,"ttt");
 				////console.log($.jStorage.get('djtoken'),"ttt");
 				$timeout(function(){
@@ -502,9 +502,9 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 					});
 				},1000);
 				
-			}).catch(function (reason) {
+			/*}).catch(function (reason) {
 				$scope.callsession();
-			});
+			});*/
 
 		};
 		$scope.sessionend = function() {
