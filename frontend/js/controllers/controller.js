@@ -549,7 +549,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				var callback={};
 				callback.data={};
 				callback.data.data=callback3;
-				
+				console.log(callback.data.data);
 				if(callback.data.data) {
                     $rootScope.isLoggedIn = true;
 					$rootScope.sessionDetails=callback.data.data;
