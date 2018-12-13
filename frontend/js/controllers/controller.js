@@ -551,7 +551,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				callback.data.data=callback3;
 				
 				if(callback.data.data) {
-                    $rootScope.isLoggedIn = false;
+                    $rootScope.isLoggedIn = true;
 					$rootScope.sessionDetails=callback.data.data;
 					$rootScope.BACKEND_API_KEY=callback.data.data.BACKEND_API_KEY;
 					$rootScope.FRONTEND_ENC_KEY=callback.data.data.FRONTEND_ENC_KEY;
