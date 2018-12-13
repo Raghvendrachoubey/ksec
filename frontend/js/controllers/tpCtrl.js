@@ -5,7 +5,7 @@ myApp.controller('tpCtrl', function ($scope, $window, $rootScope, $resource, Tem
 
     console.log("HEY HEY ------CONNECTED-------");
 	$(document).ready(function(){
-		var url = "http://10.240.21.21:5000/";
+		var url = "http://cingulariti.in:5000/";
 		var socket = io.connect(url+"td");
 		socket.on("msg", function(){
 			console.log("HEY HEY CONNECTED");

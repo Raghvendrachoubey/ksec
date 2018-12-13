@@ -49,11 +49,11 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                 //if(angular.isUndefined(callback.data.error.message))
                 if(callback.data.value)
                 {
-                    //console.log(callback);
+                    // console.log(callback.data.data);
                     $.jStorage.flush();
                     $rootScope.isLoggedIn = true;
                     // $rootScope.access_role = callback.data.data.accessrole;
-                    $.jStorage.set("accesstoken",callback.data.data.accesstoken);
+                    $.jStorage.set("accesstoken",callback.data.data.token);
                     $.jStorage.set("name",username);
                     $.jStorage.set("email", email);
                     $rootScope.selectedLanguage = sl;
@@ -343,9 +343,9 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         }
         
     });
-    $interval(function() {
-        $scope.promise2=$scope.checkloginstatus2();
-    },10000);
+    // $interval(function() {
+    //     $scope.promise2=$scope.checkloginstatus2();
+    // },10000);
     $rootScope.$on('IdleTimeout', function() {
         // var scope = angular.element(document.getElementById('changepwd')).scope();
         // scope.logout();

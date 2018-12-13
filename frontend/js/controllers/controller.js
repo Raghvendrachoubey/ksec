@@ -638,8 +638,12 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 					$scope.getsessiondata();
 			});
 			
-		};
-		$scope.getsessiondata();
+        };
+        if($.jStorage.get('accesstoken'))
+            $scope.getsessiondata();
+        else {
+            $rootScope.isLoggedIn = false;
+        }
 		angular.element(document).ready(function() {
 			$(document).on('click', 'a[imgfancybox]', function(e){ 
 				filename = $(this).attr("filename");
@@ -969,7 +973,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
         
         // store the interval promise
             //if($rootScope.sailscsrf && $rootScope.sailscsrf!='')
-                promise = $interval(getallwidgets, 1000);
+                // promise = $interval(getallwidgets, 1000);
 			//else
 				////console.log("no csrf");
         };
@@ -982,7 +986,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				
 				$scope.startapi();
 				$interval(function() {
-					getallwidgets();
+					// getallwidgets();
 				},120000);
 			}
 			/*
@@ -1693,225 +1697,225 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
         var date = new Date();
         $scope.FromDate = ('0' + date.getDate()).slice(-2) + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getFullYear();
 		
-		$scope.getsessiondata = function() {
+		// $scope.getsessiondata = function() {
 			
-			var formData = {data:$.jStorage.get("accesstoken")};
-			apiService.getsessiondata(formData).then(function (callback2){
+		// 	var formData = {data:$.jStorage.get("accesstoken")};
+		// 	apiService.getsessiondata(formData).then(function (callback2){
 				
-				var bytes = CryptoJS.AES.decrypt((callback2.data.data),$rootScope.m_k);
-				var callback3 = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-				var callback={};
-				callback.data={};
-				callback.data.data=callback3;
+		// 		var bytes = CryptoJS.AES.decrypt((callback2.data.data),$rootScope.m_k);
+		// 		var callback3 = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+		// 		var callback={};
+		// 		callback.data={};
+		// 		callback.data.data=callback3;
 				
-				if(callback.data.data) {
-					$rootScope.fname= callback.data.data['Employee Name'];
-					$rootScope.lname="";
-					$rootScope.branch= callback.data.data.branchname;
+		// 		if(callback.data.data) {
+		// 			$rootScope.fname= callback.data.data['Employee Name'];
+		// 			$rootScope.lname="";
+		// 			$rootScope.branch= callback.data.data.branchname;
 					
-					$scope.fullname=$rootScope.fname;
-					$rootScope.city=callback.data.data['PCITY'];
-					$rootScope.role=callback.data.data['New Role'];
-					$rootScope.empcode=callback.data.data['DOMAIN LOGIN ID'];
-					$rootScope.Employee_ID=callback.data.data['Employee ID'];
-					$rootScope.Employee_Name=callback.data.data['Employee Name'];
-					if(callback.data.data.department)
-					{	
-						$rootScope.department=callback.data.data.department;
-						//$.jStorage.set("department",callback.data.data.department);
-					}
-					if(callback.data.data.user_type)
-					{
-						if(callback.data.data.user_type.toLowerCase()=='maker')
-						{
-							if(callback.data.data.live_chat=='Yes')
-							{
-								$rootScope.access_role = "maker-livechat";
-								$rootScope.live_chat=true;
-								//$.jStorage.set("access_role", "maker-livechat");
-								//$.jStorage.set("live_chat", true);
-							}
-							else
-							{
-								$rootScope.access_role = "maker";
-								//$.jStorage.set("access_role", "maker");
-							}
-						}
-						else if(callback.data.data.user_type.toLowerCase()=='checker')
-						{
-							if(callback.data.data.live_chat=='Yes')
-							{
-								$rootScope.access_role = "checker-livechat";
-								$rootScope.live_chat=true;
-								//$.jStorage.set("access_role", "checker-livechat");
-								//$.jStorage.set("live_chat", true);
-							}
-							else
-							{
-								$rootScope.access_role = "checker";
-								//$.jStorage.set("access_role", "checker");
-							}
-						}
-						else
-						{
-							$rootScope.access_role = callback.data.data.user_type.toLowerCase();
-							//$.jStorage.set("access_role", callback.data.data.user_type.toLowerCase());
-						}
-					}
-					else
-					{
-						$rootScope.access_role = "user";
-						//$.jStorage.set("access_role", "user");
-					}
-					$rootScope.branchdata =$rootScope.branch;
-					$rootScope.roledata =$rootScope.role;
-					$scope.department =$rootScope.department;
-				}
-			});
+		// 			$scope.fullname=$rootScope.fname;
+		// 			$rootScope.city=callback.data.data['PCITY'];
+		// 			$rootScope.role=callback.data.data['New Role'];
+		// 			$rootScope.empcode=callback.data.data['DOMAIN LOGIN ID'];
+		// 			$rootScope.Employee_ID=callback.data.data['Employee ID'];
+		// 			$rootScope.Employee_Name=callback.data.data['Employee Name'];
+		// 			if(callback.data.data.department)
+		// 			{	
+		// 				$rootScope.department=callback.data.data.department;
+		// 				//$.jStorage.set("department",callback.data.data.department);
+		// 			}
+		// 			if(callback.data.data.user_type)
+		// 			{
+		// 				if(callback.data.data.user_type.toLowerCase()=='maker')
+		// 				{
+		// 					if(callback.data.data.live_chat=='Yes')
+		// 					{
+		// 						$rootScope.access_role = "maker-livechat";
+		// 						$rootScope.live_chat=true;
+		// 						//$.jStorage.set("access_role", "maker-livechat");
+		// 						//$.jStorage.set("live_chat", true);
+		// 					}
+		// 					else
+		// 					{
+		// 						$rootScope.access_role = "maker";
+		// 						//$.jStorage.set("access_role", "maker");
+		// 					}
+		// 				}
+		// 				else if(callback.data.data.user_type.toLowerCase()=='checker')
+		// 				{
+		// 					if(callback.data.data.live_chat=='Yes')
+		// 					{
+		// 						$rootScope.access_role = "checker-livechat";
+		// 						$rootScope.live_chat=true;
+		// 						//$.jStorage.set("access_role", "checker-livechat");
+		// 						//$.jStorage.set("live_chat", true);
+		// 					}
+		// 					else
+		// 					{
+		// 						$rootScope.access_role = "checker";
+		// 						//$.jStorage.set("access_role", "checker");
+		// 					}
+		// 				}
+		// 				else
+		// 				{
+		// 					$rootScope.access_role = callback.data.data.user_type.toLowerCase();
+		// 					//$.jStorage.set("access_role", callback.data.data.user_type.toLowerCase());
+		// 				}
+		// 			}
+		// 			else
+		// 			{
+		// 				$rootScope.access_role = "user";
+		// 				//$.jStorage.set("access_role", "user");
+		// 			}
+		// 			$rootScope.branchdata =$rootScope.branch;
+		// 			$rootScope.roledata =$rootScope.role;
+		// 			$scope.department =$rootScope.department;
+		// 		}
+		// 	});
 			
-		};
-		$scope.getsessiondata();
+		// };
+		// $scope.getsessiondata();
 
-        $rootScope.logoutLiveAgent = function(){
-            // if($rootScope.agentconnected){
-                livechatapi.agentLogout({
-                    'domain_login_id': $rootScope.empcode
-                }, function (data) {
-                    //console.log("agent logout", data)
-                })
-            // }
-        }
+        // $rootScope.logoutLiveAgent = function(){
+        //     // if($rootScope.agentconnected){
+        //         livechatapi.agentLogout({
+        //             'domain_login_id': $rootScope.empcode
+        //         }, function (data) {
+        //             //console.log("agent logout", data)
+        //         })
+        //     // }
+        // }
 
-        $rootScope.logout = function() {
-            //console.log("LOGOUT !!!!!!!!!!!!!!", $rootScope.agentconnected)
+        // $rootScope.logout = function() {
+        //     //console.log("LOGOUT !!!!!!!!!!!!!!", $rootScope.agentconnected)
 
-            if($rootScope.liveChatHistory && $rootScope.private_live_socket){
-                for (var i = 0; i < $rootScope.liveChatHistory.length; i++) {
-                    $rootScope.private_live_socket.emit('end_user_message', {
+        //     if($rootScope.liveChatHistory && $rootScope.private_live_socket){
+        //         for (var i = 0; i < $rootScope.liveChatHistory.length; i++) {
+        //             $rootScope.private_live_socket.emit('end_user_message', {
 
-                        agent_empcode: $rootScope.empcode,
-                        date: new Date(),
-                        from_empcode: $rootScope.empcode,
-                        message: "ending chat------from logout ctrl",
-                        to_empcode: $rootScope.liveChatHistory[i].user,
-                        type: "end_chat",
-                        user_empcode: $rootScope.liveChatHistory[i].user,
-                        user_details: {}
-                    });
-                }
+        //                 agent_empcode: $rootScope.empcode,
+        //                 date: new Date(),
+        //                 from_empcode: $rootScope.empcode,
+        //                 message: "ending chat------from logout ctrl",
+        //                 to_empcode: $rootScope.liveChatHistory[i].user,
+        //                 type: "end_chat",
+        //                 user_empcode: $rootScope.liveChatHistory[i].user,
+        //                 user_details: {}
+        //             });
+        //         }
                 
-            }
+        //     }
             
-            if($rootScope.agentconnected){             
-                livechatapi.userlogOut(
-                    {
-                        'user_empcode': $rootScope.empcode,
-                        'domain_login_id':$rootScope.connectedAgentName
-                    },
-                    function(data){
-                        $rootScope.agentconnected = false;
-                        //console.log("live user logout ",data);
-                    }
-                )                
-            }
+        //     if($rootScope.agentconnected){             
+        //         livechatapi.userlogOut(
+        //             {
+        //                 'user_empcode': $rootScope.empcode,
+        //                 'domain_login_id':$rootScope.connectedAgentName
+        //             },
+        //             function(data){
+        //                 $rootScope.agentconnected = false;
+        //                 //console.log("live user logout ",data);
+        //             }
+        //         )                
+        //     }
 
-            livechatapi.agentLogout({
-                'domain_login_id': $rootScope.empcode
-            }, function (data) {
-                //console.log("agent logout", data)
-            })
+        //     livechatapi.agentLogout({
+        //         'domain_login_id': $rootScope.empcode
+        //     }, function (data) {
+        //         //console.log("agent logout", data)
+        //     })
 
-            if($rootScope.access_role=='user')
-            {
-                //var formData = {user:$rootScope.empcode,emp:$rootScope.Employee_ID};
-                if($.jStorage.get("accesstoken")) {
-					var formData = {data:$.jStorage.get("accesstoken")};
-					apiService.userlogout(formData).then(function (callback){
+        //     if($rootScope.access_role=='user')
+        //     {
+        //         //var formData = {user:$rootScope.empcode,emp:$rootScope.Employee_ID};
+        //         if($.jStorage.get("accesstoken")) {
+		// 			var formData = {data:$.jStorage.get("accesstoken")};
+		// 			apiService.userlogout(formData).then(function (callback){
 					
 					
-						$rootScope.tabvalue.elements = [];
-						$rootScope.tabvalue.element_values = [];
-						$.jStorage.flush();
+		// 				$rootScope.tabvalue.elements = [];
+		// 				$rootScope.tabvalue.element_values = [];
+		// 				$.jStorage.flush();
 						
-						//$state.go("login");
+		// 				//$state.go("login");
 						
 						
-					});
-				}
-				else {
-					$timeout(function(){
-                        $rootScope.isLoggedIn = false;
-						// window.location.href=$rootScope.dmpurl+"/login/user_logout";
-					},500);
-				}
-            }
-            CsrfTokenService.getCookie("csrftoken").then(function(token) {
-                $scope.formData = {sessionid:$rootScope.sessionid,user:$rootScope.id,csrfmiddlewaretoken:token};
-                apiService.logout($scope.formData).then(function (callback){
+		// 			});
+		// 		}
+		// 		else {
+		// 			$timeout(function(){
+        //                 $rootScope.isLoggedIn = false;
+		// 				// window.location.href=$rootScope.dmpurl+"/login/user_logout";
+		// 			},500);
+		// 		}
+        //     }
+        //     CsrfTokenService.getCookie("csrftoken").then(function(token) {
+        //         $scope.formData = {sessionid:$rootScope.sessionid,user:$rootScope.id,csrfmiddlewaretoken:token};
+        //         apiService.logout($scope.formData).then(function (callback){
                     
                     
-                    $rootScope.tabvalue.elements = [];
-                    $rootScope.tabvalue.element_values = [];
-                    $.jStorage.flush();
+        //             $rootScope.tabvalue.elements = [];
+        //             $rootScope.tabvalue.element_values = [];
+        //             $.jStorage.flush();
                     
-                    //$state.go("login");
-                    $timeout(function(){
-                        $rootScope.isLoggedIn = false;
-                        // if($rootScope.access_role=='user')
-                        //     window.location.href=$rootScope.dmpurl+"/login/user_logout";
-                        // else
-                        //     window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=1";
-                    },500);
+        //             //$state.go("login");
+        //             $timeout(function(){
+        //                 $rootScope.isLoggedIn = false;
+        //                 // if($rootScope.access_role=='user')
+        //                 //     window.location.href=$rootScope.dmpurl+"/login/user_logout";
+        //                 // else
+        //                 //     window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=1";
+        //             },500);
                     
-                });
+        //         });
             
-            });
+        //     });
 
 
-        };
+        // };
 		
 		
 			
-        $scope.$modalInstance = {};
-        $scope.openChangePwd = function() {
-            $scope.$modalInstance = $uibModal.open({
-                scope: $scope,
-                animation: true,
-                //size: 'sm',
-                templateUrl: 'views/modal/changepassword.html',
-                //controller: 'CommonCtrl'
-            });
-        };
-        $scope.changePwdcancel = function() {
-            ////console.log("dismissing");
-            $scope.$modalInstance.dismiss('cancel');
-            //$scope.$modalInstance.close();
-        };
-        $scope.passworderror=0
-        $scope.changepasswordSuccess=0;
+        // $scope.$modalInstance = {};
+        // $scope.openChangePwd = function() {
+        //     $scope.$modalInstance = $uibModal.open({
+        //         scope: $scope,
+        //         animation: true,
+        //         //size: 'sm',
+        //         templateUrl: 'views/modal/changepassword.html',
+        //         //controller: 'CommonCtrl'
+        //     });
+        // };
+        // $scope.changePwdcancel = function() {
+        //     ////console.log("dismissing");
+        //     $scope.$modalInstance.dismiss('cancel');
+        //     //$scope.$modalInstance.close();
+        // };
+        // $scope.passworderror=0
+        // $scope.changepasswordSuccess=0;
           
-        $scope.changepassword = function(currentpassword,newpassword,newpassword2) {
-             ////console.log(newpassword);
-            userid = $rootScope.id;
-            $scope.token="";
-            CsrfTokenService.getCookie("csrftoken").then(function(done) {
-                $scope.token=done;
-                $scope.formData = {userid:userid,oldpassword:(currentpassword),newpassword:(newpassword),csrfmiddlewaretoken:$scope.token };
-                ////console.log($scope.formData);
-                apiService.changepassword($scope.formData).then(function (callback){
-                    if(callback.data.value)
-                    {    
-                        $scope.changepasswordSuccess=1;
-                        $timeout(function () {
-                            $scope.$modalInstance.dismiss('cancel');
-                            $scope.changepasswordSuccess=0;
-                        },500);
-                    }
-                    else if (callback.data.error.message==-1)
-                        $scope.passworderror =-1;
-                })    
-            });  
-        };
+        // $scope.changepassword = function(currentpassword,newpassword,newpassword2) {
+        //      ////console.log(newpassword);
+        //     userid = $rootScope.id;
+        //     $scope.token="";
+        //     CsrfTokenService.getCookie("csrftoken").then(function(done) {
+        //         $scope.token=done;
+        //         $scope.formData = {userid:userid,oldpassword:(currentpassword),newpassword:(newpassword),csrfmiddlewaretoken:$scope.token };
+        //         ////console.log($scope.formData);
+        //         apiService.changepassword($scope.formData).then(function (callback){
+        //             if(callback.data.value)
+        //             {    
+        //                 $scope.changepasswordSuccess=1;
+        //                 $timeout(function () {
+        //                     $scope.$modalInstance.dismiss('cancel');
+        //                     $scope.changepasswordSuccess=0;
+        //                 },500);
+        //             }
+        //             else if (callback.data.error.message==-1)
+        //                 $scope.passworderror =-1;
+        //         })    
+        //     });  
+        // };
         
         // $timeout(function () {
         
