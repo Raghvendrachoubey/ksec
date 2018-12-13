@@ -631,6 +631,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				
 				
 			}).catch(function (reason) {
+                console.log(reason);
 				if(reason.status==403) {
 					$scope.sessionend();
 				}
