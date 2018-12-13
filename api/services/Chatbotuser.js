@@ -100,7 +100,7 @@ var model = {
         found.token=token;
         var ip_address = ip.address("public","ipv4");
         var userLogs = require("./Chatbotuserlogs");
-        var sessiondata = userLogs({userid:data.email,user:username,login_date:(new Date()),token:token,ip_address:ip_address,logout_date:new Date()});
+        var sessiondata = userLogs({userid:data.email,user:data.username,login_date:(new Date()),token:token,ip_address:ip_address,logout_date:new Date()});
         sessiondata.save(function (err,result) {
             if (err) {
                 callback(err, null);
