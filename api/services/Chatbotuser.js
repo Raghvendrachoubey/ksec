@@ -90,7 +90,7 @@ var model = {
         var jwt = require("jsonwebtoken");
         var found = {};
         found = data;
-        found = found.toObject();
+        // found = found.toObject();
         
         found.curtime=Date.now();
         found.curtime=found.curtime;
