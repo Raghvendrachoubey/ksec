@@ -549,7 +549,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				var callback={};
 				callback.data={};
 				callback.data.data=callback3;
-				
+				console.log(callback.data.data);
 				if(callback.data.data) {
 					$rootScope.sessionDetails=callback.data.data;
 					$rootScope.BACKEND_API_KEY=callback.data.data.BACKEND_API_KEY;
@@ -631,7 +631,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				
 				
 			}).catch(function (reason) {
-                console.log(reason);
+                
 				if(reason.status==403) {
 					$scope.sessionend();
 				}
