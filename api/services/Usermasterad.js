@@ -488,8 +488,9 @@ var model = {
 		if(decoded) {
 			//callback(null, decoded);
 			var found = {};
-			found = decoded;
-			found.curtime=Date.now();
+			found.username = decoded.username;
+			found.email = decoded.email;
+			
 			var Chatbotuserlogs = require("./Chatbotuserlogs");
 			found.FRONTEND_ENC_KEY=env2.FRONTEND_ENC_KEY;
 			found.BACKEND_API_KEY=env2.BACKEND_API_KEY;
