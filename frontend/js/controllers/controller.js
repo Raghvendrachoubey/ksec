@@ -476,7 +476,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 		$scope.callsession = function () {
 			apiService.gettoken({
 				data:{
-					user_id: $rootScope.empcode,
+					user_id: $rootScope.email,
 					api_key:$rootScope.BACKEND_API_KEY
 				}
 			}).then(function (apiresponse){
@@ -549,7 +549,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				var callback={};
 				callback.data={};
 				callback.data.data=callback3;
-				console.log(callback.data.data);
+				
 				if(callback.data.data) {
                     $rootScope.isLoggedIn = true;
 					$rootScope.sessionDetails=callback.data.data;
@@ -567,9 +567,9 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 					$rootScope.city="";
 					$rootScope.role="";
 					$rootScope.functions="";
-					$rootScope.empcode="";
+					$rootScope.empcode=callback.data.data['email'];
 					$rootScope.Employee_ID="";
-					$rootScope.Employee_Name="";
+					$rootScope.Employee_Name=callback.data.data['username'];
 					$rootScope.state="";
 					$rootScope.LOB_name="";
 					$rootScope.LOB_code="";
@@ -634,7 +634,8 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 			}).catch(function (reason) {
                 
 				if(reason.status==403) {
-					$scope.sessionend();
+                    // $scope.sessionend();
+                    $rootScope.isLoggedIn = true;
 				}
 				else
 					$scope.getsessiondata();
@@ -979,6 +980,13 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 			//else
 				////console.log("no csrf");
         };
+        $rootScope.$watch('isLoggedIn', function (newvalue,oldvalue) {
+			////console.log(oldvalue,"old");
+			////console.log(newvalue,"new");
+			if(newvalue) {
+                $scope.getsessiondata();
+            }
+        });
         $rootScope.$watch('getallsession', function (newvalue,oldvalue) {
 			////console.log(oldvalue,"old");
 			////console.log(newvalue,"new");

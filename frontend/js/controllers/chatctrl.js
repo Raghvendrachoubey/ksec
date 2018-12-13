@@ -30,8 +30,9 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         {id:"en" , name:"English"},
         {id:"hi" , name:"Hindi"},
         {id:"mr" , name:"Marathi"},
-        {id:"gu" , name:"Gujarati"},
-        {id:"ta" , name:"Tamil"},
+        {id:"kn" , name:"Kannada"},
+        {id:"te" , name:"Telugu"},
+        {id:"bn" , name:"Bengali"},
     ];
     $scope.login = function(username,email,sl)
     {
@@ -51,7 +52,11 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                 {
                     // console.log(callback.data.data);
                     $.jStorage.flush();
+                    $timeout(function(){
+                        $scope.chatpanelheight = $("#chat_window_1").height()-160;
+                    },2000);
                     $rootScope.isLoggedIn = true;
+                    
                     // $rootScope.access_role = callback.data.data.accessrole;
                     $.jStorage.set("accesstoken",callback.data.data.token);
                     $.jStorage.set("name",username);
@@ -189,65 +194,65 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
     //  * as you want.
     //  */
     $rootScope.newuser = function() {
-
+        $scope.userlogout();
          // ----------------
-        $rootScope.agentconnected = false;
-        $rootScope.endConversation(1);
+        // $rootScope.agentconnected = false;
+        // $rootScope.endConversation(1);
 
-         // livechatapi.userlogOut({
-         //     'user_empcode': $rootScope.empcode,
-         //     'domain_login_id':$rootScope.connectedAgentName
-         // },function(data){
-         //    //console.log("live user logout ",data);
-         // })
+        //  // livechatapi.userlogOut({
+        //  //     'user_empcode': $rootScope.empcode,
+        //  //     'domain_login_id':$rootScope.connectedAgentName
+        //  // },function(data){
+        //  //    //console.log("live user logout ",data);
+        //  // })
 
          
-        if($rootScope.chatlist.length > 1)
-        {
-            /*
-            apiService.get_session({}).then( function (response) {
-                $cookies.put("csrftoken",response.data.csrf_token);
-                $cookies.put("session_id",response.data.session_id);
-                $.jStorage.set("csrftoken",response.data.csrf_token);
-                $.jStorage.set("session_id",response.data.session_id);
-                $rootScope.session_id =response.data.session_id;
-                $rootScope.conversationid=$rootScope.id+response.data.session_id;
-                $rootScope.chatlist = [];
-                $rootScope.firstMsg = true;
-                msg = {Text:"Hi, How may I help you ?",type:"SYS_FIRST"};
-                $rootScope.pushSystemMsg(0,msg);
-                ////console.log(response.data);
-            });*/
-        }
-        $(".icrnno").val("");
-        $rootScope.outprocessjourney="";
-        $rootScope.outprocessjourneylist=[];
-        $rootScope.crnconver = [];
-        $rootScope.crndata = {};
-        $rootScope.getconversationid();
-        $rootScope.script_data=[];
-        $rootScope.tabvalue.elements = [];
-        $rootScope.tabvalue.element_values=[];
-        $rootScope.journeylist=[];
-        $rootScope.outprocessclick=0;
-        $rootScope.chatlist = [];
-        $rootScope.firstMsg = true;
-        //Idle.setTimeout(10);
-          //  Idle.watch();
-        var today = new Date();
-        var hrs = today.getHours();
+        // if($rootScope.chatlist.length > 1)
+        // {
+        //     /*
+        //     apiService.get_session({}).then( function (response) {
+        //         $cookies.put("csrftoken",response.data.csrf_token);
+        //         $cookies.put("session_id",response.data.session_id);
+        //         $.jStorage.set("csrftoken",response.data.csrf_token);
+        //         $.jStorage.set("session_id",response.data.session_id);
+        //         $rootScope.session_id =response.data.session_id;
+        //         $rootScope.conversationid=$rootScope.id+response.data.session_id;
+        //         $rootScope.chatlist = [];
+        //         $rootScope.firstMsg = true;
+        //         msg = {Text:"Hi, How may I help you ?",type:"SYS_FIRST"};
+        //         $rootScope.pushSystemMsg(0,msg);
+        //         ////console.log(response.data);
+        //     });*/
+        // }
+        // $(".icrnno").val("");
+        // $rootScope.outprocessjourney="";
+        // $rootScope.outprocessjourneylist=[];
+        // $rootScope.crnconver = [];
+        // $rootScope.crndata = {};
+        // $rootScope.getconversationid();
+        // $rootScope.script_data=[];
+        // $rootScope.tabvalue.elements = [];
+        // $rootScope.tabvalue.element_values=[];
+        // $rootScope.journeylist=[];
+        // $rootScope.outprocessclick=0;
+        // $rootScope.chatlist = [];
+        // $rootScope.firstMsg = true;
+        // //Idle.setTimeout(10);
+        //   //  Idle.watch();
+        // var today = new Date();
+        // var hrs = today.getHours();
 
-        var greet;
+        // var greet;
 
-        if (hrs < 12)
-            greet = 'Good Morning';
-        else if (hrs >= 12 && hrs <= 17)
-            greet = 'Good Afternoon';
-        else if (hrs >= 17 && hrs <= 24)
-            greet = 'Good Evening';
-        msg = {Text:greet+",I'm MEERA How can I help you today?",type:"SYS_FIRST"};
-        //msg = {Text:"Hi, How may I help you ?",type:"SYS_FIRST"};
-        $rootScope.pushSystemMsg(0,msg);
+        // if (hrs < 12)
+        //     greet = 'Good Morning';
+        // else if (hrs >= 12 && hrs <= 17)
+        //     greet = 'Good Afternoon';
+        // else if (hrs >= 17 && hrs <= 24)
+        //     greet = 'Good Evening';
+        // msg = {Text:greet+",I'm Bandhu How can I help you today?",type:"SYS_FIRST"};
+        // //msg = {Text:"Hi, How may I help you ?",type:"SYS_FIRST"};
+        // $rootScope.pushSystemMsg(0,msg);
         
     };
     $rootScope.savehistory = function(obj,cli) {
@@ -329,7 +334,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
     $scope.checkloginstatus2 = function(){
         if(!$.jStorage.get("accesstoken")) {
             
-            $scope.userlogout();
+            // $scope.userlogout();
         }
     };
     $scope.$on('IdleStart', function() {
@@ -633,7 +638,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             else if (hrs >= 17 && hrs <= 24)
                 greet = 'Good Evening';
             //console.log(greet);
-            msg = {Text:greet+",I'm MEERA How can I help you today?",type:"SYS_FIRST"};
+            msg = {Text:greet+",I'm Bandhu How can I help you today?",type:"SYS_FIRST"};
             $rootScope.pushSystemMsg(0,msg);  
         }
         $('#chat_panel').slideDown("slow");
@@ -5170,7 +5175,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             // //console.log('User alert!', data);
             // });
             //io.socket.get('/Livechat/addconv');
-            if($rootScope.department == undefined || $rootScope.department == null ){//
+            /*if($rootScope.department == undefined || $rootScope.department == null ){//
                 var msg3 = {Text:"You are not authorized to query this bot since you are not mapped to any department. Please connect with the system admin",type:"SYS_EMPTY_RES"};
                 $rootScope.pushSystemMsg(0,msg3); 
                 $timeout(function() {
@@ -5178,7 +5183,8 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                 },500);
                 
             }
-            else{
+            else*/
+            {
                 
             apiService.getnewquestion({user_input:value.toLowerCase()}).then(function (unansdata){
                 if(unansdata.data.data)

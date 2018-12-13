@@ -36,7 +36,7 @@ myApp.config(function ($compileProvider,$stateProvider, $urlRouterProvider, $htt
 	 
     //ttsProvider.setSettings({ key: '5a1cc1a178c24b89ba23fd6e3b1bb6c5' });
     $qProvider.errorOnUnhandledRejections(false);
-    IdleProvider.idle(1); // 1sec idle
+    IdleProvider.idle(30*60); // 1sec idle
     IdleProvider.timeout(30); // in seconds
 	TitleProvider.enabled(false);
     //KeepaliveProvider.interval(180);
