@@ -504,6 +504,8 @@ var model = {
 					callback(err, null);
 				} 
 				else {
+					var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(found), "58e7054c20c23efd03373efd0337").toString();
+					callback(null, ciphertext);
 					callback(null, found);
 				}
 			});
