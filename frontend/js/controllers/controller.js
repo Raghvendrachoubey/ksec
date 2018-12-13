@@ -432,7 +432,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
         });
     })
     myApp.controller('Dashboard5Ctrl', function ($scope,$rootScope, TemplateService, NavigationService,CsrfTokenService,Menuservice, $timeout,$http,apiService,$state,$cookies,$uibModal,Idle,$interval,toastr) {
-        $scope.template = TemplateService.getHTML("content/dashboard5.html");
+        $scope.template = TemplateService.getHTML("content/home.html");
         TemplateService.title = "Dashboard"; //This is the Title of the Website
         $scope.navigation = NavigationService.getNavigation();
 		$rootScope.getallsession=false;
@@ -464,16 +464,12 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
             
         };
 		$timeout(function(){
-			//window.history.replaceState({}, document.title, "?" + "");
-			/*history.pushState(null, document.title, location.href);
-			window.addEventListener('popstate', function (event)
-			{
-			  history.pushState(null, document.title, location.href);
-			});*/
+			
 			if(!$.jStorage.get('accesstoken'))
 			{
 				$timeout(function(){
-					window.location.href=$rootScope.dmpurl+"/login/user_logout";
+                    $rootScope.isLoggedIn = false;
+					// window.location.href=$rootScope.dmpurl+"/login/user_logout";
 				},500);
 			}
 		},1000);
@@ -528,14 +524,16 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 						$.jStorage.flush();
 						//$state.go("login");
 						$timeout(function(){
-							window.location.href=$rootScope.dmpurl+"/login/user_logout";
+                            $rootScope.isLoggedIn = false;
+							// window.location.href=$rootScope.dmpurl+"/login/user_logout";
 						},500);
 						
 					});
 				}
 				else {
 					$timeout(function(){
-						window.location.href=$rootScope.dmpurl+"/login/user_logout";
+                        $rootScope.isLoggedIn = false;
+						// window.location.href=$rootScope.dmpurl+"/login/user_logout";
 					},500);
 				}
 			}
@@ -557,29 +555,29 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 					$rootScope.BACKEND_API_KEY=callback.data.data.BACKEND_API_KEY;
 					$rootScope.FRONTEND_ENC_KEY=callback.data.data.FRONTEND_ENC_KEY;
 					$rootScope.B_TOKEN_KEY=callback.data.data.B_TOKEN_KEY;
-					$rootScope.id=callback.data.data._id;
-					$rootScope.fname= callback.data.data['Employee Name'];
+					// $rootScope.id=callback.data.data._id;
+					$rootScope.fname= callback.data.data['username'];
 					$rootScope.lname="";
-					$rootScope.email= callback.data.data['Email Address'];
-					$rootScope.branch= callback.data.data.branchname;
+					$rootScope.email= callback.data.data['email'];
+					$rootScope.branch= "";
 					
-					$rootScope.sessionid= callback.data.data.sessionid;
+					$rootScope.sessionid= callback.data.data.email;
 					
-					$rootScope.city=callback.data.data['PCITY'];
-					$rootScope.role=callback.data.data['New Role'];
-					$rootScope.functions=callback.data.data['Function'];
-					$rootScope.empcode=callback.data.data['DOMAIN LOGIN ID'];
-					$rootScope.Employee_ID=callback.data.data['Employee ID'];
-					$rootScope.Employee_Name=callback.data.data['Employee Name'];
-					$rootScope.state=callback.data.data['State'];
-					$rootScope.LOB_name=callback.data.data['LOB name'];
-					$rootScope.LOB_code=callback.data.data['LOB Code'];
-					$rootScope.LOC_Code=callback.data.data['LOC Code'];
-					$rootScope.division=callback.data.data['Division'];
-					$rootScope.segment=callback.data.data['Business Segment'];
+					$rootScope.city="";
+					$rootScope.role="";
+					$rootScope.functions="";
+					$rootScope.empcode="";
+					$rootScope.Employee_ID="";
+					$rootScope.Employee_Name="";
+					$rootScope.state="";
+					$rootScope.LOB_name="";
+					$rootScope.LOB_code="";
+					$rootScope.LOC_Code="";
+					$rootScope.division="";
+					$rootScope.segment="";
 					if(callback.data.data.department)
 					{	
-						$rootScope.department=callback.data.data.department;
+						$rootScope.department="";
 						//$.jStorage.set("department",callback.data.data.department);
 					}
 					if(callback.data.data.user_type)
@@ -616,7 +614,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 						}
 						else
 						{
-							$rootScope.access_role = callback.data.data.user_type.toLowerCase();
+							$rootScope.access_role = "";
 							//$.jStorage.set("access_role", callback.data.data.user_type.toLowerCase());
 						}
 					}
@@ -1365,7 +1363,8 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 					}
 					else {
 						$timeout(function(){
-							window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
+                            $rootScope.isLoggedIn = false;
+							// window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
 						},500);
 					}
 				});
@@ -1388,7 +1387,8 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 		}
 		else {
 			$timeout(function(){
-				window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
+                $rootScope.isLoggedIn = false;
+				// window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
 			},500);
 		}
 		//formData = {uuid:username};
@@ -1651,7 +1651,8 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				$.jStorage.flush();
 				//$state.go("login");
 				$timeout(function(){
-					window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
+                    $rootScope.isLoggedIn = false;
+					// window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
 				},500);
 				
 			});
@@ -1678,7 +1679,8 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				$.jStorage.flush();
 				//$state.go("login");
 				$timeout(function(){
-					window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=1";
+                    $rootScope.isLoggedIn = false;
+					// window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=1";
 				},500);
 				
 			});
@@ -1838,7 +1840,8 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				}
 				else {
 					$timeout(function(){
-						window.location.href=$rootScope.dmpurl+"/login/user_logout";
+                        $rootScope.isLoggedIn = false;
+						// window.location.href=$rootScope.dmpurl+"/login/user_logout";
 					},500);
 				}
             }
@@ -1853,10 +1856,11 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
                     
                     //$state.go("login");
                     $timeout(function(){
-                        if($rootScope.access_role=='user')
-                            window.location.href=$rootScope.dmpurl+"/login/user_logout";
-                        else
-                            window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=1";
+                        $rootScope.isLoggedIn = false;
+                        // if($rootScope.access_role=='user')
+                        //     window.location.href=$rootScope.dmpurl+"/login/user_logout";
+                        // else
+                        //     window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=1";
                     },500);
                     
                 });

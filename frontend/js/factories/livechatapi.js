@@ -1,5 +1,5 @@
 // var liveChatUrl="http://localhost:5000/" ;
-var liveChatUrl="https://kaira.prod.kotak.int:5000/" ;
+var liveChatUrl="https://cingulariti.in:5000/" ;
 
 myApp.factory("livechatapi",function($http){  
       return {

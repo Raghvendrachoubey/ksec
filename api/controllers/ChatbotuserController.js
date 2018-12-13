@@ -3,7 +3,7 @@ var controller = {
     loginuser: function (req, res) {
         console.log(req.connection.remoteAddress);
         if (req.body) {
-            Chatbotuser.loginuser(req.body, res.callback);
+            Chatbotuser.loginuser(req,req.body, res.callback);
         }
         else {
             res.json({

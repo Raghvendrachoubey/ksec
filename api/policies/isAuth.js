@@ -73,7 +73,7 @@ module.exports = function (req, res, next) {
 			if(!req.session.userId)
 				return res.forbidden("User not found");
 			var uid = req.session.userId;
-			var decodedtext=decoded['DOMAIN LOGIN ID'];
+			var decodedtext=decoded['email'];
 			uid=uid.toLowerCase();
 			decodedtext=decodedtext.toLowerCase();
 			// console.log(uid,decodedtext);

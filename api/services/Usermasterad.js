@@ -487,160 +487,178 @@ var model = {
 		var decoded = jwt.decode(ccdata.data);
 		if(decoded) {
 			//callback(null, decoded);
-			
-			Usermasterad.findOne({
-				"DOMAIN LOGIN ID": {$regex:".*"+decoded['DOMAIN LOGIN ID']+".*",$options:"i"}
-			}).limit(1).exec(function (err, found) {
+			var found = {};
+			found = decoded;
+			found.curtime=Date.now();
+			var Chatbotuserlogs = require("./Chatbotuserlogs");
+			found.FRONTEND_ENC_KEY=env2.FRONTEND_ENC_KEY;
+			found.BACKEND_API_KEY=env2.BACKEND_API_KEY;
+			found.B_TOKEN_KEY=env2.B_TOKEN_KEY;
+			Chatbotuserlogs.findOne({
+				token:ccdata.data,
+				//user:data.user
+			}).sort({createdAt: -1}).exec(function (err, result) {
 				if (err) {
+					//console.log("err",err);
 					callback(err, null);
 				} 
 				else {
-					if (found) {
-						
-						var ip = require('ip');
-						var jwt = require("jsonwebtoken");
-						found = found.toObject();
-						found.curtime=Date.now();
-						var Chatbotuserlogs = require("./Chatbotuserlogs");
-						found.FRONTEND_ENC_KEY=env2.FRONTEND_ENC_KEY;
-						found.BACKEND_API_KEY=env2.BACKEND_API_KEY;
-						found.B_TOKEN_KEY=env2.B_TOKEN_KEY;
-						Chatbotuserlogs.findOne({
-							token:ccdata.data,
-							//user:data.user
-						}).sort({createdAt: -1}).exec(function (err, result) {
-							if (err) {
-								//console.log("err",err);
-								callback(err, null);
-							} 
-							else {
-								// found2 = {};
-								
-								// found2 = found;
-								// found2.sessionid = result._id;
-								
-								var Loc = require("./Loc");
-								var loccode=parseInt(found['LOC Code']);
-								//console.log(loccode);
-								loccode=loccode.toString();
-								if(loccode.charAt[0]=='0')
-									loccode=loccode.substring(1);
-								Loc.findOne({
-									id: loccode,
-								}).limit(1).exec(function (locerr, locfound) {
-									
-									if(locfound)
-									{
-										if(locfound['text']=='nan')
-											found.branchname="NA";
-										found.branchname=locfound['text'];
-									}
-									if(!found.branchname)
-										found.branchname="NA";
-									
-									var users = require("./Users");
-									users.findOne({
-										domain_id: decoded['DOMAIN LOGIN ID'],
-									}).limit(1).exec(function (err, found2) {
-										if(found2)
-										{
-											Chatbotuserlogs.count({
-												userid:decoded['DOMAIN LOGIN ID']
-											}, function(err11, c) {
-												if(err11)
-												{
-													callback(err11,null);
-												}
-												else {
-													//found = found.toObject();
-													var r = result.toObject();
-													found.sessionid = r._id;
-													found.user_type=found2.user_type;
-													found.user_role=found2.user_role;
-													if(found2.live_chat)
-														found.live_chat=found2.live_chat;
-													found.logincount = c;
-													var dept = require("./Deptroles");
-													dept.find({
-														roles: found['New Role'],
-													}).exec(function (err3, deptdata) {
-														if(err3)
-														{
-															var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(found), "58e7054c20c23efd03373efd0337").toString();
-															callback(null, ciphertext);
-														}
-														if(deptdata)
-														{
-															var depts="";
-															for(var i = 0 ; i <= deptdata.length-1 ; i++)
-															{
-																if(i==0)
-																	depts=deptdata[i].dept_name;
-																else 
-																	depts=depts+","+deptdata[i].dept_name;
-															}
-															found.department=depts;
-															var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(found), "58e7054c20c23efd03373efd0337").toString();
-															callback(null, ciphertext);
-														}
-														else {
-															var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(found), "58e7054c20c23efd03373efd0337").toString();
-															callback(null, ciphertext);
-														}
-													});
-												}
-												
-												//found['user_type']=found2.user_type;
-												//found['user_role']=found2.user_role;
-												
-											});
-										}
-										else
-										{
-											var dept = require("./Deptroles");
-											dept.find({
-												roles: found['New Role'],
-											}).exec(function (err3, deptdata) {
-												if(err3)
-												{
-													callback(null, found);
-												}
-												if(deptdata)
-												{
-													var depts="";
-													for(var i = 0 ; i <= deptdata.length-1 ; i++)
-													{
-														if(i==0)
-															depts=deptdata[i].dept_name;
-														else 
-															depts=depts+","+deptdata[i].dept_name;
-													}
-													found.department=depts;
-													var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(found), "58e7054c20c23efd03373efd0337").toString();
-													callback(null, ciphertext);
-												}
-												else {
-													var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(found), "58e7054c20c23efd03373efd0337").toString();
-													callback(null, ciphertext);
-												}
-											});
-											//callback(null, found);
-										}
-											
-									});		
-								});
-							}
-						});
-						
-						
-					} else {
-						callback({
-							message: "-1"
-						}, null);
-					}
+					callback(null, found);
 				}
-
 			});
+			// Usermasterad.findOne({
+			// 	"DOMAIN LOGIN ID": {$regex:".*"+decoded['DOMAIN LOGIN ID']+".*",$options:"i"}
+			// }).limit(1).exec(function (err, found) {
+			// 	if (err) {
+			// 		callback(err, null);
+			// 	} 
+			// 	else {
+			// 		if (found) {
+						
+			// 			var ip = require('ip');
+			// 			var jwt = require("jsonwebtoken");
+			// 			found = found.toObject();
+			// 			found.curtime=Date.now();
+			// 			var Chatbotuserlogs = require("./Chatbotuserlogs");
+			// 			found.FRONTEND_ENC_KEY=env2.FRONTEND_ENC_KEY;
+			// 			found.BACKEND_API_KEY=env2.BACKEND_API_KEY;
+			// 			found.B_TOKEN_KEY=env2.B_TOKEN_KEY;
+			// 			Chatbotuserlogs.findOne({
+			// 				token:ccdata.data,
+			// 				//user:data.user
+			// 			}).sort({createdAt: -1}).exec(function (err, result) {
+			// 				if (err) {
+			// 					//console.log("err",err);
+			// 					callback(err, null);
+			// 				} 
+			// 				else {
+			// 					// found2 = {};
+								
+			// 					// found2 = found;
+			// 					// found2.sessionid = result._id;
+								
+			// 					var Loc = require("./Loc");
+			// 					var loccode=parseInt(found['LOC Code']);
+			// 					//console.log(loccode);
+			// 					loccode=loccode.toString();
+			// 					if(loccode.charAt[0]=='0')
+			// 						loccode=loccode.substring(1);
+			// 					Loc.findOne({
+			// 						id: loccode,
+			// 					}).limit(1).exec(function (locerr, locfound) {
+									
+			// 						if(locfound)
+			// 						{
+			// 							if(locfound['text']=='nan')
+			// 								found.branchname="NA";
+			// 							found.branchname=locfound['text'];
+			// 						}
+			// 						if(!found.branchname)
+			// 							found.branchname="NA";
+									
+			// 						var users = require("./Users");
+			// 						users.findOne({
+			// 							domain_id: decoded['DOMAIN LOGIN ID'],
+			// 						}).limit(1).exec(function (err, found2) {
+			// 							if(found2)
+			// 							{
+			// 								Chatbotuserlogs.count({
+			// 									userid:decoded['DOMAIN LOGIN ID']
+			// 								}, function(err11, c) {
+			// 									if(err11)
+			// 									{
+			// 										callback(err11,null);
+			// 									}
+			// 									else {
+			// 										//found = found.toObject();
+			// 										var r = result.toObject();
+			// 										found.sessionid = r._id;
+			// 										found.user_type=found2.user_type;
+			// 										found.user_role=found2.user_role;
+			// 										if(found2.live_chat)
+			// 											found.live_chat=found2.live_chat;
+			// 										found.logincount = c;
+			// 										var dept = require("./Deptroles");
+			// 										dept.find({
+			// 											roles: found['New Role'],
+			// 										}).exec(function (err3, deptdata) {
+			// 											if(err3)
+			// 											{
+			// 												var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(found), "58e7054c20c23efd03373efd0337").toString();
+			// 												callback(null, ciphertext);
+			// 											}
+			// 											if(deptdata)
+			// 											{
+			// 												var depts="";
+			// 												for(var i = 0 ; i <= deptdata.length-1 ; i++)
+			// 												{
+			// 													if(i==0)
+			// 														depts=deptdata[i].dept_name;
+			// 													else 
+			// 														depts=depts+","+deptdata[i].dept_name;
+			// 												}
+			// 												found.department=depts;
+			// 												var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(found), "58e7054c20c23efd03373efd0337").toString();
+			// 												callback(null, ciphertext);
+			// 											}
+			// 											else {
+			// 												var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(found), "58e7054c20c23efd03373efd0337").toString();
+			// 												callback(null, ciphertext);
+			// 											}
+			// 										});
+			// 									}
+												
+			// 									//found['user_type']=found2.user_type;
+			// 									//found['user_role']=found2.user_role;
+												
+			// 								});
+			// 							}
+			// 							else
+			// 							{
+			// 								var dept = require("./Deptroles");
+			// 								dept.find({
+			// 									roles: found['New Role'],
+			// 								}).exec(function (err3, deptdata) {
+			// 									if(err3)
+			// 									{
+			// 										callback(null, found);
+			// 									}
+			// 									if(deptdata)
+			// 									{
+			// 										var depts="";
+			// 										for(var i = 0 ; i <= deptdata.length-1 ; i++)
+			// 										{
+			// 											if(i==0)
+			// 												depts=deptdata[i].dept_name;
+			// 											else 
+			// 												depts=depts+","+deptdata[i].dept_name;
+			// 										}
+			// 										found.department=depts;
+			// 										var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(found), "58e7054c20c23efd03373efd0337").toString();
+			// 										callback(null, ciphertext);
+			// 									}
+			// 									else {
+			// 										var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(found), "58e7054c20c23efd03373efd0337").toString();
+			// 										callback(null, ciphertext);
+			// 									}
+			// 								});
+			// 								//callback(null, found);
+			// 							}
+											
+			// 						});		
+			// 					});
+			// 				}
+			// 			});
+						
+						
+			// 		} else {
+			// 			callback({
+			// 				message: "-1"
+			// 			}, null);
+			// 		}
+			// 	}
+
+			// });
 		}
 		else {
 			callback({},null);

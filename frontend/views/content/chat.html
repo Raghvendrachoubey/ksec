@@ -18,22 +18,77 @@
                         <span class="glyphicon glyphicon-minus icon_close" data-id="chat_window_1"></span>
                     </a>
                 </div>
-            </div>
-            <div class="container-fluid chatbody">
+			</div>
+			<div class="container-fluid" ng-if="!isLoggedIn">
+                <div class="col-sm-12"> 
+                    <div class="login">
+                        <div class="login-container">
+                            <div class="loginbar">
+                                <h1 class="text-center">Login</h1>
+                            </div>
+
+                            <div class="row loginwrapper">
+
+                                <form id="login_form" name="login_form" class="form-horizontal">
+
+                                	<div class="col-sm-10 col-sm-offset-1">
+	                                    <div class="form-group">
+	                                        <label for="username" class="control-label">Name:</label>
+	                                        <input class="form-control username" id="username" type="text" name="username" placeholder="Name" ng-model="user.name" required>
+	                                        <div class="pull-right" ng-repeat="(field,value) in login_form.username.$error" ng-show="login_form.username.$touched">
+                                                <span class="label label-danger" ng-if="field=='required' && value">Please Enter Name</span>
+                                            </div>
+	                                    </div>
+                                    </div>
+									<div class="col-sm-10 col-sm-offset-1">
+	                                    <div class="form-group">
+	                                        <label for="email" class="control-label">Email:</label>
+	                                        <input class="form-control email" id="email" type="email" name="email" placeholder="Email" ng-model="user.email" required>
+	                                        <div class="pull-right" ng-repeat="(field,value) in login_form.email.$error" ng-show="login_form.email.$touched">
+                                                <span class="label label-danger" ng-if="field=='required' && value">Please Enter Valid Email</span>
+                                            </div>
+	                                    </div>
+                                    </div>
+                                    <div class="col-sm-10 col-sm-offset-1">
+										<div class="form-group">
+											<label for="language_list" class="control-label">Language</label>
+											
+											<select id="language_list" name="language_list"  ng-options="cat as cat.name for cat in languagelist" ng-model="selectedLanguage"  class="form-control"  required>
+										
+											</select>
+											<div class="pull-right" ng-repeat="(field,value) in login_form.language_list.$error" ng-show="login_form.language_list.$touched">
+												<span class="label label-danger" ng-if="field=='required' && value">Please Select  Language</span>
+											</div>
+											
+										</div>
+									</div>
+                                    <div class="col-sm-10 col-sm-offset-1">
+                                    	<div class="form-group loginbtngrp">
+                                            <div class="pull-right"  ng-if="loginerror==-1">
+                                                <span class="label label-danger">Please try again</span>
+                                            </div>
+                                            <div class="pull-right"  ng-if="!isLoggedin">
+                                                <span class="label label-danger">Please Login To Continue</span>
+                                            </div>
+                                            <input class="form-control login-button" id='login' type="submit" name="login" ng-disabled="login_form.$invalid"  class="btn btn-primary btn-lg btn-block" value="Login" ng-click="login(user.name,user.email,selectedLanguage);">
+                                        </div>
+									</div>
+									
+                                </form>
+
+                            </div>
+                        <!-- <div class="login-help">
+                            <a href="#" class="text-center" ng-click="openForgotpassword();">Forgot Password</a>
+                        </div> -->
+                        </div>
+                    </div>
+                </div>
+			</div>
+            <div class="container-fluid chatbody" ng-if="isLoggedIn">
                 <div class="tab-content chattab-content">
                     
                     <div class="tab-pane active row" id="chattab" ng-show="chat_tab === 1">
-                    	<div class="form-group">
-                            <label for="language_list" class="col-sm-4 control-label">Language</label>
-                            <div class="col-sm-8">
-                                <select id="language_list" name="language_list"  ng-options="cat as cat.name for cat in languagelist" ng-model="selectedLanguage" ng-change="langchange(selectedLanguage);" class="form-control"  required>
-                            
-                                </select>
-                                <div class="pull-right" ng-repeat="(field,value) in login_form.language_list.$error" ng-show="login_form.language_list.$touched">
-                                    <span class="label label-danger" ng-if="field=='required' && value">Please Select  Language</span>
-                                </div>
-                            </div>
-                        </div>
+                    	
                         <div class="panel-body" ng-style="{'height':chatpanelheight+ 'px'}"> 
                             <ul class="chat">
                                 

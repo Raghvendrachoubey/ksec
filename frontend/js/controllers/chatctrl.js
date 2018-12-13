@@ -24,6 +24,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
     $rootScope.agentdet = {};
     $rootScope.outprocessclick = 0;
     $rootScope.journeylist = [];
+    $rootScope.isLoggedIn = false;
     $rootScope.displaySubmitButton = false;
     $rootScope.languagelist = [
         {id:"en" , name:"English"},
@@ -32,6 +33,76 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         {id:"gu" , name:"Gujarati"},
         {id:"ta" , name:"Tamil"},
     ];
+    $scope.login = function(username,email,sl)
+    {
+        
+        
+            $scope.formData = {username:username,email:(email)};
+        /*
+        apiService.login($scope.formData).then(function (callback){
+            //console.log(callback);
+        });*/
+        
+            apiService.login($scope.formData).then(function (callback){
+                // $scope.csrftoken=CsrfTokenService.getCookie("csrftoken");
+                
+                //if(angular.isUndefined(callback.data.error.message))
+                if(callback.data.value)
+                {
+                    //console.log(callback);
+                    $.jStorage.flush();
+                    $rootScope.isLoggedIn = true;
+                    // $rootScope.access_role = callback.data.data.accessrole;
+                    $.jStorage.set("accesstoken",callback.data.data.accesstoken);
+                    $.jStorage.set("name",username);
+                    $.jStorage.set("email", email);
+                    $rootScope.selectedLanguage = sl;
+                    $.jStorage.set("language", $rootScope.selectedLanguage.id);
+                    $scope.sessiondata = {
+                        id_string : "",
+                        //data : {},
+                        DTHyperlink : '',
+                        LineNo : '',
+                        options : '',
+                        opts : '',
+                        row_by_framework_level : '',
+                        framework_level : 1,
+                        response:{},
+                        response_type :'',
+                        form_input_type : '',
+                        form_input_dict : {} , 
+                        form_input_list : []  ,  
+                        form_category : '',
+                        Context:'',
+                        Context_1:'',
+                        Context_2:'',
+                        Context_3:'',
+                        Context_4:'',
+                        Context_5:'',
+                        gb_dt_start_row:-1,
+                        gb_dt_end_row:-1,
+                        gb_dt_current_cursor_row:-1,
+                        gb_dt_current_cursor_col:-1,
+                        gb_dt_file_name:'',
+                        gb_sub_topic_list : [],
+                        gb_step_list : [],
+                        gb_current_step : '',
+                        tooltip : [],
+                        gb_topic_tuple_array:[],
+                        gb_max_ratio_index_in_tuple:[],
+                        gb_topic:'',
+                        gb_matched_row_values:[],
+                        gb_matched_col_values:[],
+                    };
+                    $.jStorage.set("sessiondata",$scope.sessiondata);
+                    
+                }
+                else if(callback.data.error.message == -1)
+                    $scope.loginerror = -1;
+            });
+        
+        
+    };
     if(!$.jStorage.get("language"))
     {
         $rootScope.selectedLanguage = $rootScope.languagelist[0];
@@ -220,14 +291,16 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
 						//io.socket.disconnect();
 					//$state.go("login");
 					$timeout(function(){
-						window.location.href=$rootScope.dmpurl+"/login/user_logout";
+                        $rootScope.isLoggedIn = false;
+						// window.location.href=$rootScope.dmpurl+"/login/user_logout";
 					},500);
 					
 				});
 			}
 			else {
 				$timeout(function(){
-					window.location.href=$rootScope.dmpurl+"/login/user_logout";
+                    $rootScope.isLoggedIn = false;
+					// window.location.href=$rootScope.dmpurl+"/login/user_logout";
 				},500);
 			}
         }
@@ -246,7 +319,8 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                 //console.log("agent logout", data)
             })
             $timeout(function(){
-                window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
+                $rootScope.isLoggedIn = false;
+                // window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
             },500);            
         });
         
@@ -563,14 +637,15 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             $rootScope.pushSystemMsg(0,msg);  
         }
         $('#chat_panel').slideDown("slow");
+        // $("#chat_panel").toggle('scale');
         //$('#chat_panel').find('.panel-body').slideDown("fast");
         //$('#chat_panel').find('.panel-footer').slideDown("slow");
         $('.panel-heading span.icon_minim').removeClass('panel-collapsed');
         $('.panel-heading span.icon_minim').removeClass('glyphicon-plus').addClass('glyphicon-minus');
         $timeout(function(){
-            // $(".clickImage").hide();
-             $("#chat-circle").toggle('scale');
-        },0);
+            $("#chat-circle").hide();
+            //  $("#chat-circle").toggle('scale');
+        },500);
         $rootScope.chatOpen = true;
         $rootScope.scrollChatWindow();
         if($(".expandable2").hasClass('col-md-12')) //-- menu closed
@@ -597,12 +672,13 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         $rootScope.showTimeoutmsg = false;
         $rootScope.autocompletelist = [];
         $('#chat_panel').slideUp();
+        // $('#chat_panel').toggle('scale');
         //$('#chat_panel').find('.panel-body').slideUp("fast");
         //$('#chat_panel').find('.panel-footer').slideUp("fast");
         $('.panel-heading span.icon_minim').addClass('panel-collapsed');
         $('.panel-heading span.icon_minim').addClass('glyphicon-plus').removeClass('glyphicon-minus');
-        // $(".clickImage").show( "fadeIn");
-        $("#chat-circle").toggle('scale');
+        $("#chat-circle").show( "fadeIn");
+        // $("#chat-circle").toggle('scale');
         if($(".expandable2").hasClass('col-md-8')) //-- menu is closed
         {
             $(".expandable2").removeClass('col-md-8');

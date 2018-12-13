@@ -84,54 +84,78 @@ module.exports = mongoose.model('chatbotuser', schema,'chatbotuser');
 //var chatbot_user_logs = mongoose.model('chatbot_user_logs', userlogschema,"chatbot_user_logs");
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
 var model = {
-    loginuser: function (data, callback) {
+    loginuser: function (reqobj,data, callback) {
        // console.log("data", data)
-        Chatbotuser.findOne({
-            email: data.username,
-            password: data.password,
-        }, { fname: 1, lname: 1,email:1,accessrole:1,branch:1 }).limit(1).exec(function (err, found) {
+        var ip = require('ip');
+        var jwt = require("jsonwebtoken");
+        var found = {};
+        found = data;
+        found = found.toObject();
+        
+        found.curtime=Date.now();
+        found.curtime=found.curtime;
+        var token = jwt.sign(found, "ExPo", {
+            expiresIn: '8h'
+        });
+        found.token=token;
+        var ip_address = ip.address("public","ipv4");
+        var userLogs = require("./Chatbotuserlogs");
+        var sessiondata = userLogs({userid:data.email,user:username,login_date:(new Date()),token:token,ip_address:ip_address,logout_date:new Date()});
+        sessiondata.save(function (err,result) {
             if (err) {
                 callback(err, null);
-            } 
+            }
             else {
-                if (found) {
-                    var ip = require('ip');
-                    var ip_address = ip.address("public","ipv4");
-                    var userLogs = require("./Chatbotuserlogs");
-                    var sessiondata = userLogs({user:found._id,login_date:(new Date()),ip_address:ip_address,logout_date:new Date()});
-                    sessiondata.save(function (err,result) {
-                        if (err) {
-                                return err;
-                        }
-                        else {
-                            // found2 = {};
+                reqobj.session.userId=data.email;
+                callback(null, found);
+            }
+        });
+        // Chatbotuser.findOne({
+        //     email: data.username,
+        //     password: data.password,
+        // }, { fname: 1, lname: 1,email:1,accessrole:1,branch:1 }).limit(1).exec(function (err, found) {
+        //     if (err) {
+        //         callback(err, null);
+        //     } 
+        //     else {
+        //         if (found) {
+        //             var ip = require('ip');
+        //             var ip_address = ip.address("public","ipv4");
+        //             var userLogs = require("./Chatbotuserlogs");
+        //             var sessiondata = userLogs({user:found._id,login_date:(new Date()),ip_address:ip_address,logout_date:new Date()});
+        //             sessiondata.save(function (err,result) {
+        //                 if (err) {
+        //                         return err;
+        //                 }
+        //                 else {
+        //                     // found2 = {};
                             
-                            // found2 = found;
-                            // found2.sessionid = result._id;
-                            found = found.toObject();
-                            var r = result.toObject();
-                            found.sessionid = r._id;
+        //                     // found2 = found;
+        //                     // found2.sessionid = result._id;
+        //                     found = found.toObject();
+        //                     var r = result.toObject();
+        //                     found.sessionid = r._id;
                       
 
-                            PythonShell.run(pythonpath+'my_script.py', { mode: 'json ',args:[data]}, function (err, results) { 
-                                //found.set('sessionid', result._id)
+        //                     PythonShell.run(pythonpath+'my_script.py', { mode: 'json ',args:[data]}, function (err, results) { 
+        //                         //found.set('sessionid', result._id)
                                 
                                 
-                                callback(null, found);
-                            });
-                            //callback(null, found);
-                        }
-                    });
+        //                         callback(null, found);
+        //                     });
+        //                     //callback(null, found);
+        //                 }
+        //             });
                     
                     
-                } else {
-                    callback({
-                        message: "-1"
-                    }, null);
-                }
-            }
+        //         } else {
+        //             callback({
+        //                 message: "-1"
+        //             }, null);
+        //         }
+        //     }
 
-        });
+        // });
     },
     changepassword: function (data, callback) {
         Chatbotuser.findOneAndUpdate({
