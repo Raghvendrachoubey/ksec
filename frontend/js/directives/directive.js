@@ -93,6 +93,10 @@ myApp.directive('img', function ($compile, $parse) {
                                         //console.log(response.data.data);
                                         element.html(response.data.data);
                                         $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    }).catch(function (reason) {
+                                        hcont=$.parseHTML(value);
+                                        element.html(hcont);
+                                        $( "ul.chat li:last-child" ).removeClass('langcase');
                                     });
                                 }
                                     // if (scope.originalTooltip) {
@@ -217,6 +221,10 @@ myApp.directive('img', function ($compile, $parse) {
                                         hcont=$.parseHTML(response.data.data);
                                         
                                         //hcont= $compile(hcont)(scope);
+                                        element.html(hcont);
+                                        $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    }).catch(function (reason) {
+                                        hcont=$.parseHTML(contents);
                                         element.html(hcont);
                                         $( "ul.chat li:last-child" ).removeClass('langcase');
                                     });
