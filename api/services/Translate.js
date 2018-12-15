@@ -23,6 +23,7 @@ var model = {
             // console.log(res.from.text.didYouMean);
             // //=> false 
         }).catch(err => {
+            callback(err, null);
             //console.error(err);
         });
     },
@@ -65,14 +66,16 @@ var model = {
                             // console.log(res.from.text.didYouMean);
                             // //=> false 
                         }).catch(err => {
-                            //console.error(err);
+                            callback(err, null);
                         });
                     }
             },
             // 3rd param is the function to call when everything's done
             function(err){
                 // All tasks are done now
-                if(err) {}
+                if(err) {
+                    callback(err, null);
+                }
                 else
                     callback(null,{linkdata:linkdata,key:key});
             }

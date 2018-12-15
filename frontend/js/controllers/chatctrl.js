@@ -133,13 +133,18 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
     };
     $rootScope.menuOpen=false;
 
-
+    $scope.not_menu = [
+        {msg:"Changes in the commission structure"},
+        {msg:"Shubh Deepawali from Fino"},
+        {msg:"Transact more to achieve more now"},
+        {msg:"More"},
+    ];
 
     $scope.failuremsg = [
-        {msg:"Sorry, I did not catch that. Could you please rephrase the sentence and try again?"},
-        {msg:"Oops! I dont't think I can answer that,Can you rephrase your question?"},
+        {msg:"I'm glad that you are trying new functionalities. However, currently I'm equipped with information about Cash-In, New Products, Transaction Status, Commission & Charges and General Information about Account Opening Processes."},
+        {msg:"I'm glad that you are trying new functionalities. However, currently I'm equipped with information about Cash-In, New Products, Transaction Status, Commission & Charges and General Information about Account Opening Processes."},
         //{msg:"No hard feelings but I don't think I can answer that"},
-        {msg:"Well, I haven't heard that before can you put it in another way?"},
+        {msg:"I'm glad that you are trying new functionalities. However, currently I'm equipped with information about Cash-In, New Products, Transaction Status, Commission & Charges and General Information about Account Opening Processes."},
     ];
     $scope.lastfailure="";
     if($.jStorage.get("lastagent"))
@@ -2915,6 +2920,14 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
     $rootScope.outprocessjourney="";
     $rootScope.outprocessjourneylist=[];
     $rootScope.DthResponse = function(id,data,dthlink) {
+        if(data.tiledlist[0].Steps && data.tiledlist[0].Steps=='download')
+        {
+            var link=document.createElement('a');
+            link.href="https://cingulariti.in:8096/rbl_backend/static/images/loan_application_form.pdf";
+            link.download="Form.pdf";
+            link.click();
+            link.remove();
+        }
 		$rootScope.script_data = [];
 		$rootScope.scrollprocess();
         // $rootScope.tabvalue.elements = [];

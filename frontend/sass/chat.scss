@@ -705,7 +705,7 @@ td#fbplus-title-float-left , td#fbplus-title-float-right {
 .dthyperlink2 {
     cursor: pointer;
     // text-decoration: underline;
-    background: #eee;
+    background: #fff;
     color: #442A70;
     // font-style: italic;
     padding: 0.5em 0.5em;
@@ -715,7 +715,7 @@ td#fbplus-title-float-left , td#fbplus-title-float-right {
 .chat-body .dthyperlink {
     cursor: pointer;
     // text-decoration: underline;
-    background: #eee;
+    background: #fff;
     color: #442A70;
     // font-style: italic;
     padding: 0.5em 0.5em;
@@ -788,7 +788,7 @@ a.unanswered {
     display: table;
     float: right;
     right: 10px;
-    font-family: Roboto-Light;
+    // font-family: Roboto-Light;
     font-size: 13px;
     border-radius: 4px;
     font-weight: 600;
@@ -1026,8 +1026,8 @@ height:30px!important;
     float:left;
 }
 .dthyperlink.chatdt {
-    background: #eee;
-    color: #000;
+    background: #fff;
+    color: #4C1F6D;
     padding: 0.5em 0.5em;
     margin-bottom: 0.2em;
     border-radius: 5px;

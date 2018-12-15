@@ -193,11 +193,12 @@ myApp.directive('img', function ($compile, $parse) {
                         var translationChangeOccurred = function () {
                             attrs.$observe('compTranslater', function(value) {
                                 var languageid = $.jStorage.get("language");
-                                contents = attrs.content;  
+                                contents = value;
+                                // contents = attrs.content;  
                                 contents=contents.replace('↵',' <br> ');  
                                 //contents=contents.replace(" ",' <br> '); 
                                 contents = contents.replace("\n","<br>");     
-                                contents = contents.replace(new RegExp("../static/data_excel/", 'g'), adminurl2+'static/data_excel/');     
+                                contents = contents.replace(new RegExp("../static/data_excel/", 'g'), adminurl+'static/data_excel/');     
                                 var formData = { "text": contents,"language":languageid };
                                 //element.text(value);
                                 //element.html(apiService.translate(formdata));

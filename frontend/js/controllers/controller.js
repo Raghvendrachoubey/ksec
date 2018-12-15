@@ -437,7 +437,136 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
         $scope.navigation = NavigationService.getNavigation();
 		$rootScope.getallsession=false;
 		$scope.getallsession1=false;
-		$rootScope.getallsessionid=false;
+        $rootScope.getallsessionid=false;
+        $rootScope.nearme = function() {
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                  mysrclat = position.coords.latitude;
+                  mysrclong = position.coords.longitude;
+                //   console.log("current-lat",mysrclat);
+                //   console.log("Long",mysrclong);
+                  var formData = {
+                    latitude:mysrclat,
+                    longitude: mysrclong
+                    };
+                    apiService.gps_location(formData).then(function (callback){
+
+                        // console.log("gps-api",callback["data"]["Result"]);
+
+                        valueMap = "The Branch nearest to you is shown in the map below";
+                        // $rootScope.pushSystemMsg(0, valueMap);
+                        $rootScope.chatlist.push({id:"id",msg:valueMap,position:"right",curTime: $rootScope.getDatetime()});
+
+                        $.ajax({
+                            url: "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDy_367PJeu1ykECzPAc7fZNPLF5bOTSlU&latlng="+callback["data"]["Result"]["latitude"]+","+callback["data"]["Result"]["longitude"]+"&sensor=true",
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            timeout: 3000,
+                            type: "GET",
+                            success: function (data) {
+                                // console.log(data);
+                                if(data.status == "OK"){
+                                    if(data.results.length>0){
+                                        $rootScope.showMap = true;
+                                        var mymsgmap = { Text:"Address: "+callback["data"]["Result"]["address"] ,type:"SYS_MAP" };
+                                        $rootScope.pushSystemMsg(0, mymsgmap);
+                                        $.jStorage.set("lat",callback["data"]["Result"]["latitude"]);
+                                        $.jStorage.set("long",callback["data"]["Result"]["longitude"]);
+                                        $.jStorage.set("address",callback["data"]["Result"]["address"]);
+                                    }
+                                }
+                            },
+                        });
+
+                    });
+                   // Use either $scope.$apply() or $scope.evalAsync not both for same result
+                    //$scope.$apply()  
+                    $scope.$apply(function() {
+                        $rootScope.lat = mysrclat;
+                        $rootScope.lan = mysrclong;
+                    })
+                    //$scope.$evalAsync()
+                });
+            }
+        };
+        $rootScope.getadd = function() {
+            if(!($.jStorage.get("curaddress")) )
+            {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position){
+                        $scope.$apply(function(){
+                            $scope.position = position;
+                            
+                            $.jStorage.set("position",position);
+                            $.jStorage.set("lat",position.coords.latitude);
+                            $.jStorage.set("long",position.coords.longitude);
+                            $.ajax({
+                                url: "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDy_367PJeu1ykECzPAc7fZNPLF5bOTSlU&latlng="+position.coords.latitude+","+position.coords.longitude+"&sensor=true",
+                                dataType: "json",
+                                async: true,
+                                cache: false,
+                                timeout: 3000,
+                                type: "GET",
+                                success: function (data) {
+                                    //console.log(data,"live user");
+                                    if(data.status == "OK")
+                                    {
+                                        if(data.results.length>0)
+                                        {
+                                            $rootScope.curaddress = data.results[0].formatted_address;
+                                            $.jStorage.set("curaddress",$rootScope.curaddress);
+                                            //console.log($rootScope.curaddress,"live user");
+                                        }
+                                    }
+                                },
+                            });
+                            //console.log(position);
+                        });
+                    });
+                }
+                $rootScope.map="";
+                
+            }
+            else
+            {
+                
+                $rootScope.curaddress =$.jStorage.get("curaddress");
+                $scope.position=$.jStorage.get("position");
+            }
+        };
+        $rootScope.initMap=function(map_index) {
+            $timeout(function(){
+
+                // var map;
+                // var latlng = new google.maps.LatLng($.jStorage.get('lat'),$.jStorage.get('long'));
+                // console.log(latlng);
+                
+                // map = new google.maps.Map(document.getElementById('map_'+map_index), {
+                //     center: latlng,
+                //     //center:{lat: $.jStorage.get('lat'), lng: $.jStorage.get('long')},
+                //     zoom: 12
+                // });
+
+                
+                var mapOptions = {
+                    zoom: 15,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                map = new google.maps.Map(document.getElementById('map_'+map_index), mapOptions);
+                var geolocate = new google.maps.LatLng($.jStorage.get('lat'), $.jStorage.get('long'));
+                // var infowindow = new google.maps.InfoWindow({
+                //     map: map,
+                //     position: geolocate,
+                //     content:
+                //         '<h2>Latitude: ' + $.jStorage.get('lat') + '</h2>' +
+                //         '<h2>Longitude: ' + $.jStorage.get('long') + '</h2>'
+                // });
+                
+                map.setCenter(geolocate);
+            },1000);
+        };
 		$rootScope.removetab = function(index,parentjourney){
             ////console.log("remove tab",$rootScope.tabvalue.elements);
             var li_i=$('#tab_data ul.nav-tabs li').index($('#tab_data ul.nav-tabs li[data-parentjr="'+parentjourney+'"]'));
@@ -483,11 +612,13 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				$rootScope.djtoken=apiresponse.data;
 				$.jStorage.set('djtoken',apiresponse.data);*/
 				////console.log(apiresponse.data,"ttt");
-				////console.log($.jStorage.get('djtoken'),"ttt");
+                ////console.log($.jStorage.get('djtoken'),"ttt");
+                $rootScope.getadd();
 				$timeout(function(){
 					apiService.get_session({
 						user: $rootScope.empcode
 					}).then(function (response) {
+                        $rootScope.isLoggedIn = true;
 						$rootScope.session_object = response.data.session_object;
 						$cookies.put("csrftoken", response.data.csrf_token);
 						$cookies.put("session_id", response.data.session_id);
@@ -642,12 +773,16 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 			});
 			
         };
-        if($.jStorage.get('accesstoken'))
-            $scope.getsessiondata();
+        if($.jStorage.get('accesstoken')) {
+            $scope.callsession();
+            $rootScope.isLoggedIn = true;
+        }
+            // $scope.getsessiondata();
         else {
             $rootScope.isLoggedIn = false;
         }
 		angular.element(document).ready(function() {
+            $rootScope.getadd();
 			$(document).on('click', 'a[imgfancybox]', function(e){ 
 				filename = $(this).attr("filename");
 				var thislink = $(this);

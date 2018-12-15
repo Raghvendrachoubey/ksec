@@ -9188,6 +9188,10 @@ ul.dropdown-menu.pdm li a, .profilelist li a {
   border-color: #442A70 !important;
   color: #442A70 !important; }
 
+.g_map {
+  height: 400px;
+  width: 300px; }
+
 a.bottomarrow {
   position: absolute;
   /*bottom: 20px;
@@ -10921,7 +10925,9 @@ span.bottom-info.redbg {
     #chat_window_1 div#all_questions {
       height: 600px; }
     #chat_window_1 #chat_panel {
-      height: 750px; } }
+      height: 750px; }
+    #chat_window_1 .g_map {
+      width: 220px; } }
 
 @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation: landscape) {
   /* For landscape layouts only */
@@ -10947,7 +10953,9 @@ span.bottom-info.redbg {
   div#all_questions {
     height: 210px !important; }
   #chat_panel {
-    height: 300px !important; } }
+    height: 300px !important; }
+  .g_map {
+    width: 220px; } }
 
 @font-face {
   font-family: "Frutiger_LT_45_Light";
@@ -11637,7 +11645,7 @@ td#fbplus-title-float-left, td#fbplus-title-float-right {
 
 .dthyperlink2 {
   cursor: pointer;
-  background: #eee;
+  background: #fff;
   color: #442A70;
   padding: 0.5em 0.5em;
   margin-bottom: 0.2em;
@@ -11645,7 +11653,7 @@ td#fbplus-title-float-left, td#fbplus-title-float-right {
 
 .chat-body .dthyperlink {
   cursor: pointer;
-  background: #eee;
+  background: #fff;
   color: #442A70;
   padding: 0.5em 0.5em;
   margin-bottom: 0.2em;
@@ -11707,7 +11715,6 @@ a.unanswered {
   display: table;
   float: right;
   right: 10px;
-  font-family: Roboto-Light;
   font-size: 13px;
   border-radius: 4px;
   font-weight: 600; }
@@ -11902,8 +11909,8 @@ a.unanswered {
   float: left; }
 
 .dthyperlink.chatdt {
-  background: #eee;
-  color: #000;
+  background: #fff;
+  color: #4C1F6D;
   padding: 0.5em 0.5em;
   margin-bottom: 0.2em;
   border-radius: 5px; }

@@ -263,10 +263,10 @@ $rootScope.sailscsrf="111";
 	$(document).on('click', '.chat-body .changedthbg', function(){ 
         console.log("dth click");
         var stage = $(this).attr("data-bgstage");
-        $(".stage"+stage).css('background-color','#eee');
-        $(".stage"+stage).css('color','#1e90ff');
+        $(".stage"+stage).css('background-color','#fff');
+        $(".stage"+stage).css('color','#4C1F6D');
         $(".stage"+stage+' .lefticon').hide();
-        $(this).css('background-color', '#003366');
+        $(this).css('background-color', '#4C1F6D');
         $(this).css('color', '#fff');
         $(this).find(".lefticon").show();
     });     

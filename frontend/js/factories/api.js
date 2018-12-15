@@ -886,6 +886,17 @@ myApp.factory('apiService', function ($rootScope,$http, $q, $timeout,CsrfTokenSe
             
             
         },
+        gps_location:function(formData, callback){
+            //console.log(formData);
+            var fd = formData;
+            return    $http({
+                url:adminurl+'gps_location/',
+                //url: adminUrl3 + 'Chatbotautolist/getDthlink',
+                method: 'POST',
+                data:$httpParamSerializer(fd),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','Authorization':$rootScope.djtoken,'X-CSRFToken':formData.csrfmiddlewaretoken },
+            });          
+        }
     };
     //return responsedata;
 });

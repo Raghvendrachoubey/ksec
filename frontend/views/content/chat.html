@@ -3,7 +3,7 @@
             <div class="panel-heading container-fluid" id="accordion">
                 <!--<span class="glyphicon glyphicon-comment"></span> Chat-->
                 <ul class="nav nav-tabs" id="chatTabs">
-                    <li class="active"  ><a href="#chattab" data-toggle="tab" ng-click="chat_tab=1" class=""><i class="fa fa-comment-o"></i> Chat</a></li>
+                    <li class="active"  ><a href="#chattab" data-toggle="tab" ng-click="chat_tab=1" class=""><i class="fa fa-comment-o"></i><span comp-translate="Chat"></span> </a></li>
                     <!--<li ><a href="#crntab" data-toggle="tab" ng-click="chat_tab=2">CRN NO.</a></li>-->
                     <!-- <li ng-show="access_role == 2"><a href="#srtab" data-toggle="tab" ng-click="chat_tab=3">SR NO.</a></li>  -->
                 </ul>
@@ -12,10 +12,10 @@
 						<i class="fa fa-bell" aria-hidden="true"></i>
 					</button>
 					<ul class="dropdown-menu not_menu">
-						<li><a href="#">Changes in the commission structure</a></li>
-						<li><a href="#">Shubh Deepawali from Fino</a></li>
-						<li><a href="#">Transact more to achieve more now</a></li>
-						<li><a href="#">More</a></li>
+						<li ng-repeat="notmsg in not_menu">
+							<a href="#"><span comp-translate="{{notmsg.msg}}"></span></a>
+						</li>
+						
 						<!-- <li role="separator" class="divider"></li>
 						<li><a href="#">Separated link</a></li> -->
 					</ul>
@@ -23,8 +23,8 @@
                         <span id="minim_chat_window " class="glyphicon glyphicon-minus icon_minim"></span>
                     </a>
                     
-                    <button type="button" class="btn btn-xs btn-primary newuser" ng-if="isLoggedIn"  ng-click="newuser();"><span class="glyphicon glyphicon-user"></span> End Chat</button>
-                    <button type="button" class="btn btn-xs btn-primary newchat" ng-if="agentconnected" ng-click="endConversation(1);"><span class="glyphicon glyphicon-comment"></span> End Live Chat</button>
+                    <button type="button" class="btn btn-xs btn-primary newuser" ng-if="isLoggedIn"  ng-click="newuser();"><span class="glyphicon glyphicon-user"></span> <span comp-translate="End Chat"></span></button>
+                    <!-- <button type="button" class="btn btn-xs btn-primary newchat" ng-if="agentconnected" ng-click="endConversation(1);"><span class="glyphicon glyphicon-comment"></span> End Live Chat</button> -->
                     <a type="button" class="btn btn-default btn-xs" ng-click="minimizeChatwindow();" href="#">
                         <span class="glyphicon glyphicon-minus icon_close" data-id="chat_window_1"></span>
                     </a>
@@ -34,9 +34,9 @@
                 <div class="col-sm-12"> 
                     <div class="login">
                         <div class="login-container">
-                            <div class="loginbar">
+                            <!-- <div class="loginbar">
                                 <h1 class="text-center">Login</h1>
-                            </div>
+                            </div> -->
 
                             <div class="row loginwrapper">
 
@@ -109,42 +109,41 @@
                                         <img ng-src="img/{{list.position == 'left' && 'Kairaprofile2.png' || 'logo7.png'}}" alt="BOT" class="img-circle " />
                                     </span>
                                     <div class="start_conv" ng-if="list.msg.type=='SYS_CONV_START'">
-                                        <span class="label label-success" >{{list.msg.Text}}</span>
+                                        <span class="label label-success" ><span comp-translater="{{list.msg.Text}}"></span></span>
                                     </div>
                                     <div class="end_conv" ng-if="list.msg.type == 'SYS_CONV_END'">
-                                        <span class="label label-danger" >{{list.msg.Text}}</span>
+                                        <span class="label label-danger" ><span comp-translater="{{list.msg.Text}}"></span></span>
                                     </div>
                                     
-                                    <div ng-class="{'chat-body':list.position==='right' || ( list.msg.tiledlist[0].type !== 'Instruction' &&  list.msg.type != 'SYS_CALC' && list.msg.type !== 'SYS_CONV_START' && list.msg.type !== 'SYS_CONV_END')}" ng-if="!list.type">
+                                    <div ng-class="{'chat-body':list.position==='right' || ( list.msg.tiledlist[0].type !== 'Instruction' &&  list.msg.type != 'SYS_CALC' && list.msg.type !== 'SYS_CONV_START' && list.msg.type !== 'SYS_CONV_END' && list.msg.type !== 'SYS_MAP')}" ng-if="!list.type">
                                         <div class="clearfix" ng-if="list.position==='right' && !list.msg.type">
                                             <p class="lastmsg" >
-                                                <ng-bind-html ng-bind-html = "list.msg">
+                                                <!-- <ng-bind-html ng-bind-html = "list.msg">
                                                     {{list.msg}}
-                                                </ng-bind-html>
+												</ng-bind-html> -->
+												<span comp-translater="{{list.msg}}"></span>
                                             </p>
                                         </div>
                                         <div class=" clearfix" ng-if="list.position==='left' && list.msg.tiledlist ">
                                             <div class="sysChatRes"  ng-repeat="chatRes in list.msg.tiledlist">
                                                 <div class="chatType" ng-if="list.msg.tiledlist[0].type==='text'">
-                                                    <p class="lastmsg" ng-bind-html = "to_trusted(chatRes.Text);">
+													<p>
+														<span comp-translater="{{chatRes.Text}}"></span>
+													</p>
+                                                    <!-- <p class="lastmsg" ng-bind-html = "to_trusted(chatRes.Text);">
                                                         
-                                                        <!--
-                                                        <small class="chatTime">
-                                                            <span class="glyphicon glyphicon-time">
-                                                            </span>
-                                                            {{list.curTime | date: 'HH:mm:ss'}}
-                                                        </small>-->
-                                                    </p>
+                                                        
+                                                    </p> -->
 													<div class="col-md-12" ng-if="chatRes.table_data">
 														<!--<div class="col-md-12 tabledata" id="table_data{{$rowIndex}}">
 															<ng-bind-html ng-bind-html="chatRes.table_data" >{{chatRes.table_data}}</ng-bind-html >
 														</div>-->
 														<div class="col-md-12">
-															<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(chatRes.table_data,$rowIndex);">View</button>
+															<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(chatRes.table_data,$rowIndex);"><span comp-translate="View"></span></button>
 															
 														</div>
 													</div>
-													<div class='carousel slide' ng-if="chatRes.image_name>0"  id='myCarousel{{$rowIndex}}'>
+													<!-- <div class='carousel slide' ng-if="chatRes.image_name>0"  id='myCarousel{{$rowIndex}}'>
                                                         <div class='carousel-inner'>
                                                             <div class='item carousel_item2' ng-class="{active:!$index}" ng-repeat="imagelist in chatRes.image_name track by $index">
                                                                 <div >
@@ -163,7 +162,7 @@
                                                         </div>
                                                         <a class='left carousel-control' href='#myCarousel{{$rowIndex}}' data-slide='prev'><i class='glyphicon glyphicon-chevron-left'></i></a>
                                                         <a class='right carousel-control' href='#myCarousel{{$rowIndex}}' data-slide='next'><i class='glyphicon glyphicon-chevron-right'></i></a>
-                                                    </div>
+                                                    </div> -->
 													<div ng-if="chatRes.tab_list_dd">
 														<span ng-repeat="dc in chatRes.Dimensions track by $index">
 															<div  class="col-md-12">
@@ -204,7 +203,8 @@
 														<div class="container-fluid" ng-repeat="dthlink in chatRes.DT" ng-init="$dthindex = $index">
 															<div class="col-md-11 dthyperlink lastmsg changedthbg stage{{chatRes.bgstage}}"  data-id="{{dthlink}}" data-url-id="innerLink" data-stage="{{chatRes.Stage}}" data-bgstage="{{chatRes.bgstage}}" ng-if="chatRes.DT.length > 0 " data-index="{{$index}}"  ng-click="getDthlinkRes(chatRes.Stage,dthlink,chatRes);" >
 																<span class="lefticon glyphicon glyphicon-chevron-left" style="display:none;"></span>
-																{{dthlink}}
+																<!-- {{dthlink}} -->
+																<span comp-translate="{{dthlink}}"></span>
 															</div>
 														</div>
 													</div>
@@ -223,8 +223,9 @@
 																	<div class="faqques">
 																		<p class="lastmsg" >
 																			<a href="#" data-index="{{$rowIndex}}" data-faqindex="{{$faqindex}}" ng-click="saveviewfaq($faqindex,$rowIndex,faqlist.key,faqlist.value,faqlist);" class="FAQBeforeLink">
-																				<span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">
-																				</span>
+																				<!-- <span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">
+																				</span> -->
+																				<span class="FAQBefore" comp-translater="{{faqlist.key}}"></span>
 																			</a>
 																		</p>
 																	</div>
@@ -236,7 +237,8 @@
 																					<!--<ng-bind-html ng-bind-html = "faqlist.value|newlines" class="FAQAnsBefore" >
 																						{{faqlist.value}}
 																					</ng-bind-html>-->
-																					<span ng-bind-html = "to_trusted(faqlist.value);"></span>
+																					<!-- <span ng-bind-html = "to_trusted(faqlist.value);"></span> -->
+																					<span  comp-translater="{{faqlist.value}}"></span>
 																				</span>
 																				<span ng-if="faqlist.type=='Table Format'">
 																					<div class="" ng-if="faqlist.value.table_data">
@@ -244,7 +246,7 @@
 																							<ng-bind-html ng-bind-html="chatRes.table_data" >{{chatRes.table_data}}</ng-bind-html >
 																						</div>-->
 																						<div class="">
-																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);">View</button>
+																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);"><span class="FAQBefore" comp-translate="View"></span></button>
 																							
 																						</div>
 																					</div>
@@ -254,15 +256,17 @@
 																						<!--<ng-bind-html ng-bind-html = "faqlist.value.Text|newlines" class="FAQAnsBefore" >
 																							{{faqlist.value.Text}}
 																						</ng-bind-html>-->
-																						<span ng-bind-html = "to_trusted(faqlist.value.Text);"></span>
+																						<!-- <span ng-bind-html = "to_trusted(faqlist.value.Text);"></span> -->
+																						<span comp-translater="{{faqlist.value.Text}}"></span>
 																					</span>
 																					<form class="{{faqlist.value.form_name}} htmlformss" ng-if="faqlist.value.form_data" name="htmlform_{{$index}}" id="{{faqlist.value.form_name}}">
 																						<span ng-if="faqlist.value.stage_details">
-																							{{faqlist.value.stage_details.Text}}
+																							<!-- {{faqlist.value.stage_details.Text}} -->
+																							<span comp-translater="{{faqlist.value.stage_details}}"></span>
 																						</span>
 																						<div ng-repeat="fd in faqlist.value.form_data">
 																							<span ng-if="fd.type=='select'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}"></span></label>
 																								<!--ng-options="ff as ff.label for ff in fd.values track by $index"-->
 																								<select ng-model="faqlist.value.form_data.value[fd.name]"     class="form-control hselect{{$rowIndex}}" name="{{fd.name}}" id=""  required autocomplete="off">
 																									
@@ -276,7 +280,7 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='text'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}"></span></label>
 																								<input type="text"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
@@ -284,21 +288,21 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='number'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}"></span></label>
 																								<input type="number" step="0.01"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='date'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}"></span></label>
 																								<input type="date"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='true'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}"></span></label>
 																								<!-- <upload-image multiple  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " no-view name="{{fd.name}}" id="" type="image|pdf" ng-callback="excelUploaded();" onchange="uploadNowf();"></upload-image> -->
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}" multiple upload-image ng-callback="excelUploaded();" onchange="angular.element(this).scope().uploadNowf(this);" >  
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -306,16 +310,16 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='false'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}"></span></label>
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='checkbox-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}"></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> {{fc.label}}
+																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> <span comp-translate="{{fd.label}}"></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -323,9 +327,9 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='radio-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}"></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> {{fc.label}}
+																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> <span comp-translate="{{fd.label}}"></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -353,8 +357,9 @@
 																	<div class="faqques">
 																		<p class="lastmsg" >
 																			<a href="#" data-index="{{$rowIndex}}" data-faqindex="{{$faqindex}}" ng-click="saveviewfaq($faqindex,$rowIndex,faqlist.key,faqlist.value,faqlist);" class="FAQBeforeLink">
-																				<span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">																			
-																				</span>
+																				<!-- <span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">																			
+																				</span> -->
+																				<span comp-translater="{{faqlist.key}}" class="FAQBefore"></span>
 																			</a>
 																		</p>
 																	</div>
@@ -366,7 +371,8 @@
 																					<!--<ng-bind-html ng-bind-html = "faqlist.value|newlines" class="FAQAnsBefore" >
 																						{{faqlist.value}}
 																					</ng-bind-html> -->
-																					<span ng-bind-html = "to_trusted(faqlist.value);"></span>
+																					<!-- <span ng-bind-html = "to_trusted(faqlist.value);"></span> -->
+																					<span comp-translater="{{faqlist.value}}" ></span>
 																				</span>
 																				<span ng-if="faqlist.type=='Table Format'">
 																					<div class="" ng-if="faqlist.value.table_data">
@@ -374,7 +380,7 @@
 																							<ng-bind-html ng-bind-html="chatRes.table_data" >{{chatRes.table_data}}</ng-bind-html >
 																						</div>-->
 																						<div class="">
-																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);">View</button>
+																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);"><span comp-translate="View" ></span></button>
 																							
 																						</div>
 																					</div>
@@ -384,15 +390,17 @@
 																						<!--<ng-bind-html ng-bind-html = "faqlist.value.Text|newlines" class="FAQAnsBefore" >
 																							{{faqlist.value.Text}}
 																						</ng-bind-html> -->
-																						<span ng-bind-html = "to_trusted(faqlist.value.Text)"></span>
+																						<!-- <span ng-bind-html = "to_trusted(faqlist.value.Text)"></span> -->
+																						<span comp-translater="{{faqlist.value.Text}}" ></span>
 																					</span>
 																					<form class="{{faqlist.value.form_name}} htmlformss" name="htmlform_{{$index}}" ng-if="faqlist.value.form_data" id="{{faqlist.value.form_name}}">
 																						<span ng-if="faqlist.value.stage_details">
-																							{{faqlist.value.stage_details.Text}}
+																							<!-- {{faqlist.value.stage_details.Text}} -->
+																							<span comp-translater="{{faqlist.value.stage_details.Text}}" ></span>
 																						</span>
 																						<div ng-repeat="fd in faqlist.value.form_data">
 																							<span ng-if="fd.type=='select'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!--ng-options="ff as ff.label for ff in fd.values track by $index"-->
 																								<select ng-model="faqlist.value.form_data.value[fd.name]"     class="form-control hselect{{$rowIndex}}" name="{{fd.name}}" id=""  required autocomplete="off">
 																									
@@ -406,7 +414,7 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='text'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="text"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
@@ -414,21 +422,21 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='number'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="number" step="0.01"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='date'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="date"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='true'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!-- <upload-image multiple  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " no-view name="{{fd.name}}" id="" type="image|pdf" ng-callback="excelUploaded();" onchange="uploadNowf();"></upload-image> -->
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}" multiple upload-image ng-callback="excelUploaded();" onchange="angular.element(this).scope().uploadNowf(this);" >  
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -436,16 +444,16 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='false'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='checkbox-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> {{fc.label}}
+																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -453,9 +461,9 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='radio-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> {{fc.label}}
+																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -608,8 +616,9 @@
 																	<div class="faqques">
 																		<p class="lastmsg" >
 																			<a href="#" data-index="{{$rowIndex}}" data-faqindex="{{$faqindex}}" ng-click="saveviewfaq($faqindex,$rowIndex,faqlist.key,faqlist.value,faqlist);" class="FAQBeforeLink">
-																				<span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">
-																				</span>
+																				<!-- <span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">
+																				</span> -->
+																				<span comp-translater="{{faqlist.key}}" ></span>
 																			</a>
 																		</p>
 																	</div>
@@ -621,7 +630,8 @@
 																					<!--<ng-bind-html ng-bind-html = "faqlist.value|newlines" class="FAQAnsBefore" >
 																						{{faqlist.value}}
 																					</ng-bind-html>-->
-																					<span ng-bind-html = "to_trusted(faqlist.value);"></span>
+																					<!-- <span ng-bind-html = "to_trusted(faqlist.value);"></span> -->
+																					<span comp-translater="{{faqlist.value}}" ></span>
 																				</span>
 																				<span ng-if="faqlist.type=='Table Format'">
 																					<div class="" ng-if="faqlist.value.table_data">
@@ -629,7 +639,7 @@
 																							<ng-bind-html ng-bind-html="chatRes.table_data" >{{chatRes.table_data}}</ng-bind-html >
 																						</div>-->
 																						<div class="">
-																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);">View</button>
+																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);"><span comp-translater="View" ></span></button>
 																							
 																						</div>
 																					</div>
@@ -639,15 +649,17 @@
 																						<!--<ng-bind-html ng-bind-html = "faqlist.value.Text|newlines" class="FAQAnsBefore" >
 																							{{faqlist.value.Text}}
 																						</ng-bind-html>-->
-																						<span ng-bind-html = "to_trusted(faqlist.value.Text);"></span>
+																						<!-- <span ng-bind-html = "to_trusted(faqlist.value.Text);"></span> -->
+																						<span comp-translater="{{faqlist.value.Text}}" ></span>
 																					</span>
 																					<form class="{{faqlist.value.form_name}} htmlformss" ng-if="faqlist.value.form_data" name="htmlform_{{$index}}" id="{{faqlist.value.form_name}}">
 																						<span ng-if="faqlist.value.stage_details">
-																							{{faqlist.value.stage_details.Text}}
+																							<!-- {{faqlist.value.stage_details.Text}} -->
+																							<span comp-translater="{{faqlist.value.stage_details}}" ></span>
 																						</span>
 																						<div ng-repeat="fd in faqlist.value.form_data">
 																							<span ng-if="fd.type=='select'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translater="{{fd.label}}" ></span></label>
 																								<!--ng-options="ff as ff.label for ff in fd.values track by $index"-->
 																								<select ng-model="faqlist.value.form_data.value[fd.name]"     class="form-control hselect{{$rowIndex}}" name="{{fd.name}}" id=""  required autocomplete="off">
 																									
@@ -661,7 +673,7 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='text'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translater="{{fd.label}}" ></span></label>
 																								<input type="text"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
@@ -669,21 +681,21 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='number'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="number" step="0.01"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='date'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="date"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='true'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!-- <upload-image multiple  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " no-view name="{{fd.name}}" id="" type="image|pdf" ng-callback="excelUploaded();" onchange="uploadNowf();"></upload-image> -->
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}" multiple upload-image ng-callback="excelUploaded();" onchange="angular.element(this).scope().uploadNowf(this);" >  
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -691,14 +703,14 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='false'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='checkbox-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
 																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> {{fc.label}}
 																								</div>
@@ -708,7 +720,7 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='radio-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
 																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> {{fc.label}}
 																								</div>
@@ -738,8 +750,9 @@
 																	<div class="faqques">
 																		<p class="lastmsg" >
 																			<a href="#" data-index="{{$rowIndex}}" data-faqindex="{{$faqindex}}" ng-click="saveviewfaq($faqindex,$rowIndex,faqlist.key,faqlist.value,faqlist);" class="FAQBeforeLink">
-																				<span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">																			
-																				</span>
+																				<!-- <span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">																			
+																				</span> -->
+																				<span comp-translater="{{faqlist.key}}" ></span>
 																			</a>
 																		</p>
 																	</div>
@@ -751,7 +764,8 @@
 																					<!--<ng-bind-html ng-bind-html = "faqlist.value|newlines" class="FAQAnsBefore" >
 																						{{faqlist.value}}
 																					</ng-bind-html> -->
-																					<span ng-bind-html = "to_trusted(faqlist.value);"></span>
+																					<!-- <span ng-bind-html = "to_trusted(faqlist.value);"></span> -->
+																					<span comp-translater="{{faqlist.value}}" ></span>
 																				</span>
 																				<span ng-if="faqlist.type=='Table Format'">
 																					<div class="" ng-if="faqlist.value.table_data">
@@ -759,7 +773,7 @@
 																							<ng-bind-html ng-bind-html="chatRes.table_data" >{{chatRes.table_data}}</ng-bind-html >
 																						</div>-->
 																						<div class="">
-																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);">View</button>
+																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);"><span comp-translate="View" ></span></button>
 																							
 																						</div>
 																					</div>
@@ -769,15 +783,17 @@
 																						<!--<ng-bind-html ng-bind-html = "faqlist.value.Text|newlines" class="FAQAnsBefore" >
 																							{{faqlist.value.Text}}
 																						</ng-bind-html> -->
-																						<span ng-bind-html = "to_trusted(faqlist.value.Text)"></span>
+																						<!-- <span ng-bind-html = "to_trusted(faqlist.value.Text)"></span> -->
+																						<span comp-translater="{{faqlist.value.Text}}" ></span>
 																					</span>
 																					<form class="{{faqlist.value.form_name}} htmlformss" name="htmlform_{{$index}}" ng-if="faqlist.value.form_data" id="{{faqlist.value.form_name}}">
 																						<span ng-if="faqlist.value.stage_details">
-																							{{faqlist.value.stage_details.Text}}
+																							<!-- {{faqlist.value.stage_details.Text}} -->
+																							<span comp-translater="{{faqlist.value.stage_details.Text}}" ></span>
 																						</span>
 																						<div ng-repeat="fd in faqlist.value.form_data">
 																							<span ng-if="fd.type=='select'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!--ng-options="ff as ff.label for ff in fd.values track by $index"-->
 																								<select ng-model="faqlist.value.form_data.value[fd.name]"     class="form-control hselect{{$rowIndex}}" name="{{fd.name}}" id=""  required autocomplete="off">
 																									
@@ -791,7 +807,7 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='text'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="text"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
@@ -799,21 +815,21 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='number'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="number" step="0.01"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='date'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="date"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='true'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!-- <upload-image multiple  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " no-view name="{{fd.name}}" id="" type="image|pdf" ng-callback="excelUploaded();" onchange="uploadNowf();"></upload-image> -->
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}" multiple upload-image ng-callback="excelUploaded();" onchange="angular.element(this).scope().uploadNowf(this);" >  
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -821,16 +837,16 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='false'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='checkbox-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> {{fc.label}}
+																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -838,9 +854,9 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='radio-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> {{fc.label}}
+																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -868,7 +884,7 @@
 														</ol>
 														<!-- {{chatRes}} -->
 														<div class="text-center ">
-															<button type="button" class="faqmore{{$rowIndex}} btn btn-xs btn-primary faqtoggle"  ng-if="chatRes.FAQ.length > 3" ng-click="faqtoggle($rowIndex);" >View More FAQ</button>
+															<button type="button" class="faqmore{{$rowIndex}} btn btn-xs btn-primary faqtoggle"  ng-if="chatRes.FAQ.length > 3" ng-click="faqtoggle($rowIndex);" ><span comp-translate="View More FAQ" ></span></button>
 															
 															
 														</div>
@@ -898,7 +914,7 @@
 														<div class="container-fluid" ng-repeat="dthlink in chatRes.DT" ng-init="$dthindex = $index">
 															<div class="col-md-11 dthyperlink lastmsg changedthbg stage{{chatRes.bgstage}}"  data-id="{{dthlink}}" data-url-id="innerLink" data-stage="{{chatRes.Stage}}" data-bgstage="{{chatRes.bgstage}}" ng-if="chatRes.DT.length > 0 " data-index="{{$index}}"  ng-click="getDthlinkRes(chatRes.Stage,dthlink,chatRes);" >
 																<span class="lefticon glyphicon glyphicon-chevron-left" style="display:none;"></span>
-																{{dthlink}}
+																<span comp-translate="{{dthlink}}" ></span>
 															</div>
 														</div>
 													</div>
@@ -946,11 +962,22 @@
 												<div class=" clearfix" ng-if="list.msg.tiledlist[0].type==='html_form'">
 													<form class="{{chatRes.form_name}} htmlformss" name="htmlform_{{$index}}" id="{{chatRes.form_name}}">
 														<span ng-if="chatRes.stage_details">
-															{{chatRes.stage_details.Text}}
+															<span comp-translater="{{chatRes.stage_details.Text}}" ></span>
 														</span>
 														<div ng-repeat="fd in list.msg.tiledlist[0].form_data">
+															 <span ng-if="fd.type=='text' && fd.name == 'share_location'" > 
+																<label><span comp-translate="{{fd.label}}" ></span></label>
+																<input type="text"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}" ng-init="chatRes.form_data.value[fd.name]=curaddress">
+																<div class="maplocation" ng-init="initMap($rowIndex)">
+																	<div class="g_map" id="map_{{$rowIndex}}"></div>
+																</div>
+																<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
+																	<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
+																	<span ng-bind="htmlform_{{$index}}.$dirty">{{$dirty}}</span>
+																</div>  -->
+															</span>
 															<span ng-if="fd.type=='select'"> 
-																<label>{{fd.label}}</label>
+																<label><span comp-translate="{{fd.label}}" ></span></label>
 																<!--ng-options="ff as ff.label for ff in fd.values track by $index"-->
 																<select ng-model="chatRes.form_data.value[fd.name]"     class="form-control hselect{{$rowIndex}}" name="{{fd.name}}" id=""  required autocomplete="off">
 																	
@@ -964,7 +991,7 @@
 																</div>  -->
 															</span>
 															<span ng-if="fd.type=='text'"> 
-																<label>{{fd.label}}</label>
+																<label><span comp-translate="{{fd.label}}" ></span></label>
 																<input type="text"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
 																	<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
@@ -972,21 +999,21 @@
 																</div>  -->
 															</span>
 															<span ng-if="fd.type=='number'"> 
-																<label>{{fd.label}}</label>
+																<label><span comp-translate="{{fd.label}}" ></span></label>
 																<input type="number" step="0.01"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																	<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																</div>  -->
 															</span>
 															<span ng-if="fd.type=='date'"> 
-																<label>{{fd.label}}</label>
+																<label><span comp-translate="{{fd.label}}" ></span></label>
 																<input type="date"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																	<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																</div>  -->
 															</span>
 															<span ng-if="fd.type=='file' && fd.multiple=='true'"> 
-																<label>{{fd.label}}</label>
+																<label><span comp-translate="{{fd.label}}" ></span></label>
 																<!-- <upload-image multiple  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " no-view name="{{fd.name}}" id="" type="image|pdf" ng-callback="excelUploaded();" onchange="uploadNowf();"></upload-image> -->
 																<input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}" multiple upload-image ng-callback="excelUploaded();" onchange="angular.element(this).scope().uploadNowf(this);" >  
 																<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -994,16 +1021,16 @@
 																</div>  -->
 															</span>
 															<span ng-if="fd.type=='file' && fd.multiple=='false'"> 
-																<label>{{fd.label}}</label>
+																<label><span comp-translate="{{fd.label}}" ></span></label>
 																<input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}">
 																<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																	<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																</div>  -->
 															</span>
 															<span ng-if="fd.type=='checkbox-group'"> 
-																<label>{{fd.label}}</label>
+																<label><span comp-translate="{{fd.label}}" ></span></label>
 																<div ng-repeat="fc in fd.values">
-																	<input type="checkbox"  ng-model="chatRes.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> {{fc.label}}
+																	<input type="checkbox"  ng-model="chatRes.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> <span comp-translate="{{fc.label}}" ></span>
 																</div>
 																<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1011,9 +1038,9 @@
 																</div>  -->
 															</span>
 															<span ng-if="fd.type=='radio-group'"> 
-																<label>{{fd.label}}</label>
+																<label><span comp-translate="{{fd.label}}" ></span></label>
 																<div ng-repeat="fc in fd.values">
-																	<input type="radio" name="{{fd.name}}"  ng-model="chatRes.form_data.value[fc.value]"  class=""  id=""> {{fc.label}}
+																	<input type="radio" name="{{fd.name}}"  ng-model="chatRes.form_data.value[fc.value]"  class=""  id=""> <span comp-translate="{{fc.label}}" ></span>
 																</div>
 																<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1041,9 +1068,10 @@
                                                                         <div class="text-box" ng-if="imagelist.Brand_Name!=''">
                                                                             <div class="imgtitle2">
                                                                                 <b><span>
-                                                                                    <ng-bind-html  ng-bind-html="imagelist.Brand_Name">
+																					<span comp-translate="{{imagelist.Brand_Name}}" ></span>
+                                                                                    <!-- <ng-bind-html  ng-bind-html="imagelist.Brand_Name">
                                                                                         {{imagelist.Brand_Name}} 
-                                                                                    </ng-bind-html> 
+                                                                                    </ng-bind-html>  -->
                                                                                 </span></b>
                                                                             </div>
                                                                         </div> 
@@ -1083,7 +1111,7 @@
 														<div class="container-fluid" ng-repeat="dthlink in chatRes.DT" ng-init="$dthindex = $index">
 															<div class="col-md-11 dthyperlink lastmsg changedthbg stage{{chatRes.bgstage}}"  data-id="{{dthlink}}" data-url-id="innerLink" data-stage="{{chatRes.Stage}}" data-bgstage="{{chatRes.bgstage}}" ng-if="chatRes.DT.length > 0 " data-index="{{$index}}"  ng-click="getDthlinkRes(chatRes.Stage,dthlink,chatRes);" >
 																<span class="lefticon glyphicon glyphicon-chevron-left" style="display:none;"></span>
-																{{dthlink}}
+																<span comp-translate="{{dthlink}}" ></span>
 															</div>
 														</div>
 													</div>
@@ -1103,8 +1131,9 @@
 																	<div class="faqques">
 																		<p class="lastmsg" >
 																			<a href="#" data-index="{{$rowIndex}}" data-faqindex="{{$faqindex}}" ng-click="saveviewfaq($faqindex,$rowIndex,faqlist.key,faqlist.value,faqlist);" class="FAQBeforeLink">
-																				<span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">
-																				</span>
+																				<!-- <span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">
+																				</span> -->
+																				<span comp-translater="{{faqlist.key}}" ></span>
 																			</a>
 																		</p>
 																	</div>
@@ -1116,7 +1145,8 @@
 																					<!--<ng-bind-html ng-bind-html = "faqlist.value|newlines" class="FAQAnsBefore" >
 																						{{faqlist.value}}
 																					</ng-bind-html>-->
-																					<span ng-bind-html = "to_trusted(faqlist.value);"></span>
+																					<!-- <span ng-bind-html = "to_trusted(faqlist.value);"></span> -->
+																					<span comp-translater="{{faqlist.value}}" ></span>
 																				</span>
 																				<span ng-if="faqlist.type=='Table Format'">
 																					<div class="" ng-if="faqlist.value.table_data">
@@ -1124,7 +1154,7 @@
 																							<ng-bind-html ng-bind-html="chatRes.table_data" >{{chatRes.table_data}}</ng-bind-html >
 																						</div>-->
 																						<div class="">
-																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);">View</button>
+																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);"><span comp-translate="View" ></span></button>
 																							
 																						</div>
 																					</div>
@@ -1134,15 +1164,17 @@
 																						<!--<ng-bind-html ng-bind-html = "faqlist.value.Text|newlines" class="FAQAnsBefore" >
 																							{{faqlist.value.Text}}
 																						</ng-bind-html>-->
-																						<span ng-bind-html = "to_trusted(faqlist.value.Text);"></span>
+																						<!-- <span ng-bind-html = "to_trusted(faqlist.value.Text);"></span> -->
+																						<span comp-translater="{{faqlist.value.Text}}" ></span>
 																					</span>
 																					<form class="{{faqlist.value.form_name}} htmlformss" ng-if="faqlist.value.form_data" name="htmlform_{{$index}}" id="{{faqlist.value.form_name}}">
 																						<span ng-if="faqlist.value.stage_details">
-																							{{faqlist.value.stage_details.Text}}
+																							<!-- {{faqlist.value.stage_details.Text}} -->
+																							<span comp-translater="{{faqlist.value.stage_details.Text}}" ></span>
 																						</span>
 																						<div ng-repeat="fd in faqlist.value.form_data">
 																							<span ng-if="fd.type=='select'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!--ng-options="ff as ff.label for ff in fd.values track by $index"-->
 																								<select ng-model="faqlist.value.form_data.value[fd.name]"     class="form-control hselect{{$rowIndex}}" name="{{fd.name}}" id=""  required autocomplete="off">
 																									
@@ -1156,7 +1188,7 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='text'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="text"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
@@ -1164,21 +1196,21 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='number'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="number" step="0.01"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='date'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="date"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='true'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!-- <upload-image multiple  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " no-view name="{{fd.name}}" id="" type="image|pdf" ng-callback="excelUploaded();" onchange="uploadNowf();"></upload-image> -->
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}" multiple upload-image ng-callback="excelUploaded();" onchange="angular.element(this).scope().uploadNowf(this);" >  
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1186,16 +1218,16 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='false'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='checkbox-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> {{fc.label}}
+																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1203,9 +1235,9 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='radio-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> {{fc.label}}
+																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1233,8 +1265,9 @@
 																	<div class="faqques">
 																		<p class="lastmsg" >
 																			<a href="#" data-index="{{$rowIndex}}" data-faqindex="{{$faqindex}}" ng-click="saveviewfaq($faqindex,$rowIndex,faqlist.key,faqlist.value,faqlist);" class="FAQBeforeLink">
-																				<span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">																			
-																				</span>
+																				<!-- <span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">																			
+																				</span> -->
+																				<span comp-translater="{{faqlist.key}}" ></span>
 																			</a>
 																		</p>
 																	</div>
@@ -1246,7 +1279,8 @@
 																					<!--<ng-bind-html ng-bind-html = "faqlist.value|newlines" class="FAQAnsBefore" >
 																						{{faqlist.value}}
 																					</ng-bind-html> -->
-																					<span ng-bind-html = "to_trusted(faqlist.value);"></span>
+																					<!-- <span ng-bind-html = "to_trusted(faqlist.value);"></span> -->
+																					<span comp-translater="{{faqlist.value}}" ></span>
 																				</span>
 																				<span ng-if="faqlist.type=='Table Format'">
 																					<div class="" ng-if="faqlist.value.table_data">
@@ -1254,7 +1288,7 @@
 																							<ng-bind-html ng-bind-html="chatRes.table_data" >{{chatRes.table_data}}</ng-bind-html >
 																						</div>-->
 																						<div class="">
-																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);">View</button>
+																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);"><span comp-translate="View" ></span></button>
 																							
 																						</div>
 																					</div>
@@ -1264,15 +1298,16 @@
 																						<!--<ng-bind-html ng-bind-html = "faqlist.value.Text|newlines" class="FAQAnsBefore" >
 																							{{faqlist.value.Text}}
 																						</ng-bind-html> -->
-																						<span ng-bind-html = "to_trusted(faqlist.value.Text)"></span>
+																						<!-- <span ng-bind-html = "to_trusted(faqlist.value.Text)"></span> -->
+																						<span comp-translater="faqlist.value.Text" ></span>
 																					</span>
 																					<form class="{{faqlist.value.form_name}} htmlformss" name="htmlform_{{$index}}" ng-if="faqlist.value.form_data" id="{{faqlist.value.form_name}}">
 																						<span ng-if="faqlist.value.stage_details">
-																							{{faqlist.value.stage_details.Text}}
+																							<span comp-translater="{{faqlist.value.stage_details.Text}}" ></span>
 																						</span>
 																						<div ng-repeat="fd in faqlist.value.form_data">
 																							<span ng-if="fd.type=='select'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!--ng-options="ff as ff.label for ff in fd.values track by $index"-->
 																								<select ng-model="faqlist.value.form_data.value[fd.name]"     class="form-control hselect{{$rowIndex}}" name="{{fd.name}}" id=""  required autocomplete="off">
 																									
@@ -1286,7 +1321,7 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='text'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="text"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
@@ -1294,21 +1329,21 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='number'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="number" step="0.01"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='date'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="date"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='true'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!-- <upload-image multiple  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " no-view name="{{fd.name}}" id="" type="image|pdf" ng-callback="excelUploaded();" onchange="uploadNowf();"></upload-image> -->
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}" multiple upload-image ng-callback="excelUploaded();" onchange="angular.element(this).scope().uploadNowf(this);" >  
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1316,16 +1351,16 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='false'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='checkbox-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> {{fc.label}}
+																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1333,9 +1368,9 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='radio-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> {{fc.label}}
+																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1495,12 +1530,13 @@
                                                 <!-- animated fadeIn -->
                                                 <div class="chatType  boxme" ng-if="list.msg.tiledlist[0].type==='DTHyperlink'">
                                                     
-                                                    <ng-bind-html ng-if="chatRes.Text != '' && chatRes.Text" ng-bind-html="chatRes.Text|newlines">
+                                                    <!-- <ng-bind-html ng-if="chatRes.Text != '' && chatRes.Text" ng-bind-html="chatRes.Text|newlines">
                                                         <p class="lastmsg" >
                                                             {{chatRes.Text}}     
                                                         </p>
-                                                    </ng-bind-html>
-                                                    <!-- <p class="lastmsg redtext" ng-repeat="scrpttext in chatRes.Script">
+                                                    </ng-bind-html> -->
+													<span ng-if="chatRes.Text != '' && chatRes.Text" comp-translater="{{chatRes.Text}}" ></span>
+													<!-- <p class="lastmsg redtext" ng-repeat="scrpttext in chatRes.Script">
                                                         <ng-bind-html ng-bind-html="scrpttext|newlines">
                                                             {{scrpttext}}
                                                         </ng-bind-html>
@@ -1517,7 +1553,7 @@
 													<div class="container-fluid dts{{$rowIndex}}" ng-if="!chatRes.conflict || (!chatRes.FAQ && !chatRes.conflict)"  ng-repeat="dthlink in chatRes.DT" ng-init="$dthindex = $index">
                                                         <div class="col-md-11 dthyperlink lastmsg changedthbg stage{{chatRes.bgstage}}"  data-id="{{dthlink}}" data-url-id="innerLink" data-stage="{{chatRes.Stage}}" data-bgstage="{{chatRes.bgstage}}" ng-if="chatRes.DT.length > 0 " data-index="{{$index}}"  ng-click="getDthlinkRes(chatRes.Stage,dthlink,chatRes);" >
                                                             <span class="lefticon glyphicon glyphicon-chevron-left" style="display:none;"></span>
-                                                            {{dthlink}}
+                                                            <span comp-translate="{{dthlink}}" ></span>
                                                         </div>
                                                         <!-- <button type="button" class="btn btn-primary" ng-if="chatRes.Decision_Icon[$dthindex] !== '' && chatRes.Decision_Icon"  popover-placement="top" uib-popover-html="{{chatRes.Decision_Icon[$dthindex]}}" popover-title="{{dthlink}}" popover-class="dthpopover">
                                                             <span class="glyphicon glyphicon-info-sign"></span>
@@ -1535,8 +1571,9 @@
 																	<div class="faqques">
 																		<p class="lastmsg" >
 																			<a href="#" data-index="{{$rowIndex}}" data-faqindex="{{$faqindex}}" ng-click="saveviewfaq($faqindex,$rowIndex,faqlist.key,faqlist.value,faqlist);" class="FAQBeforeLink">
-																				<span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">
-																				</span>
+																				<!-- <span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">
+																				</span> -->
+																				<span comp-translater="{{faqlist.key}}" ></span>
 																			</a>
 																		</p>
 																	</div>
@@ -1548,7 +1585,8 @@
 																					<!--<ng-bind-html ng-bind-html = "faqlist.value|newlines" class="FAQAnsBefore" >
 																						{{faqlist.value}}
 																					</ng-bind-html>-->
-																					<span ng-bind-html = "to_trusted(faqlist.value);"></span>
+																					<!-- <span ng-bind-html = "to_trusted(faqlist.value);"></span> -->
+																					<span comp-translater="{{faqlist.value}}" ></span>
 																				</span>
 																				<span ng-if="faqlist.type=='Table Format'">
 																					<div class="" ng-if="faqlist.value.table_data">
@@ -1556,7 +1594,7 @@
 																							<ng-bind-html ng-bind-html="chatRes.table_data" >{{chatRes.table_data}}</ng-bind-html >
 																						</div>-->
 																						<div class="">
-																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);">View</button>
+																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);"><span comp-translate="View" ></span></button>
 																							
 																						</div>
 																					</div>
@@ -1566,15 +1604,16 @@
 																						<!--<ng-bind-html ng-bind-html = "faqlist.value.Text|newlines" class="FAQAnsBefore" >
 																							{{faqlist.value.Text}}
 																						</ng-bind-html>-->
-																						<span ng-bind-html = "to_trusted(faqlist.value.Text);"></span>
+																						<!-- <span ng-bind-html = "to_trusted(faqlist.value.Text);"></span> -->
+																						<span comp-translater="{{faqlist.value.Text}}" ></span>
 																					</span>
 																					<form class="{{faqlist.value.form_name}} htmlformss" ng-if="faqlist.value.form_data" name="htmlform_{{$index}}" id="{{faqlist.value.form_name}}">
 																						<span ng-if="faqlist.value.stage_details">
-																							{{faqlist.value.stage_details.Text}}
+																							<span comp-translater="{{faqlist.value.stage_details.Text}}" ></span>
 																						</span>
 																						<div ng-repeat="fd in faqlist.value.form_data">
 																							<span ng-if="fd.type=='select'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!--ng-options="ff as ff.label for ff in fd.values track by $index"-->
 																								<select ng-model="faqlist.value.form_data.value[fd.name]"     class="form-control hselect{{$rowIndex}}" name="{{fd.name}}" id=""  required autocomplete="off">
 																									
@@ -1588,7 +1627,7 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='text'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="text"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
@@ -1596,21 +1635,21 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='number'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="number" step="0.01"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='date'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="date"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='true'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!-- <upload-image multiple  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " no-view name="{{fd.name}}" id="" type="image|pdf" ng-callback="excelUploaded();" onchange="uploadNowf();"></upload-image> -->
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}" multiple upload-image ng-callback="excelUploaded();" onchange="angular.element(this).scope().uploadNowf(this);" >  
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1618,16 +1657,16 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='false'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='checkbox-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> {{fc.label}}
+																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1635,9 +1674,9 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='radio-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> {{fc.label}}
+																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1665,8 +1704,9 @@
 																	<div class="faqques">
 																		<p class="lastmsg" >
 																			<a href="#" data-index="{{$rowIndex}}" data-faqindex="{{$faqindex}}" ng-click="saveviewfaq($faqindex,$rowIndex,faqlist.key,faqlist.value,faqlist);" class="FAQBeforeLink">
-																				<span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">																			
-																				</span>
+																				<!-- <span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">																			
+																				</span> -->
+																				<span comp-translater="{{faqlist.key}}" ></span>
 																			</a>
 																		</p>
 																	</div>
@@ -1678,7 +1718,8 @@
 																					<!--<ng-bind-html ng-bind-html = "faqlist.value|newlines" class="FAQAnsBefore" >
 																						{{faqlist.value}}
 																					</ng-bind-html> -->
-																					<span ng-bind-html = "to_trusted(faqlist.value);"></span>
+																					<!-- <span ng-bind-html = "to_trusted(faqlist.value);"></span> -->
+																					<span comp-translater="{{faqlist.value}}" ></span>
 																				</span>
 																				<span ng-if="faqlist.type=='Table Format'">
 																					<div class="" ng-if="faqlist.value.table_data">
@@ -1686,7 +1727,7 @@
 																							<ng-bind-html ng-bind-html="chatRes.table_data" >{{chatRes.table_data}}</ng-bind-html >
 																						</div>-->
 																						<div class="">
-																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);">View</button>
+																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);"><span comp-translate="View" ></span></button>
 																							
 																						</div>
 																					</div>
@@ -1696,15 +1737,16 @@
 																						<!--ng-bind-html ng-bind-html = "faqlist.value.Text|newlines" class="FAQAnsBefore" >
 																							{{faqlist.value.Text}}
 																						</ng-bind-html> -->
-																						<span ng-bind-html = "to_trusted(faqlist.value.Text);"></span>
+																						<!-- <span ng-bind-html = "to_trusted(faqlist.value.Text);"></span> -->
+																						<span comp-translater="{{faqlist.value.Text}}" ></span>
 																					</span>
 																					<form class="{{faqlist.value.form_name}} htmlformss" name="htmlform_{{$index}}" ng-if="faqlist.value.form_data" id="{{faqlist.value.form_name}}">
 																						<span ng-if="faqlist.value.stage_details">
-																							{{faqlist.value.stage_details.Text}}
+																							<span comp-translater="{{faqlist.key}}" ></span>
 																						</span>
 																						<div ng-repeat="fd in faqlist.value.form_data">
 																							<span ng-if="fd.type=='select'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!--ng-options="ff as ff.label for ff in fd.values track by $index"-->
 																								<select ng-model="faqlist.value.form_data.value[fd.name]"     class="form-control hselect{{$rowIndex}}" name="{{fd.name}}" id=""  required autocomplete="off">
 																									
@@ -1718,7 +1760,7 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='text'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="text"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
@@ -1726,21 +1768,21 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='number'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="number" step="0.01"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='date'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="date"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='true'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!-- <upload-image multiple  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " no-view name="{{fd.name}}" id="" type="image|pdf" ng-callback="excelUploaded();" onchange="uploadNowf();"></upload-image> -->
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}" multiple upload-image ng-callback="excelUploaded();" onchange="angular.element(this).scope().uploadNowf(this);" >  
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1748,16 +1790,16 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='false'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='checkbox-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> {{fc.label}}
+																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1765,9 +1807,9 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='radio-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> {{fc.label}}
+																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1795,8 +1837,8 @@
 														</ol>
 														<!-- {{chatRes}} -->
 														<div class="text-center ">
-															<button type="button" class="faqmore{{$rowIndex}} btn btn-xs btn-primary faqtoggle"  ng-if="chatRes.FAQ.length > 3" ng-click="faqtoggle($rowIndex);" >View More FAQ</button>
-															<button type="button" class="btn btn-xs btn-primary faqtoggle viewprocess{{$rowIndex}}"  ng-if="chatRes.FAQ && (chatRes.DT.length > 0)" ng-click="showDT($rowIndex);" >View Processes</button>
+															<button type="button" class="faqmore{{$rowIndex}} btn btn-xs btn-primary faqtoggle"  ng-if="chatRes.FAQ.length > 3" ng-click="faqtoggle($rowIndex);" ><span comp-translate="View More FAQ" ></span></button>
+															<button type="button" class="btn btn-xs btn-primary faqtoggle viewprocess{{$rowIndex}}"  ng-if="chatRes.FAQ && (chatRes.DT.length > 0)" ng-click="showDT($rowIndex);" ><span comp-translate="View Processes" ></span></button>
 															
 														</div>
 													</div>
@@ -1815,8 +1857,9 @@
 																	<div class="faqques">
 																		<p class="lastmsg" >
 																			<a href="#" data-index="{{$rowIndex}}" data-faqindex="{{$faqindex}}" ng-click="saveviewfaq($faqindex,$rowIndex,faqlist.key,faqlist.value,faqlist);" class="FAQBeforeLink">
-																				<span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">
-																				</span>
+																				<!-- <span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">
+																				</span> -->
+																				<span comp-translater="{{faqlist.key}}" ></span>
 																			</a>
 																		</p>
 																	</div>
@@ -1828,7 +1871,8 @@
 																					<!--<ng-bind-html ng-bind-html = "faqlist.value|newlines" class="FAQAnsBefore" >
 																						{{faqlist.value}}
 																					</ng-bind-html>-->
-																					<span ng-bind-html = "to_trusted(faqlist.value);"></span>
+																					<!-- <span ng-bind-html = "to_trusted(faqlist.value);"></span> -->
+																					<span comp-translater="{{faqlist.value}}" ></span>
 																				</span>
 																				<span ng-if="faqlist.type=='Table Format'">
 																					<div class="" ng-if="faqlist.value.table_data">
@@ -1836,7 +1880,7 @@
 																							<ng-bind-html ng-bind-html="chatRes.table_data" >{{chatRes.table_data}}</ng-bind-html >
 																						</div>-->
 																						<div class="">
-																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);">View</button>
+																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);"><span comp-translate="View" ></span></button>
 																							
 																						</div>
 																					</div>
@@ -1846,15 +1890,16 @@
 																						<!--<ng-bind-html ng-bind-html = "faqlist.value.Text|newlines" class="FAQAnsBefore" >
 																							{{faqlist.value.Text}}
 																						</ng-bind-html>-->
-																						<span ng-bind-html = "to_trusted(faqlist.value.Text);"></span>
+																						<!-- <span ng-bind-html = "to_trusted(faqlist.value.Text);"></span> -->
+																						<span comp-translater="{{faqlist.value.Text}}" ></span>
 																					</span>
 																					<form class="{{faqlist.value.form_name}} htmlformss" ng-if="faqlist.value.form_data" name="htmlform_{{$index}}" id="{{faqlist.value.form_name}}">
 																						<span ng-if="faqlist.value.stage_details">
-																							{{faqlist.value.stage_details.Text}}
+																							<span comp-translater="{{faqlist.value.stage_details.Text}}" ></span>
 																						</span>
 																						<div ng-repeat="fd in faqlist.value.form_data">
 																							<span ng-if="fd.type=='select'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!--ng-options="ff as ff.label for ff in fd.values track by $index"-->
 																								<select ng-model="faqlist.value.form_data.value[fd.name]"     class="form-control hselect{{$rowIndex}}" name="{{fd.name}}" id=""  required autocomplete="off">
 																									
@@ -1868,7 +1913,7 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='text'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="text"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
@@ -1876,21 +1921,21 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='number'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="number" step="0.01"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='date'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="date"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='true'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!-- <upload-image multiple  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " no-view name="{{fd.name}}" id="" type="image|pdf" ng-callback="excelUploaded();" onchange="uploadNowf();"></upload-image> -->
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}" multiple upload-image ng-callback="excelUploaded();" onchange="angular.element(this).scope().uploadNowf(this);" >  
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1898,16 +1943,16 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='false'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='checkbox-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> {{fc.label}}
+																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1915,9 +1960,9 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='radio-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> {{fc.label}}
+																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1945,8 +1990,9 @@
 																	<div class="faqques">
 																		<p class="lastmsg" >
 																			<a href="#" data-index="{{$rowIndex}}" data-faqindex="{{$faqindex}}" ng-click="saveviewfaq($faqindex,$rowIndex,faqlist.key,faqlist.value,faqlist);" class="FAQBeforeLink">
-																				<span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">																			
-																				</span>
+																				<!-- <span ng-bind-html = "faqlist.key|newlines" class="FAQBefore">																			
+																				</span> -->
+																				<span comp-translater="{{faqlist.key}}" ></span>
 																			</a>
 																		</p>
 																	</div>
@@ -1958,7 +2004,8 @@
 																					<!--<ng-bind-html ng-bind-html = "faqlist.value|newlines" class="FAQAnsBefore" >
 																						{{faqlist.value}}
 																					</ng-bind-html> -->
-																					<span ng-bind-html = "to_trusted(faqlist.value);"></span>
+																					<!-- <span ng-bind-html = "to_trusted(faqlist.value);"></span> -->
+																					<span comp-translater="{{faqlist.value}}" ></span>
 																				</span>
 																				<span ng-if="faqlist.type=='Table Format'">
 																					<div class="" ng-if="faqlist.value.table_data">
@@ -1966,7 +2013,7 @@
 																							<ng-bind-html ng-bind-html="chatRes.table_data" >{{chatRes.table_data}}</ng-bind-html >
 																						</div>-->
 																						<div class="">
-																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);">View</button>
+																							<button class="btn btn-xs btn-primary" type="button" ng-click="viewcontent(faqlist.value.table_data,$faqindex);"><span comp-translate="View" ></span></button>
 																							
 																						</div>
 																					</div>
@@ -1976,15 +2023,17 @@
 																						<!--<ng-bind-html ng-bind-html = "faqlist.value.Text|newlines" class="FAQAnsBefore" >
 																							{{faqlist.value.Text}}
 																						</ng-bind-html> -->
-																						<span ng-bind-html = "to_trusted(faqlist.value.Text)"></span>
+																						<!-- <span ng-bind-html = "to_trusted(faqlist.value.Text)"></span> -->
+																						<span comp-translater="{{faqlist.value.Text}}" ></span>
 																					</span>
 																					<form class="{{faqlist.value.form_name}} htmlformss" name="htmlform_{{$index}}" ng-if="faqlist.value.form_data" id="{{faqlist.value.form_name}}">
 																						<span ng-if="faqlist.value.stage_details">
-																							{{faqlist.value.stage_details.Text}}
+																							<!--  -->
+																							<span comp-translater="{{faqlist.value.stage_details.Text}}" ></span>
 																						</span>
 																						<div ng-repeat="fd in faqlist.value.form_data">
 																							<span ng-if="fd.type=='select'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!--ng-options="ff as ff.label for ff in fd.values track by $index"-->
 																								<select ng-model="faqlist.value.form_data.value[fd.name]"     class="form-control hselect{{$rowIndex}}" name="{{fd.name}}" id=""  required autocomplete="off">
 																									
@@ -1998,7 +2047,7 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='text'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="text"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
@@ -2006,21 +2055,21 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='number'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="number" step="0.01"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='date'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="date"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='true'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<!-- <upload-image multiple  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " no-view name="{{fd.name}}" id="" type="image|pdf" ng-callback="excelUploaded();" onchange="uploadNowf();"></upload-image> -->
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}" multiple upload-image ng-callback="excelUploaded();" onchange="angular.element(this).scope().uploadNowf(this);" >  
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -2028,16 +2077,16 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='file' && fd.multiple=='false'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<input type="file"  ng-model="faqlist.value.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""   autocomplete="off" placeholder="Enter {{fd.placeholder}}"  ng-message="Please Upload {{fd.placeholder}}">
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																									<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='checkbox-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> {{fc.label}}
+																									<input type="checkbox"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> <span comp-translate="{{fc.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -2045,9 +2094,9 @@
 																								</div>  -->
 																							</span>
 																							<span ng-if="fd.type=='radio-group'"> 
-																								<label>{{fd.label}}</label>
+																								<label><span comp-translate="{{fd.label}}" ></span></label>
 																								<div ng-repeat="fc in fd.values">
-																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> {{fc.label}}
+																									<input type="radio" name="{{fd.name}}"  ng-model="faqlist.value.form_data.value[fc.value]"  class=""  id=""> <span comp-translate="{{fd.label}}" ></span>
 																								</div>
 																								<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																								<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -2075,7 +2124,7 @@
 														</ol>
 														<!-- {{chatRes}} -->
 														<div class="text-center ">
-															<button type="button" class="faqmore{{$rowIndex}} btn btn-xs btn-primary faqtoggle"  ng-if="chatRes.FAQ.length > 3" ng-click="faqtoggle($rowIndex);" >View More FAQ</button>
+															<button type="button" class="faqmore{{$rowIndex}} btn btn-xs btn-primary faqtoggle"  ng-if="chatRes.FAQ.length > 3" ng-click="faqtoggle($rowIndex);" ><span comp-translate="View More FAQ" ></span></button>
 															
 															
 														</div>
@@ -2088,7 +2137,8 @@
                                                     <div class="container-fluid dts{{$rowIndex}}" ng-if="(chatRes.FAQ && chatRes.conflict) || (!chatRes.FAQ && chatRes.conflict)" ng-style="chatRes.FAQ && chatRes.conflict && {'display':'none'}"  ng-repeat="dthlink in chatRes.DT" ng-init="$dthindex = $index">
                                                         <div class="col-md-11 dthyperlink lastmsg changedthbg stage{{chatRes.bgstage}}"  data-id="{{dthlink}}" data-url-id="innerLink" data-stage="{{chatRes.Stage}}" data-bgstage="{{chatRes.bgstage}}" ng-if="chatRes.DT.length > 0 " data-index="{{$index}}"  ng-click="getDthlinkRes(chatRes.Stage,dthlink,chatRes);" >
                                                             <span class="lefticon glyphicon glyphicon-chevron-left" style="display:none;"></span>
-                                                            {{dthlink}}
+															<!-- {{dthlink}} -->
+															<span comp-translate="{{dthlink}}" ></span>
                                                         </div>
                                                         <!-- <button type="button" class="btn btn-primary" ng-if="chatRes.Decision_Icon[$dthindex] !== '' && chatRes.Decision_Icon"  popover-placement="top" uib-popover-html="{{chatRes.Decision_Icon[$dthindex]}}" popover-title="{{dthlink}}" popover-class="dthpopover">
                                                             <span class="glyphicon glyphicon-info-sign"></span>
@@ -2243,8 +2293,8 @@
                                                 <!-- <ng-bind-html ng-bind-html = "list.msg.Text"> -->
                                                 <!-- <span comp-translate="{{list.msg.Text}}"></span> -->
                                                 <!-- </ng-bind-html>  --> 
-                                                <!-- <span comp-translate="{{list.msg.Text}}"></span>  -->
-                                                {{list.msg.Text}}
+                                                 <span comp-translater="{{list.msg.Text}}"></span>  
+                                                <!-- {{list.msg.Text}} -->
                                             </p>
                                         </div>
                                         <div class=" clearfix" ng-if="(list.position==='left' &&  (list.msg.type==='SYS_INACTIVE' || list.msg.type==='SYS_FIRST' || list.msg.type === 'SYS_EMPTY_RES' || list.msg.type === 'SYS_AUTO'))">
@@ -2252,9 +2302,12 @@
                                                 <!-- <ng-bind-html ng-bind-html = "list.msg.Text">
                                                     {{list.msg.Text}}
                                                 </ng-bind-html> -->
-                                                <p class="lastmsg" ng-bind-html = "to_trusted(list.msg.Text);">
+                                                <!-- <p class="lastmsg" ng-bind-html = "to_trusted(list.msg.Text);">
 
-                                                </p>
+												</p> -->
+												<p>
+													<span comp-translater="{{list.msg.Text}}"></span>  
+												</p>
                                             </p>
                                         </div>
 										<div class=" clearfix" ng-if="(list.position==='left' &&  (list.msg.type==='SYS_CRN'))">
@@ -2356,7 +2409,14 @@
                                                     {{carddata.ctalabel}}
                                                 </a>
                                             </div> -->
-                                        </div>
+										</div>
+										<div class="chat-body" ng-if="list.position==='left' && list.msg.type == 'SYS_MAP'">
+                                        		<span class="bold"><span comp-translater="{{list.msg.Text}}"></span>  </span>
+	                                    	<div class="maplocation" ng-init="initMap($rowIndex)" style="height: 300px; width: 300px;">
+						                    	<div class="g_map" id="map_{{$rowIndex}}" style="height: 300px; width: 300px"></div>
+						                	</div>
+						                
+						                </div>
                                         <div class=" clearfix" ng-if="(list.position==='left' &&  (list.msg.type==='SYS_CALC' ))">
                                             <div class="cals row" id="cal_select{{$index}}">
                                                 <button class="btn btn-sm btn-primary" name="tdbtn" id="tdbtn{{$index}}" ng-click="showTdcalc();">RD Calculator</button>
@@ -2491,7 +2551,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <p class="lastmsg" ng-if="list.msg.type !== 'SYS_CONV_END' && list.msg.type !== 'SYS_CONV_START'">
+                                        <p class="lastmsg" ng-if="list.msg.type !== 'SYS_CONV_END' && list.msg.type !== 'SYS_CONV_START' && list.msg.type !== 'SYS_MAP'">
                                             <small class="chatTime">
                                                 <span class="glyphicon glyphicon-time">
                                                 </span>
@@ -2506,7 +2566,8 @@
 								
 									<div  class="chat-body" ng-if="list.type">
                                            <p class="lastmsg">
-											{{list.message}}
+											<!-- {{list.message}} -->
+											<span comp-translater="{{list.message}}"></span>  
                                                 </p>
 												<small class="chatTime ng-binding">
 													<span class="glyphicon glyphicon-time">
@@ -2581,8 +2642,8 @@
                                             </div>
                                         </div>-->
 										<button type="button" data-index="1" class="btn btn-default btn-xs hulbtn featurebtn" ng-click="outprocessdata('Self Help','Self Help');"><span class="ng-scope" comp-translate="Self Help">Self Help</span></button>
-										<button type="button" data-index="3" class="btn btn-default btn-xs hulbtn featurebtn" ng-click="outprocessdata('Customer Help','Customer Help');"><span class="ng-scope" comp-translate="Customer Help">Customer Help</span></button> 
-                                        
+										<button type="button" data-index="2" class="btn btn-default btn-xs hulbtn featurebtn" ng-click="outprocessdata('Customer Help','Customer Help');"><span class="ng-scope" comp-translate="Customer Help">Customer Help</span></button> 
+                                        <button type="button" data-index="3" class="btn btn-default btn-xs hulbtn featurebtn" ng-click="nearme();"><span class="ng-scope" comp-translate="Find Branch">Find Branch</span></button> 
 									</div>
 								</div>
 							</div> 
