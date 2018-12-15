@@ -10,7 +10,7 @@ var schema = new Schema({
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
 var model = {
     translate: function (reqdata, callback) {
-        const translate = require('google-translate-api');
+        const translate = require('@vitalets/google-translate-api');
         //console.log(reqdata);
         translate(reqdata.text, {from: 'en', to: reqdata.language}).then(res => {
             //console.log(res.text);
@@ -28,7 +28,7 @@ var model = {
         });
     },
     translatelink: function (reqdata, callback) {
-        const translate = require('google-translate-api');
+        const translate = require('@vitalets/google-translate-api');
         //console.log(reqdata);
         var async = require('async');
         var linkdata= "";

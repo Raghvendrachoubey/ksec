@@ -4925,7 +4925,13 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         angular.forEach(formdata, function(value, key) {
             ////console.log(value);
             
-            
+            if(value.name=='mobile' || value.name=='mobileno' || value.name=='phone' || value.name=='phoneno') {
+                if(fieldvalue[value.name].length == 10) {}
+                else {
+                    toastr.error("Please enter 10 digit mobile number", 'Error');
+                    return false;
+                }
+            }
             if(value.type=='date')
             {
                 ////console.log(fieldvalue[value.name]);
