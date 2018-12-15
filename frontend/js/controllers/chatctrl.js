@@ -134,12 +134,32 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
     $rootScope.menuOpen=false;
 
     $scope.not_menu = [
-        {msg:"Changes in the commission structure"},
-        {msg:"Shubh Deepawali from Fino"},
-        {msg:"Transact more to achieve more now"},
+        {msg:"Changes in the commission structure",img:"not1.png"},
+        {msg:"Shubh Deepawali from Fino",img:"not2.jpg"},
+        {msg:"Transact more to achieve more now",img:"not3.jpg"},
         {msg:"More"},
     ];
-
+    $scope.$noti_instance = {};
+    $scope.shownotification = function(notdata) {
+        
+        $scope.notedata = notdata;
+        $scope.$noti_instance = $uibModal.open({
+            scope: $scope,
+            animation: true,
+            size: 'sm',
+            templateUrl: 'views/modal/notificationdata.html',
+            resolve: {
+                items: function () {
+                    return notdata;
+                }
+            },
+            //controller: 'CommonCtrl'
+        });
+    };
+    $scope.noticancel = function() {
+        ////console.log("dismissing");
+        $scope.$noti_instance.dismiss('cancel');
+    };
     $scope.failuremsg = [
         {msg:"I'm glad that you are trying new functionalities. However, currently I'm equipped with information about Cash-In, New Products, Transaction Status, Commission & Charges and General Information about Account Opening Processes."},
         {msg:"I'm glad that you are trying new functionalities. However, currently I'm equipped with information about Cash-In, New Products, Transaction Status, Commission & Charges and General Information about Account Opening Processes."},
@@ -153,6 +173,9 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         $rootScope.agentlist = $.jStorage.get("agentlist");
     
     angular.element(document).ready(function() { 
+        // $timeout(function(){
+        // new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+        // },10000);
         $timeout(function(){
             $rootScope.panelheight = $(window).height()-80;
         },0);

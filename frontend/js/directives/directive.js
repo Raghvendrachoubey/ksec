@@ -90,9 +90,10 @@ myApp.directive('img', function ($compile, $parse) {
                                     apiService.translate(formData).then( function (response) {
                                         // html =$sce.trustAsHtml(response.data.data);
                                         // bindhtml = "<span ng-bind-html='"+html+"'>{{"+html+"}}<span>";
-                                        //console.log(response.data.data);
+                                        
                                         element.html(response.data.data);
                                         $( "ul.chat li:last-child" ).removeClass('langcase');
+                                        // $(element).parent().closest("li").removeClass('langcase');
                                     }).catch(function (reason) {
                                         hcont=$.parseHTML(value);
                                         element.html(hcont);

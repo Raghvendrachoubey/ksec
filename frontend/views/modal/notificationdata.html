@@ -1,0 +1,27 @@
+<div class="noti_modal">
+    <div class="modal-header">
+         <h3 class="modal-title" id="modal-title">Subject: <span comp-translater="{{notedata.msg}}"></span></h3> 
+        <button type="button" class="close"  aria-hidden="true" ng-click="noticancel();">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body">
+        <div class="row">
+            <div class="container-fluid notdata" ng-if="notedata.img">
+                <div class="col-md-12">
+                    <a href="img/{{notedata.img}}"   class="fancyboxable"  data-fancybox="not" rel="gallary"   data-caption="" title="" fancyboxable fancybox>
+                        <img ng-src="img/{{notedata.img}}" class="img-responsive">
+                    </a>
+                </div>
+            </div>
+            <!-- <div class="container-fluid notdata">
+                <div class="col-md-12">
+                    
+                </div>
+            </div> -->
+        </div>
+        
+        
+    </div>
+    <div class="modal-footer hidden">
+        
+    </div>
+</div>

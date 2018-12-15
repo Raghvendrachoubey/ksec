@@ -86,5 +86,6 @@ module.exports = [
   //'frontend/js/services/raphael.js',
   //'frontend/js/services/Treant.js',
   "frontend/js/services/jquery.orgchart.min.js",
-  'https://maps.googleapis.com/maps/api/js?key=AIzaSyDy_367PJeu1ykECzPAc7fZNPLF5bOTSlU&v=3.exp&sensor=true'
+  'https://maps.googleapis.com/maps/api/js?key=AIzaSyDy_367PJeu1ykECzPAc7fZNPLF5bOTSlU&v=3.exp&sensor=true',
+  // 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
 ];

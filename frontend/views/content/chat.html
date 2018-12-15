@@ -3,7 +3,7 @@
             <div class="panel-heading container-fluid" id="accordion">
                 <!--<span class="glyphicon glyphicon-comment"></span> Chat-->
                 <ul class="nav nav-tabs" id="chatTabs">
-                    <li class="active"  ><a href="#chattab" data-toggle="tab" ng-click="chat_tab=1" class=""><i class="fa fa-comment-o"></i><span comp-translate="Chat"></span> </a></li>
+                    <li class="active"  ><a href="#chattab" data-toggle="tab" ng-click="chat_tab=1" class=""><i class="fa fa-comment-o"></i>&nbsp;&nbsp;<span comp-translate="Chat"></span> </a></li>
                     <!--<li ><a href="#crntab" data-toggle="tab" ng-click="chat_tab=2">CRN NO.</a></li>-->
                     <!-- <li ng-show="access_role == 2"><a href="#srtab" data-toggle="tab" ng-click="chat_tab=3">SR NO.</a></li>  -->
                 </ul>
@@ -13,7 +13,7 @@
 					</button>
 					<ul class="dropdown-menu not_menu">
 						<li ng-repeat="notmsg in not_menu">
-							<a href="#"><span comp-translate="{{notmsg.msg}}"></span></a>
+							<a href="#" ng-click="shownotification(notmsg);"><span comp-translate="{{notmsg.msg}}"></span></a>
 						</li>
 						
 						<!-- <li role="separator" class="divider"></li>
@@ -2681,7 +2681,7 @@
 							</div>
                             <div class="form-group">
                                 <span  class="thumbsIcon">
-                                    <span class="chatbottomtext">Was this information useful ? 
+                                    <span class="chatbottomtext"><span comp-translate="Was this information useful ?"></span> 
                                         <span class="thumbsup glyphicon glyphicon-thumbs-up" ng-click="likeChatClick();"></span>&nbsp; 
                                         <span class="thumbsdown glyphicon glyphicon-thumbs-down" ng-click="dislikeChatClick();"></span>
                                     </span>

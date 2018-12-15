@@ -13,6 +13,11 @@ ul.dropdown-menu.pdm li a, .profilelist li a {
 .login{
     margin-top: 5%;
 }
+.noti_modal {
+    .modal-header .close {
+        top: -21px;
+    }
+}
 .btn-primary {
     background-color: #442A70;
     border-color: #442A70;
