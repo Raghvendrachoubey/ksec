@@ -5031,6 +5031,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             mergedObject.DTHlink = tiledlist.stage_details.DT[0];
             mergedObject.DTHstage = tiledlist.stage_details.Stage;
             mergedObject.Journey_Name = tiledlist.stage_details.Journey_Name;
+            mergedObject.tiledlist = angular.copy(tiledlist);
             apiService.getDthlinkRes(mergedObject).then( function (response) {
                 if(response.data.session_object)
                     $rootScope.session_object = response.data.session_object;
