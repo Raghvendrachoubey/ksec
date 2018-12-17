@@ -1630,21 +1630,19 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
 				branch:$rootScope.branch
             };
 			//PAN india blank column issue #bugfix 14-11
-            ////console.log(cl);
+            // console.log(cl);
             $rootScope.savehistory(obj,cl);
                 //$rootScope.chatlist[cl].gotresponse=true;
             ////$rootScope.chatlist[cl].gotresponse=true;
-                $rootScope.fstabs = [];
-                    $rootScope.fstabvalue =[];
-                    $(".fdashboard").hide();
-                    $(".fspanel").hide();
-                    $rootScope.seeallTopic();
-                    $("ul.nav.nav-list.tree").hide();
+            // $rootScope.fstabs = [];
+            // $rootScope.fstabvalue =[];
+            // $(".fdashboard").hide();
+            // $(".fspanel").hide();
+            // $rootScope.seeallTopic();
+            // $("ul.nav.nav-list.tree").hide();
             $rootScope.outprocessclick=1;
-                if(data.data.tiledlist[0].topic)
-                     $("#topic").text(data.data.tiledlist[0].topic);
             angular.forEach(data.data.tiledlist, function(value, key) {
-                //console.log(value);
+                
                 if(value.type=="text")
                 {
                     ////console.log(data.data.tiledlist[0].text);
@@ -1742,7 +1740,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                 }
                 else if(value.type=="DTHyperlink")
                 {
-                    ////console.log(data.data,"outprocessdata");
+                    // console.log(data.data,"outprocessdata");
                     $rootScope.DthResponse(0,data.data,'');  
                     if(data.data.tiledlist[0].DT.length==1) {
                         $timeout(function(){
@@ -1804,7 +1802,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
 					//return false;
                 }
             }).catch(function(reason){
-                //console.log(reason);
+                // console.log(reason);
             });
         });
     };

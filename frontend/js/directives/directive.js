@@ -62,6 +62,7 @@ myApp.directive('img', function ($compile, $parse) {
             scope: true,
             priority: 0,
             compile: function (element, attrs) {
+                
                 var originalText = element.text();
                 //var originalTooltip = attrs['tooltip'];
                 //console.log(originalText);
@@ -69,7 +70,11 @@ myApp.directive('img', function ($compile, $parse) {
                     pre: function (scope, element, attrs) {
                         scope.originalText = originalText;
                         //scope.originalTooltip = originalTooltip;
-                    
+                        var parentid = $(element).parents("li");
+                        // if($(element).parents("li"))
+                        //     console.log("has li",$(parentid).attr("class"));
+                        // else
+                        //     console.log("does not  li",$(parentid).attr("class"));
                         
                         var translationChangeOccurred = function () {
                             attrs.$observe('compTranslate', function(value) {
@@ -83,7 +88,8 @@ myApp.directive('img', function ($compile, $parse) {
                                     
                                     hcont=$.parseHTML(value);
                                     element.html(hcont);
-                                    $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    // $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    $(parentid).removeClass("langcase");
                                 }
                                 else 
                                 {
@@ -92,12 +98,14 @@ myApp.directive('img', function ($compile, $parse) {
                                         // bindhtml = "<span ng-bind-html='"+html+"'>{{"+html+"}}<span>";
                                         
                                         element.html(response.data.data);
-                                        $( "ul.chat li:last-child" ).removeClass('langcase');
+                                        $(parentid).removeClass("langcase");
+                                        // $( "ul.chat li:last-child" ).removeClass('langcase');
                                         // $(element).parent().closest("li").removeClass('langcase');
                                     }).catch(function (reason) {
                                         hcont=$.parseHTML(value);
                                         element.html(hcont);
-                                        $( "ul.chat li:last-child" ).removeClass('langcase');
+                                        $(parentid).removeClass("langcase");
+                                        // $( "ul.chat li:last-child" ).removeClass('langcase');
                                     });
                                 }
                                     // if (scope.originalTooltip) {
@@ -187,17 +195,25 @@ myApp.directive('img', function ($compile, $parse) {
             priority: 0,
             compile: function (element, attrs) {
                 var originalText = element.text();
+                
+                
                 //var originalTooltip = attrs['tooltip'];
                 //console.log(originalText);
                 return {
                     pre: function (scope, element, attrs) {
+                        var parentid = $(element).parents("li");
+                        // if($(element).parents("li"))
+                        //     console.log("has li",$(parentid).attr("class"));
+                        // else
+                        //     console.log("does not  li",$(parentid).attr("class"));
                         scope.originalText = originalText;
                         //scope.originalTooltip = originalTooltip;
-                    
+                        
                         var hcont = "";
                         var translationChangeOccurred = function () {
                             attrs.$observe('compTranslater', function(value) {
                                 var languageid = $.jStorage.get("language");
+                                // console.log(value);
                                 contents = value;
                                 // contents = attrs.content;  
                                 contents=contents.replace('↵',' <br> ');  
@@ -211,7 +227,8 @@ myApp.directive('img', function ($compile, $parse) {
                                 {
                                     hcont=$.parseHTML(contents);
                                     element.html(hcont);
-                                    $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    // $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    $(parentid).removeClass("langcase");
                                 }
                                 else 
                                 {
@@ -223,11 +240,13 @@ myApp.directive('img', function ($compile, $parse) {
                                         
                                         //hcont= $compile(hcont)(scope);
                                         element.html(hcont);
-                                        $( "ul.chat li:last-child" ).removeClass('langcase');
+                                        // $( "ul.chat li:last-child" ).removeClass('langcase');
+                                        $(parentid).removeClass("langcase");
                                     }).catch(function (reason) {
                                         hcont=$.parseHTML(contents);
                                         element.html(hcont);
-                                        $( "ul.chat li:last-child" ).removeClass('langcase');
+                                        $(parentid).removeClass("langcase");
+                                        // $( "ul.chat li:last-child" ).removeClass('langcase');
                                     });
                                 // if (scope.originalTooltip) {
                                 //     attrs.$set('tooltip', translationService.translate(scope.originalTooltip));
