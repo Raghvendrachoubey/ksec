@@ -2448,10 +2448,8 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                 //delete tiledlist.FAQ;
 			if(formData.tiledlist.FAQ)
 				delete formData.tiledlist.FAQ;
-            if(tiledlist.Find_Locator) {
-                $rootScope.nearme();
-            }
-            else if(tiledlist.connected_node) {
+
+            if(tiledlist.connected_node) {
                 var topic2 = "";
                 var outputDate   = new Date();
                 var respdiff = (outputDate.getTime() - inputDate.getTime()) / 1000;
@@ -2676,6 +2674,9 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                                     
                                     $rootScope.showMsgLoader = false;
                                 }
+                                if(value.Find_Locator) {
+                                    $rootScope.nearme();
+                                }
                             });
                         });
                     }
@@ -2858,6 +2859,9 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                                 $rootScope.pushSystemMsg(0,data.data);
                                 
                                 $rootScope.showMsgLoader = false;
+                            }
+                            if(value.Find_Locator) {
+                                $rootScope.nearme();
                             }
                         });
                         // $scope.faqdtc=0;
