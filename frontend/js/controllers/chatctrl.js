@@ -2448,7 +2448,10 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                 //delete tiledlist.FAQ;
 			if(formData.tiledlist.FAQ)
 				delete formData.tiledlist.FAQ;
-            if(tiledlist.connected_node) {
+            if(tiledlist.Find_Locator) {
+                $rootScope.nearme();
+            }
+            else if(tiledlist.connected_node) {
                 var topic2 = "";
                 var outputDate   = new Date();
                 var respdiff = (outputDate.getTime() - inputDate.getTime()) / 1000;
@@ -2666,6 +2669,13 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
 									});
                                     //return false;
                                 }
+                                if (value.type == "html_form") {
+                                    //$rootScope.pushSystemMsg(0, decryptedData);
+                                    
+                                    $rootScope.pushSystemMsg(0,data.data);
+                                    
+                                    $rootScope.showMsgLoader = false;
+                                }
                             });
                         });
                     }
@@ -2841,6 +2851,13 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
 									$scope.showprocessdata(data);
 								});
                                 //return false;
+                            }
+                            if (value.type == "html_form") {
+                                    //$rootScope.pushSystemMsg(0, decryptedData);
+                                
+                                $rootScope.pushSystemMsg(0,data.data);
+                                
+                                $rootScope.showMsgLoader = false;
                             }
                         });
                         // $scope.faqdtc=0;

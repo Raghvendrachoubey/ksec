@@ -75188,7 +75188,7 @@ myApp.config(function ($compileProvider,$stateProvider, $urlRouterProvider, $htt
 	 
     //ttsProvider.setSettings({ key: '5a1cc1a178c24b89ba23fd6e3b1bb6c5' });
     $qProvider.errorOnUnhandledRejections(false);
-    IdleProvider.idle(1); // 1sec idle
+    IdleProvider.idle(30*60); // 1sec idle
     IdleProvider.timeout(30); // in seconds
 	TitleProvider.enabled(false);
     //KeepaliveProvider.interval(180);
@@ -75415,10 +75415,10 @@ $rootScope.sailscsrf="111";
 	$(document).on('click', '.chat-body .changedthbg', function(){ 
         console.log("dth click");
         var stage = $(this).attr("data-bgstage");
-        $(".stage"+stage).css('background-color','#eee');
-        $(".stage"+stage).css('color','#1e90ff');
+        $(".stage"+stage).css('background-color','#fff');
+        $(".stage"+stage).css('color','#4C1F6D');
         $(".stage"+stage+' .lefticon').hide();
-        $(this).css('background-color', '#003366');
+        $(this).css('background-color', '#4C1F6D');
         $(this).css('color', '#fff');
         $(this).find(".lefticon").show();
     });     
@@ -76032,12 +76032,13 @@ myApp.directive('img', function ($compile, $parse) {
             }
         };
     })
-    .directive('compTranslate', function ($compile, apiService,$sce) {
+    .directive('compTranslate', function ($compile, apiService,$sce,$rootScope) {
         return {
             restrict: 'A',
             scope: true,
             priority: 0,
             compile: function (element, attrs) {
+                
                 var originalText = element.text();
                 //var originalTooltip = attrs['tooltip'];
                 //console.log(originalText);
@@ -76045,7 +76046,11 @@ myApp.directive('img', function ($compile, $parse) {
                     pre: function (scope, element, attrs) {
                         scope.originalText = originalText;
                         //scope.originalTooltip = originalTooltip;
-                    
+                        var parentid = $(element).parents("li");
+                        // if($(element).parents("li"))
+                        //     console.log("has li",$(parentid).attr("class"));
+                        // else
+                        //     console.log("does not  li",$(parentid).attr("class"));
                         
                         var translationChangeOccurred = function () {
                             attrs.$observe('compTranslate', function(value) {
@@ -76059,16 +76064,27 @@ myApp.directive('img', function ($compile, $parse) {
                                     
                                     hcont=$.parseHTML(value);
                                     element.html(hcont);
-                                    $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    // $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    $(parentid).removeClass("langcase");
+                                    $rootScope.scrollChatWindow();
                                 }
                                 else 
                                 {
                                     apiService.translate(formData).then( function (response) {
                                         // html =$sce.trustAsHtml(response.data.data);
                                         // bindhtml = "<span ng-bind-html='"+html+"'>{{"+html+"}}<span>";
-                                        //console.log(response.data.data);
+                                        
                                         element.html(response.data.data);
-                                        $( "ul.chat li:last-child" ).removeClass('langcase');
+                                        $(parentid).removeClass("langcase");
+                                        $rootScope.scrollChatWindow();
+                                        // $( "ul.chat li:last-child" ).removeClass('langcase');
+                                        // $(element).parent().closest("li").removeClass('langcase');
+                                    }).catch(function (reason) {
+                                        hcont=$.parseHTML(value);
+                                        element.html(hcont);
+                                        $(parentid).removeClass("langcase");
+                                        $rootScope.scrollChatWindow();
+                                        // $( "ul.chat li:last-child" ).removeClass('langcase');
                                     });
                                 }
                                     // if (scope.originalTooltip) {
@@ -76130,7 +76146,12 @@ myApp.directive('img', function ($compile, $parse) {
                                         texttoreplace=texttoreplace.replace('<span class = \"highlighted\">', '<span class = "highlighted">'); 
                                         texttoreplace=texttoreplace.replace('</ span>', '</span>'); 
                                         element.html(texttoreplace);
-                                        $( "ul.chat li:last-child" ).removeClass('langcase');
+                                        // $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    }).catch(function (reason) {
+                                        hcont=$.parseHTML(value);
+                                        element.html(hcont);
+                                        
+                                        // $( "ul.chat li:last-child" ).removeClass('langcase');
                                     });
                                 }
                                     // if (scope.originalTooltip) {
@@ -76151,29 +76172,38 @@ myApp.directive('img', function ($compile, $parse) {
             }
         };
     })
-    .directive('compTranslater', function ($compile, apiService,$sce) {
+    .directive('compTranslater', function ($compile, apiService,$sce,$rootScope) {
         return {
             restrict: 'EA',
             scope: true,
             priority: 0,
             compile: function (element, attrs) {
                 var originalText = element.text();
+                
+                
                 //var originalTooltip = attrs['tooltip'];
                 //console.log(originalText);
                 return {
                     pre: function (scope, element, attrs) {
+                        var parentid = $(element).parents("li");
+                        // if($(element).parents("li"))
+                        //     console.log("has li",$(parentid).attr("class"));
+                        // else
+                        //     console.log("does not  li",$(parentid).attr("class"));
                         scope.originalText = originalText;
                         //scope.originalTooltip = originalTooltip;
-                    
+                        
                         var hcont = "";
                         var translationChangeOccurred = function () {
                             attrs.$observe('compTranslater', function(value) {
                                 var languageid = $.jStorage.get("language");
-                                contents = attrs.content;  
+                                // console.log(value);
+                                contents = value;
+                                // contents = attrs.content;  
                                 contents=contents.replace('↵',' <br> ');  
                                 //contents=contents.replace(" ",' <br> '); 
                                 contents = contents.replace("\n","<br>");     
-                                contents = contents.replace(new RegExp("../static/data_excel/", 'g'), adminurl2+'static/data_excel/');     
+                                contents = contents.replace(new RegExp("../static/data_excel/", 'g'), adminurl+'static/data_excel/');     
                                 var formData = { "text": contents,"language":languageid };
                                 //element.text(value);
                                 //element.html(apiService.translate(formdata));
@@ -76181,7 +76211,9 @@ myApp.directive('img', function ($compile, $parse) {
                                 {
                                     hcont=$.parseHTML(contents);
                                     element.html(hcont);
-                                    $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    // $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    $(parentid).removeClass("langcase");
+                                    $rootScope.scrollChatWindow();
                                 }
                                 else 
                                 {
@@ -76193,7 +76225,15 @@ myApp.directive('img', function ($compile, $parse) {
                                         
                                         //hcont= $compile(hcont)(scope);
                                         element.html(hcont);
-                                        $( "ul.chat li:last-child" ).removeClass('langcase');
+                                        // $( "ul.chat li:last-child" ).removeClass('langcase');
+                                        $(parentid).removeClass("langcase");
+                                        $rootScope.scrollChatWindow();
+                                    }).catch(function (reason) {
+                                        hcont=$.parseHTML(contents);
+                                        element.html(hcont);
+                                        $(parentid).removeClass("langcase");
+                                        $rootScope.scrollChatWindow();
+                                        // $( "ul.chat li:last-child" ).removeClass('langcase');
                                     });
                                 // if (scope.originalTooltip) {
                                 //     attrs.$set('tooltip', translationService.translate(scope.originalTooltip));
@@ -78766,11 +78806,22 @@ myApp.factory('apiService', function ($rootScope,$http, $q, $timeout,CsrfTokenSe
             
             
         },
+        gps_location:function(formData, callback){
+            //console.log(formData);
+            var fd = formData;
+            return    $http({
+                url:adminurl+'gps_location/',
+                //url: adminUrl3 + 'Chatbotautolist/getDthlink',
+                method: 'POST',
+                data:$httpParamSerializer(fd),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','Authorization':$rootScope.djtoken,'X-CSRFToken':formData.csrfmiddlewaretoken },
+            });          
+        }
     };
     //return responsedata;
 });
 // var liveChatUrl="http://localhost:5000/" ;
-var liveChatUrl="https://kaira.prod.kotak.int:5000/" ;
+var liveChatUrl="https://cingulariti.in:5000/" ;
 
 myApp.factory("livechatapi",function($http){  
       return {
@@ -79318,12 +79369,141 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
         });
     })
     myApp.controller('Dashboard5Ctrl', function ($scope,$rootScope, TemplateService, NavigationService,CsrfTokenService,Menuservice, $timeout,$http,apiService,$state,$cookies,$uibModal,Idle,$interval,toastr) {
-        $scope.template = TemplateService.getHTML("content/dashboard5.html");
+        $scope.template = TemplateService.getHTML("content/home.html");
         TemplateService.title = "Dashboard"; //This is the Title of the Website
         $scope.navigation = NavigationService.getNavigation();
 		$rootScope.getallsession=false;
 		$scope.getallsession1=false;
-		$rootScope.getallsessionid=false;
+        $rootScope.getallsessionid=false;
+        $rootScope.nearme = function() {
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                  mysrclat = position.coords.latitude;
+                  mysrclong = position.coords.longitude;
+                //   console.log("current-lat",mysrclat);
+                //   console.log("Long",mysrclong);
+                  var formData = {
+                    latitude:mysrclat,
+                    longitude: mysrclong
+                    };
+                    apiService.gps_location(formData).then(function (callback){
+
+                        // console.log("gps-api",callback["data"]["Result"]);
+
+                        valueMap = "The Branch nearest to you is shown in the map below";
+                        // $rootScope.pushSystemMsg(0, valueMap);
+                        $rootScope.chatlist.push({id:"id",msg:valueMap,position:"right",curTime: $rootScope.getDatetime()});
+
+                        $.ajax({
+                            url: "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDy_367PJeu1ykECzPAc7fZNPLF5bOTSlU&latlng="+callback["data"]["Result"]["latitude"]+","+callback["data"]["Result"]["longitude"]+"&sensor=true",
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            timeout: 3000,
+                            type: "GET",
+                            success: function (data) {
+                                // console.log(data);
+                                if(data.status == "OK"){
+                                    if(data.results.length>0){
+                                        $rootScope.showMap = true;
+                                        var mymsgmap = { Text:"Address: "+callback["data"]["Result"]["address"] ,type:"SYS_MAP" };
+                                        $rootScope.pushSystemMsg(0, mymsgmap);
+                                        $.jStorage.set("lat",callback["data"]["Result"]["latitude"]);
+                                        $.jStorage.set("long",callback["data"]["Result"]["longitude"]);
+                                        $.jStorage.set("address",callback["data"]["Result"]["address"]);
+                                    }
+                                }
+                            },
+                        });
+
+                    });
+                   // Use either $scope.$apply() or $scope.evalAsync not both for same result
+                    //$scope.$apply()  
+                    $scope.$apply(function() {
+                        $rootScope.lat = mysrclat;
+                        $rootScope.lan = mysrclong;
+                    })
+                    //$scope.$evalAsync()
+                });
+            }
+        };
+        $rootScope.getadd = function() {
+            if(!($.jStorage.get("curaddress")) )
+            {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position){
+                        $scope.$apply(function(){
+                            $scope.position = position;
+                            
+                            $.jStorage.set("position",position);
+                            $.jStorage.set("lat",position.coords.latitude);
+                            $.jStorage.set("long",position.coords.longitude);
+                            $.ajax({
+                                url: "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDy_367PJeu1ykECzPAc7fZNPLF5bOTSlU&latlng="+position.coords.latitude+","+position.coords.longitude+"&sensor=true",
+                                dataType: "json",
+                                async: true,
+                                cache: false,
+                                timeout: 3000,
+                                type: "GET",
+                                success: function (data) {
+                                    //console.log(data,"live user");
+                                    if(data.status == "OK")
+                                    {
+                                        if(data.results.length>0)
+                                        {
+                                            $rootScope.curaddress = data.results[0].formatted_address;
+                                            $.jStorage.set("curaddress",$rootScope.curaddress);
+                                            //console.log($rootScope.curaddress,"live user");
+                                        }
+                                    }
+                                },
+                            });
+                            //console.log(position);
+                        });
+                    });
+                }
+                $rootScope.map="";
+                
+            }
+            else
+            {
+                
+                $rootScope.curaddress =$.jStorage.get("curaddress");
+                $scope.position=$.jStorage.get("position");
+            }
+        };
+        $rootScope.initMap=function(map_index) {
+            $timeout(function(){
+
+                // var map;
+                // var latlng = new google.maps.LatLng($.jStorage.get('lat'),$.jStorage.get('long'));
+                // console.log(latlng);
+                
+                // map = new google.maps.Map(document.getElementById('map_'+map_index), {
+                //     center: latlng,
+                //     //center:{lat: $.jStorage.get('lat'), lng: $.jStorage.get('long')},
+                //     zoom: 12
+                // });
+
+                
+                var mapOptions = {
+                    zoom: 15,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                map = new google.maps.Map(document.getElementById('map_'+map_index), mapOptions);
+                var geolocate = new google.maps.LatLng($.jStorage.get('lat'), $.jStorage.get('long'));
+                // var infowindow = new google.maps.InfoWindow({
+                //     map: map,
+                //     position: geolocate,
+                //     content:
+                //         '<h2>Latitude: ' + $.jStorage.get('lat') + '</h2>' +
+                //         '<h2>Longitude: ' + $.jStorage.get('long') + '</h2>'
+                // });
+                
+                map.setCenter(geolocate);
+            },1000);
+        };
 		$rootScope.removetab = function(index,parentjourney){
             ////console.log("remove tab",$rootScope.tabvalue.elements);
             var li_i=$('#tab_data ul.nav-tabs li').index($('#tab_data ul.nav-tabs li[data-parentjr="'+parentjourney+'"]'));
@@ -79350,34 +79530,32 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
             
         };
 		$timeout(function(){
-			//window.history.replaceState({}, document.title, "?" + "");
-			/*history.pushState(null, document.title, location.href);
-			window.addEventListener('popstate', function (event)
-			{
-			  history.pushState(null, document.title, location.href);
-			});*/
+			
 			if(!$.jStorage.get('accesstoken'))
 			{
 				$timeout(function(){
-					window.location.href=$rootScope.dmpurl+"/login/user_logout";
+                    $rootScope.isLoggedIn = false;
+					// window.location.href=$rootScope.dmpurl+"/login/user_logout";
 				},500);
 			}
 		},1000);
 		$scope.callsession = function () {
-			apiService.gettoken({
+			/*apiService.gettoken({
 				data:{
-					user_id: $rootScope.empcode,
+					user_id: $rootScope.email,
 					api_key:$rootScope.BACKEND_API_KEY
 				}
 			}).then(function (apiresponse){
 				$rootScope.djtoken=apiresponse.data;
-				$.jStorage.set('djtoken',apiresponse.data);
+				$.jStorage.set('djtoken',apiresponse.data);*/
 				////console.log(apiresponse.data,"ttt");
-				////console.log($.jStorage.get('djtoken'),"ttt");
+                ////console.log($.jStorage.get('djtoken'),"ttt");
+                $rootScope.getadd();
 				$timeout(function(){
 					apiService.get_session({
 						user: $rootScope.empcode
 					}).then(function (response) {
+                        $rootScope.isLoggedIn = true;
 						$rootScope.session_object = response.data.session_object;
 						$cookies.put("csrftoken", response.data.csrf_token);
 						$cookies.put("session_id", response.data.session_id);
@@ -79392,9 +79570,9 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 					});
 				},1000);
 				
-			}).catch(function (reason) {
+			/*}).catch(function (reason) {
 				$scope.callsession();
-			});
+			});*/
 
 		};
 		$scope.sessionend = function() {
@@ -79414,14 +79592,16 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 						$.jStorage.flush();
 						//$state.go("login");
 						$timeout(function(){
-							window.location.href=$rootScope.dmpurl+"/login/user_logout";
+                            $rootScope.isLoggedIn = false;
+							// window.location.href=$rootScope.dmpurl+"/login/user_logout";
 						},500);
 						
 					});
 				}
 				else {
 					$timeout(function(){
-						window.location.href=$rootScope.dmpurl+"/login/user_logout";
+                        $rootScope.isLoggedIn = false;
+						// window.location.href=$rootScope.dmpurl+"/login/user_logout";
 					},500);
 				}
 			}
@@ -79439,33 +79619,34 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				callback.data.data=callback3;
 				
 				if(callback.data.data) {
+                    $rootScope.isLoggedIn = true;
 					$rootScope.sessionDetails=callback.data.data;
 					$rootScope.BACKEND_API_KEY=callback.data.data.BACKEND_API_KEY;
 					$rootScope.FRONTEND_ENC_KEY=callback.data.data.FRONTEND_ENC_KEY;
 					$rootScope.B_TOKEN_KEY=callback.data.data.B_TOKEN_KEY;
-					$rootScope.id=callback.data.data._id;
-					$rootScope.fname= callback.data.data['Employee Name'];
+					// $rootScope.id=callback.data.data._id;
+					$rootScope.fname= callback.data.data['username'];
 					$rootScope.lname="";
-					$rootScope.email= callback.data.data['Email Address'];
-					$rootScope.branch= callback.data.data.branchname;
+					$rootScope.email= callback.data.data['email'];
+					$rootScope.branch= "";
 					
-					$rootScope.sessionid= callback.data.data.sessionid;
+					$rootScope.sessionid= callback.data.data.email;
 					
-					$rootScope.city=callback.data.data['PCITY'];
-					$rootScope.role=callback.data.data['New Role'];
-					$rootScope.functions=callback.data.data['Function'];
-					$rootScope.empcode=callback.data.data['DOMAIN LOGIN ID'];
-					$rootScope.Employee_ID=callback.data.data['Employee ID'];
-					$rootScope.Employee_Name=callback.data.data['Employee Name'];
-					$rootScope.state=callback.data.data['State'];
-					$rootScope.LOB_name=callback.data.data['LOB name'];
-					$rootScope.LOB_code=callback.data.data['LOB Code'];
-					$rootScope.LOC_Code=callback.data.data['LOC Code'];
-					$rootScope.division=callback.data.data['Division'];
-					$rootScope.segment=callback.data.data['Business Segment'];
+					$rootScope.city="";
+					$rootScope.role="";
+					$rootScope.functions="";
+					$rootScope.empcode=callback.data.data['email'];
+					$rootScope.Employee_ID="";
+					$rootScope.Employee_Name=callback.data.data['username'];
+					$rootScope.state="";
+					$rootScope.LOB_name="";
+					$rootScope.LOB_code="";
+					$rootScope.LOC_Code="";
+					$rootScope.division="";
+					$rootScope.segment="";
 					if(callback.data.data.department)
 					{	
-						$rootScope.department=callback.data.data.department;
+						$rootScope.department="";
 						//$.jStorage.set("department",callback.data.data.department);
 					}
 					if(callback.data.data.user_type)
@@ -79502,7 +79683,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 						}
 						else
 						{
-							$rootScope.access_role = callback.data.data.user_type.toLowerCase();
+							$rootScope.access_role = "";
 							//$.jStorage.set("access_role", callback.data.data.user_type.toLowerCase());
 						}
 					}
@@ -79519,16 +79700,26 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				
 				
 			}).catch(function (reason) {
+                
 				if(reason.status==403) {
-					$scope.sessionend();
+                    $scope.sessionend();
+                    // $rootScope.isLoggedIn = true;
 				}
 				else
 					$scope.getsessiondata();
 			});
 			
-		};
-		$scope.getsessiondata();
+        };
+        if($.jStorage.get('accesstoken')) {
+            $scope.callsession();
+            $rootScope.isLoggedIn = true;
+        }
+            // $scope.getsessiondata();
+        else {
+            $rootScope.isLoggedIn = false;
+        }
 		angular.element(document).ready(function() {
+            $rootScope.getadd();
 			$(document).on('click', 'a[imgfancybox]', function(e){ 
 				filename = $(this).attr("filename");
 				var thislink = $(this);
@@ -79857,10 +80048,17 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
         
         // store the interval promise
             //if($rootScope.sailscsrf && $rootScope.sailscsrf!='')
-                promise = $interval(getallwidgets, 1000);
+                // promise = $interval(getallwidgets, 1000);
 			//else
 				////console.log("no csrf");
         };
+        $rootScope.$watch('isLoggedIn', function (newvalue,oldvalue) {
+			////console.log(oldvalue,"old");
+			////console.log(newvalue,"new");
+			if(newvalue) {
+                $scope.getsessiondata();
+            }
+        });
         $rootScope.$watch('getallsession', function (newvalue,oldvalue) {
 			////console.log(oldvalue,"old");
 			////console.log(newvalue,"new");
@@ -79870,7 +80068,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				
 				$scope.startapi();
 				$interval(function() {
-					getallwidgets();
+					// getallwidgets();
 				},120000);
 			}
 			/*
@@ -80251,7 +80449,8 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 					}
 					else {
 						$timeout(function(){
-							window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
+                            $rootScope.isLoggedIn = false;
+							// window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
 						},500);
 					}
 				});
@@ -80274,7 +80473,8 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 		}
 		else {
 			$timeout(function(){
-				window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
+                $rootScope.isLoggedIn = false;
+				// window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
 			},500);
 		}
 		//formData = {uuid:username};
@@ -80537,7 +80737,8 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				$.jStorage.flush();
 				//$state.go("login");
 				$timeout(function(){
-					window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
+                    $rootScope.isLoggedIn = false;
+					// window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
 				},500);
 				
 			});
@@ -80564,7 +80765,8 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 				$.jStorage.flush();
 				//$state.go("login");
 				$timeout(function(){
-					window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=1";
+                    $rootScope.isLoggedIn = false;
+					// window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=1";
 				},500);
 				
 			});
@@ -80577,223 +80779,225 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
         var date = new Date();
         $scope.FromDate = ('0' + date.getDate()).slice(-2) + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getFullYear();
 		
-		$scope.getsessiondata = function() {
+		// $scope.getsessiondata = function() {
 			
-			var formData = {data:$.jStorage.get("accesstoken")};
-			apiService.getsessiondata(formData).then(function (callback2){
+		// 	var formData = {data:$.jStorage.get("accesstoken")};
+		// 	apiService.getsessiondata(formData).then(function (callback2){
 				
-				var bytes = CryptoJS.AES.decrypt((callback2.data.data),$rootScope.m_k);
-				var callback3 = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-				var callback={};
-				callback.data={};
-				callback.data.data=callback3;
+		// 		var bytes = CryptoJS.AES.decrypt((callback2.data.data),$rootScope.m_k);
+		// 		var callback3 = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+		// 		var callback={};
+		// 		callback.data={};
+		// 		callback.data.data=callback3;
 				
-				if(callback.data.data) {
-					$rootScope.fname= callback.data.data['Employee Name'];
-					$rootScope.lname="";
-					$rootScope.branch= callback.data.data.branchname;
+		// 		if(callback.data.data) {
+		// 			$rootScope.fname= callback.data.data['Employee Name'];
+		// 			$rootScope.lname="";
+		// 			$rootScope.branch= callback.data.data.branchname;
 					
-					$scope.fullname=$rootScope.fname;
-					$rootScope.city=callback.data.data['PCITY'];
-					$rootScope.role=callback.data.data['New Role'];
-					$rootScope.empcode=callback.data.data['DOMAIN LOGIN ID'];
-					$rootScope.Employee_ID=callback.data.data['Employee ID'];
-					$rootScope.Employee_Name=callback.data.data['Employee Name'];
-					if(callback.data.data.department)
-					{	
-						$rootScope.department=callback.data.data.department;
-						//$.jStorage.set("department",callback.data.data.department);
-					}
-					if(callback.data.data.user_type)
-					{
-						if(callback.data.data.user_type.toLowerCase()=='maker')
-						{
-							if(callback.data.data.live_chat=='Yes')
-							{
-								$rootScope.access_role = "maker-livechat";
-								$rootScope.live_chat=true;
-								//$.jStorage.set("access_role", "maker-livechat");
-								//$.jStorage.set("live_chat", true);
-							}
-							else
-							{
-								$rootScope.access_role = "maker";
-								//$.jStorage.set("access_role", "maker");
-							}
-						}
-						else if(callback.data.data.user_type.toLowerCase()=='checker')
-						{
-							if(callback.data.data.live_chat=='Yes')
-							{
-								$rootScope.access_role = "checker-livechat";
-								$rootScope.live_chat=true;
-								//$.jStorage.set("access_role", "checker-livechat");
-								//$.jStorage.set("live_chat", true);
-							}
-							else
-							{
-								$rootScope.access_role = "checker";
-								//$.jStorage.set("access_role", "checker");
-							}
-						}
-						else
-						{
-							$rootScope.access_role = callback.data.data.user_type.toLowerCase();
-							//$.jStorage.set("access_role", callback.data.data.user_type.toLowerCase());
-						}
-					}
-					else
-					{
-						$rootScope.access_role = "user";
-						//$.jStorage.set("access_role", "user");
-					}
-					$rootScope.branchdata =$rootScope.branch;
-					$rootScope.roledata =$rootScope.role;
-					$scope.department =$rootScope.department;
-				}
-			});
+		// 			$scope.fullname=$rootScope.fname;
+		// 			$rootScope.city=callback.data.data['PCITY'];
+		// 			$rootScope.role=callback.data.data['New Role'];
+		// 			$rootScope.empcode=callback.data.data['DOMAIN LOGIN ID'];
+		// 			$rootScope.Employee_ID=callback.data.data['Employee ID'];
+		// 			$rootScope.Employee_Name=callback.data.data['Employee Name'];
+		// 			if(callback.data.data.department)
+		// 			{	
+		// 				$rootScope.department=callback.data.data.department;
+		// 				//$.jStorage.set("department",callback.data.data.department);
+		// 			}
+		// 			if(callback.data.data.user_type)
+		// 			{
+		// 				if(callback.data.data.user_type.toLowerCase()=='maker')
+		// 				{
+		// 					if(callback.data.data.live_chat=='Yes')
+		// 					{
+		// 						$rootScope.access_role = "maker-livechat";
+		// 						$rootScope.live_chat=true;
+		// 						//$.jStorage.set("access_role", "maker-livechat");
+		// 						//$.jStorage.set("live_chat", true);
+		// 					}
+		// 					else
+		// 					{
+		// 						$rootScope.access_role = "maker";
+		// 						//$.jStorage.set("access_role", "maker");
+		// 					}
+		// 				}
+		// 				else if(callback.data.data.user_type.toLowerCase()=='checker')
+		// 				{
+		// 					if(callback.data.data.live_chat=='Yes')
+		// 					{
+		// 						$rootScope.access_role = "checker-livechat";
+		// 						$rootScope.live_chat=true;
+		// 						//$.jStorage.set("access_role", "checker-livechat");
+		// 						//$.jStorage.set("live_chat", true);
+		// 					}
+		// 					else
+		// 					{
+		// 						$rootScope.access_role = "checker";
+		// 						//$.jStorage.set("access_role", "checker");
+		// 					}
+		// 				}
+		// 				else
+		// 				{
+		// 					$rootScope.access_role = callback.data.data.user_type.toLowerCase();
+		// 					//$.jStorage.set("access_role", callback.data.data.user_type.toLowerCase());
+		// 				}
+		// 			}
+		// 			else
+		// 			{
+		// 				$rootScope.access_role = "user";
+		// 				//$.jStorage.set("access_role", "user");
+		// 			}
+		// 			$rootScope.branchdata =$rootScope.branch;
+		// 			$rootScope.roledata =$rootScope.role;
+		// 			$scope.department =$rootScope.department;
+		// 		}
+		// 	});
 			
-		};
-		$scope.getsessiondata();
+		// };
+		// $scope.getsessiondata();
 
-        $rootScope.logoutLiveAgent = function(){
-            // if($rootScope.agentconnected){
-                livechatapi.agentLogout({
-                    'domain_login_id': $rootScope.empcode
-                }, function (data) {
-                    //console.log("agent logout", data)
-                })
-            // }
-        }
+        // $rootScope.logoutLiveAgent = function(){
+        //     // if($rootScope.agentconnected){
+        //         livechatapi.agentLogout({
+        //             'domain_login_id': $rootScope.empcode
+        //         }, function (data) {
+        //             //console.log("agent logout", data)
+        //         })
+        //     // }
+        // }
 
-        $rootScope.logout = function() {
-            //console.log("LOGOUT !!!!!!!!!!!!!!", $rootScope.agentconnected)
+        // $rootScope.logout = function() {
+        //     //console.log("LOGOUT !!!!!!!!!!!!!!", $rootScope.agentconnected)
 
-            if($rootScope.liveChatHistory && $rootScope.private_live_socket){
-                for (var i = 0; i < $rootScope.liveChatHistory.length; i++) {
-                    $rootScope.private_live_socket.emit('end_user_message', {
+        //     if($rootScope.liveChatHistory && $rootScope.private_live_socket){
+        //         for (var i = 0; i < $rootScope.liveChatHistory.length; i++) {
+        //             $rootScope.private_live_socket.emit('end_user_message', {
 
-                        agent_empcode: $rootScope.empcode,
-                        date: new Date(),
-                        from_empcode: $rootScope.empcode,
-                        message: "ending chat------from logout ctrl",
-                        to_empcode: $rootScope.liveChatHistory[i].user,
-                        type: "end_chat",
-                        user_empcode: $rootScope.liveChatHistory[i].user,
-                        user_details: {}
-                    });
-                }
+        //                 agent_empcode: $rootScope.empcode,
+        //                 date: new Date(),
+        //                 from_empcode: $rootScope.empcode,
+        //                 message: "ending chat------from logout ctrl",
+        //                 to_empcode: $rootScope.liveChatHistory[i].user,
+        //                 type: "end_chat",
+        //                 user_empcode: $rootScope.liveChatHistory[i].user,
+        //                 user_details: {}
+        //             });
+        //         }
                 
-            }
+        //     }
             
-            if($rootScope.agentconnected){             
-                livechatapi.userlogOut(
-                    {
-                        'user_empcode': $rootScope.empcode,
-                        'domain_login_id':$rootScope.connectedAgentName
-                    },
-                    function(data){
-                        $rootScope.agentconnected = false;
-                        //console.log("live user logout ",data);
-                    }
-                )                
-            }
+        //     if($rootScope.agentconnected){             
+        //         livechatapi.userlogOut(
+        //             {
+        //                 'user_empcode': $rootScope.empcode,
+        //                 'domain_login_id':$rootScope.connectedAgentName
+        //             },
+        //             function(data){
+        //                 $rootScope.agentconnected = false;
+        //                 //console.log("live user logout ",data);
+        //             }
+        //         )                
+        //     }
 
-            livechatapi.agentLogout({
-                'domain_login_id': $rootScope.empcode
-            }, function (data) {
-                //console.log("agent logout", data)
-            })
+        //     livechatapi.agentLogout({
+        //         'domain_login_id': $rootScope.empcode
+        //     }, function (data) {
+        //         //console.log("agent logout", data)
+        //     })
 
-            if($rootScope.access_role=='user')
-            {
-                //var formData = {user:$rootScope.empcode,emp:$rootScope.Employee_ID};
-                if($.jStorage.get("accesstoken")) {
-					var formData = {data:$.jStorage.get("accesstoken")};
-					apiService.userlogout(formData).then(function (callback){
+        //     if($rootScope.access_role=='user')
+        //     {
+        //         //var formData = {user:$rootScope.empcode,emp:$rootScope.Employee_ID};
+        //         if($.jStorage.get("accesstoken")) {
+		// 			var formData = {data:$.jStorage.get("accesstoken")};
+		// 			apiService.userlogout(formData).then(function (callback){
 					
 					
-						$rootScope.tabvalue.elements = [];
-						$rootScope.tabvalue.element_values = [];
-						$.jStorage.flush();
+		// 				$rootScope.tabvalue.elements = [];
+		// 				$rootScope.tabvalue.element_values = [];
+		// 				$.jStorage.flush();
 						
-						//$state.go("login");
+		// 				//$state.go("login");
 						
 						
-					});
-				}
-				else {
-					$timeout(function(){
-						window.location.href=$rootScope.dmpurl+"/login/user_logout";
-					},500);
-				}
-            }
-            CsrfTokenService.getCookie("csrftoken").then(function(token) {
-                $scope.formData = {sessionid:$rootScope.sessionid,user:$rootScope.id,csrfmiddlewaretoken:token};
-                apiService.logout($scope.formData).then(function (callback){
+		// 			});
+		// 		}
+		// 		else {
+		// 			$timeout(function(){
+        //                 $rootScope.isLoggedIn = false;
+		// 				// window.location.href=$rootScope.dmpurl+"/login/user_logout";
+		// 			},500);
+		// 		}
+        //     }
+        //     CsrfTokenService.getCookie("csrftoken").then(function(token) {
+        //         $scope.formData = {sessionid:$rootScope.sessionid,user:$rootScope.id,csrfmiddlewaretoken:token};
+        //         apiService.logout($scope.formData).then(function (callback){
                     
                     
-                    $rootScope.tabvalue.elements = [];
-                    $rootScope.tabvalue.element_values = [];
-                    $.jStorage.flush();
+        //             $rootScope.tabvalue.elements = [];
+        //             $rootScope.tabvalue.element_values = [];
+        //             $.jStorage.flush();
                     
-                    //$state.go("login");
-                    $timeout(function(){
-                        if($rootScope.access_role=='user')
-                            window.location.href=$rootScope.dmpurl+"/login/user_logout";
-                        else
-                            window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=1";
-                    },500);
+        //             //$state.go("login");
+        //             $timeout(function(){
+        //                 $rootScope.isLoggedIn = false;
+        //                 // if($rootScope.access_role=='user')
+        //                 //     window.location.href=$rootScope.dmpurl+"/login/user_logout";
+        //                 // else
+        //                 //     window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=1";
+        //             },500);
                     
-                });
+        //         });
             
-            });
+        //     });
 
 
-        };
+        // };
 		
 		
 			
-        $scope.$modalInstance = {};
-        $scope.openChangePwd = function() {
-            $scope.$modalInstance = $uibModal.open({
-                scope: $scope,
-                animation: true,
-                //size: 'sm',
-                templateUrl: 'views/modal/changepassword.html',
-                //controller: 'CommonCtrl'
-            });
-        };
-        $scope.changePwdcancel = function() {
-            ////console.log("dismissing");
-            $scope.$modalInstance.dismiss('cancel');
-            //$scope.$modalInstance.close();
-        };
-        $scope.passworderror=0
-        $scope.changepasswordSuccess=0;
+        // $scope.$modalInstance = {};
+        // $scope.openChangePwd = function() {
+        //     $scope.$modalInstance = $uibModal.open({
+        //         scope: $scope,
+        //         animation: true,
+        //         //size: 'sm',
+        //         templateUrl: 'views/modal/changepassword.html',
+        //         //controller: 'CommonCtrl'
+        //     });
+        // };
+        // $scope.changePwdcancel = function() {
+        //     ////console.log("dismissing");
+        //     $scope.$modalInstance.dismiss('cancel');
+        //     //$scope.$modalInstance.close();
+        // };
+        // $scope.passworderror=0
+        // $scope.changepasswordSuccess=0;
           
-        $scope.changepassword = function(currentpassword,newpassword,newpassword2) {
-             ////console.log(newpassword);
-            userid = $rootScope.id;
-            $scope.token="";
-            CsrfTokenService.getCookie("csrftoken").then(function(done) {
-                $scope.token=done;
-                $scope.formData = {userid:userid,oldpassword:(currentpassword),newpassword:(newpassword),csrfmiddlewaretoken:$scope.token };
-                ////console.log($scope.formData);
-                apiService.changepassword($scope.formData).then(function (callback){
-                    if(callback.data.value)
-                    {    
-                        $scope.changepasswordSuccess=1;
-                        $timeout(function () {
-                            $scope.$modalInstance.dismiss('cancel');
-                            $scope.changepasswordSuccess=0;
-                        },500);
-                    }
-                    else if (callback.data.error.message==-1)
-                        $scope.passworderror =-1;
-                })    
-            });  
-        };
+        // $scope.changepassword = function(currentpassword,newpassword,newpassword2) {
+        //      ////console.log(newpassword);
+        //     userid = $rootScope.id;
+        //     $scope.token="";
+        //     CsrfTokenService.getCookie("csrftoken").then(function(done) {
+        //         $scope.token=done;
+        //         $scope.formData = {userid:userid,oldpassword:(currentpassword),newpassword:(newpassword),csrfmiddlewaretoken:$scope.token };
+        //         ////console.log($scope.formData);
+        //         apiService.changepassword($scope.formData).then(function (callback){
+        //             if(callback.data.value)
+        //             {    
+        //                 $scope.changepasswordSuccess=1;
+        //                 $timeout(function () {
+        //                     $scope.$modalInstance.dismiss('cancel');
+        //                     $scope.changepasswordSuccess=0;
+        //                 },500);
+        //             }
+        //             else if (callback.data.error.message==-1)
+        //                 $scope.passworderror =-1;
+        //         })    
+        //     });  
+        // };
         
         // $timeout(function () {
         
@@ -81150,14 +81354,90 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
     $rootScope.agentdet = {};
     $rootScope.outprocessclick = 0;
     $rootScope.journeylist = [];
+    $rootScope.isLoggedIn = false;
     $rootScope.displaySubmitButton = false;
     $rootScope.languagelist = [
         {id:"en" , name:"English"},
         {id:"hi" , name:"Hindi"},
         {id:"mr" , name:"Marathi"},
-        {id:"gu" , name:"Gujarati"},
-        {id:"ta" , name:"Tamil"},
+        {id:"kn" , name:"Kannada"},
+        {id:"te" , name:"Telugu"},
+        {id:"bn" , name:"Bengali"},
     ];
+    $scope.login = function(username,email,sl)
+    {
+        
+        
+            $scope.formData = {username:username,email:(email)};
+        /*
+        apiService.login($scope.formData).then(function (callback){
+            //console.log(callback);
+        });*/
+        
+            apiService.login($scope.formData).then(function (callback){
+                // $scope.csrftoken=CsrfTokenService.getCookie("csrftoken");
+                
+                //if(angular.isUndefined(callback.data.error.message))
+                if(callback.data.value)
+                {
+                    // console.log(callback.data.data);
+                    $.jStorage.flush();
+                    $timeout(function(){
+                        $scope.chatpanelheight = $("#chat_window_1").height()-160;
+                    },2000);
+                    $rootScope.isLoggedIn = true;
+                    
+                    // $rootScope.access_role = callback.data.data.accessrole;
+                    $.jStorage.set("accesstoken",callback.data.data.token);
+                    $.jStorage.set("name",username);
+                    $.jStorage.set("email", email);
+                    $rootScope.selectedLanguage = sl;
+                    $.jStorage.set("language", $rootScope.selectedLanguage.id);
+                    $scope.sessiondata = {
+                        id_string : "",
+                        //data : {},
+                        DTHyperlink : '',
+                        LineNo : '',
+                        options : '',
+                        opts : '',
+                        row_by_framework_level : '',
+                        framework_level : 1,
+                        response:{},
+                        response_type :'',
+                        form_input_type : '',
+                        form_input_dict : {} , 
+                        form_input_list : []  ,  
+                        form_category : '',
+                        Context:'',
+                        Context_1:'',
+                        Context_2:'',
+                        Context_3:'',
+                        Context_4:'',
+                        Context_5:'',
+                        gb_dt_start_row:-1,
+                        gb_dt_end_row:-1,
+                        gb_dt_current_cursor_row:-1,
+                        gb_dt_current_cursor_col:-1,
+                        gb_dt_file_name:'',
+                        gb_sub_topic_list : [],
+                        gb_step_list : [],
+                        gb_current_step : '',
+                        tooltip : [],
+                        gb_topic_tuple_array:[],
+                        gb_max_ratio_index_in_tuple:[],
+                        gb_topic:'',
+                        gb_matched_row_values:[],
+                        gb_matched_col_values:[],
+                    };
+                    $.jStorage.set("sessiondata",$scope.sessiondata);
+                    
+                }
+                else if(callback.data.error.message == -1)
+                    $scope.loginerror = -1;
+            });
+        
+        
+    };
     if(!$.jStorage.get("language"))
     {
         $rootScope.selectedLanguage = $rootScope.languagelist[0];
@@ -81183,13 +81463,38 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
     };
     $rootScope.menuOpen=false;
 
-
-
+    $scope.not_menu = [
+        {msg:"Changes in the commission structure",img:"not1.png"},
+        {msg:"Shubh Deepawali from Fino",img:"not2.jpg"},
+        {msg:"Transact more to achieve more now",img:"not3.jpg"},
+        {msg:"More"},
+    ];
+    $scope.$noti_instance = {};
+    $scope.shownotification = function(notdata) {
+        
+        $scope.notedata = notdata;
+        $scope.$noti_instance = $uibModal.open({
+            scope: $scope,
+            animation: true,
+            size: 'sm',
+            templateUrl: 'views/modal/notificationdata.html',
+            resolve: {
+                items: function () {
+                    return notdata;
+                }
+            },
+            //controller: 'CommonCtrl'
+        });
+    };
+    $scope.noticancel = function() {
+        ////console.log("dismissing");
+        $scope.$noti_instance.dismiss('cancel');
+    };
     $scope.failuremsg = [
-        {msg:"Sorry, I did not catch that. Could you please rephrase the sentence and try again?"},
-        {msg:"Oops! I dont't think I can answer that,Can you rephrase your question?"},
+        {msg:"I'm glad that you are trying new functionalities. However, currently I'm equipped with information about Cash-In, New Products, Transaction Status, Commission & Charges and General Information about Account Opening Processes."},
+        {msg:"I'm glad that you are trying new functionalities. However, currently I'm equipped with information about Cash-In, New Products, Transaction Status, Commission & Charges and General Information about Account Opening Processes."},
         //{msg:"No hard feelings but I don't think I can answer that"},
-        {msg:"Well, I haven't heard that before can you put it in another way?"},
+        {msg:"I'm glad that you are trying new functionalities. However, currently I'm equipped with information about Cash-In, New Products, Transaction Status, Commission & Charges and General Information about Account Opening Processes."},
     ];
     $scope.lastfailure="";
     if($.jStorage.get("lastagent"))
@@ -81198,6 +81503,9 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         $rootScope.agentlist = $.jStorage.get("agentlist");
     
     angular.element(document).ready(function() { 
+        // $timeout(function(){
+        // new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+        // },10000);
         $timeout(function(){
             $rootScope.panelheight = $(window).height()-80;
         },0);
@@ -81244,65 +81552,66 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
     //  * as you want.
     //  */
     $rootScope.newuser = function() {
-
+        $rootScope.chatlist = [];
+        $scope.userlogout();
          // ----------------
-        $rootScope.agentconnected = false;
-        $rootScope.endConversation(1);
+        // $rootScope.agentconnected = false;
+        // $rootScope.endConversation(1);
 
-         // livechatapi.userlogOut({
-         //     'user_empcode': $rootScope.empcode,
-         //     'domain_login_id':$rootScope.connectedAgentName
-         // },function(data){
-         //    //console.log("live user logout ",data);
-         // })
+        //  // livechatapi.userlogOut({
+        //  //     'user_empcode': $rootScope.empcode,
+        //  //     'domain_login_id':$rootScope.connectedAgentName
+        //  // },function(data){
+        //  //    //console.log("live user logout ",data);
+        //  // })
 
          
-        if($rootScope.chatlist.length > 1)
-        {
-            /*
-            apiService.get_session({}).then( function (response) {
-                $cookies.put("csrftoken",response.data.csrf_token);
-                $cookies.put("session_id",response.data.session_id);
-                $.jStorage.set("csrftoken",response.data.csrf_token);
-                $.jStorage.set("session_id",response.data.session_id);
-                $rootScope.session_id =response.data.session_id;
-                $rootScope.conversationid=$rootScope.id+response.data.session_id;
-                $rootScope.chatlist = [];
-                $rootScope.firstMsg = true;
-                msg = {Text:"Hi, How may I help you ?",type:"SYS_FIRST"};
-                $rootScope.pushSystemMsg(0,msg);
-                ////console.log(response.data);
-            });*/
-        }
-        $(".icrnno").val("");
-        $rootScope.outprocessjourney="";
-        $rootScope.outprocessjourneylist=[];
-        $rootScope.crnconver = [];
-        $rootScope.crndata = {};
-        $rootScope.getconversationid();
-        $rootScope.script_data=[];
-        $rootScope.tabvalue.elements = [];
-        $rootScope.tabvalue.element_values=[];
-        $rootScope.journeylist=[];
-        $rootScope.outprocessclick=0;
-        $rootScope.chatlist = [];
-        $rootScope.firstMsg = true;
-        //Idle.setTimeout(10);
-          //  Idle.watch();
-        var today = new Date();
-        var hrs = today.getHours();
+        // if($rootScope.chatlist.length > 1)
+        // {
+        //     /*
+        //     apiService.get_session({}).then( function (response) {
+        //         $cookies.put("csrftoken",response.data.csrf_token);
+        //         $cookies.put("session_id",response.data.session_id);
+        //         $.jStorage.set("csrftoken",response.data.csrf_token);
+        //         $.jStorage.set("session_id",response.data.session_id);
+        //         $rootScope.session_id =response.data.session_id;
+        //         $rootScope.conversationid=$rootScope.id+response.data.session_id;
+        //         $rootScope.chatlist = [];
+        //         $rootScope.firstMsg = true;
+        //         msg = {Text:"Hi, How may I help you ?",type:"SYS_FIRST"};
+        //         $rootScope.pushSystemMsg(0,msg);
+        //         ////console.log(response.data);
+        //     });*/
+        // }
+        // $(".icrnno").val("");
+        // $rootScope.outprocessjourney="";
+        // $rootScope.outprocessjourneylist=[];
+        // $rootScope.crnconver = [];
+        // $rootScope.crndata = {};
+        // $rootScope.getconversationid();
+        // $rootScope.script_data=[];
+        // $rootScope.tabvalue.elements = [];
+        // $rootScope.tabvalue.element_values=[];
+        // $rootScope.journeylist=[];
+        // $rootScope.outprocessclick=0;
+        // $rootScope.chatlist = [];
+        // $rootScope.firstMsg = true;
+        // //Idle.setTimeout(10);
+        //   //  Idle.watch();
+        // var today = new Date();
+        // var hrs = today.getHours();
 
-        var greet;
+        // var greet;
 
-        if (hrs < 12)
-            greet = 'Good Morning';
-        else if (hrs >= 12 && hrs <= 17)
-            greet = 'Good Afternoon';
-        else if (hrs >= 17 && hrs <= 24)
-            greet = 'Good Evening';
-        msg = {Text:greet+",I'm MEERA How can I help you today?",type:"SYS_FIRST"};
-        //msg = {Text:"Hi, How may I help you ?",type:"SYS_FIRST"};
-        $rootScope.pushSystemMsg(0,msg);
+        // if (hrs < 12)
+        //     greet = 'Good Morning';
+        // else if (hrs >= 12 && hrs <= 17)
+        //     greet = 'Good Afternoon';
+        // else if (hrs >= 17 && hrs <= 24)
+        //     greet = 'Good Evening';
+        // msg = {Text:greet+",I'm Bandhu How can I help you today?",type:"SYS_FIRST"};
+        // //msg = {Text:"Hi, How may I help you ?",type:"SYS_FIRST"};
+        // $rootScope.pushSystemMsg(0,msg);
         
     };
     $rootScope.savehistory = function(obj,cli) {
@@ -81346,14 +81655,16 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
 						//io.socket.disconnect();
 					//$state.go("login");
 					$timeout(function(){
-						window.location.href=$rootScope.dmpurl+"/login/user_logout";
+                        $rootScope.isLoggedIn = false;
+						// window.location.href=$rootScope.dmpurl+"/login/user_logout";
 					},500);
 					
 				});
 			}
 			else {
 				$timeout(function(){
-					window.location.href=$rootScope.dmpurl+"/login/user_logout";
+                    $rootScope.isLoggedIn = false;
+					// window.location.href=$rootScope.dmpurl+"/login/user_logout";
 				},500);
 			}
         }
@@ -81372,7 +81683,8 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                 //console.log("agent logout", data)
             })
             $timeout(function(){
-                window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
+                $rootScope.isLoggedIn = false;
+                // window.location.href=$rootScope.dmpurl+"/login/user_logout?log_stat=2";
             },500);            
         });
         
@@ -81381,7 +81693,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
     $scope.checkloginstatus2 = function(){
         if(!$.jStorage.get("accesstoken")) {
             
-            $scope.userlogout();
+            // $scope.userlogout();
         }
     };
     $scope.$on('IdleStart', function() {
@@ -81395,9 +81707,9 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         }
         
     });
-    $interval(function() {
-        $scope.promise2=$scope.checkloginstatus2();
-    },10000);
+    // $interval(function() {
+    //     $scope.promise2=$scope.checkloginstatus2();
+    // },10000);
     $rootScope.$on('IdleTimeout', function() {
         // var scope = angular.element(document.getElementById('changepwd')).scope();
         // scope.logout();
@@ -81685,18 +81997,19 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             else if (hrs >= 17 && hrs <= 24)
                 greet = 'Good Evening';
             //console.log(greet);
-            msg = {Text:greet+",I'm MEERA How can I help you today?",type:"SYS_FIRST"};
+            msg = {Text:greet+",I'm Bandhu How can I help you today?",type:"SYS_FIRST"};
             $rootScope.pushSystemMsg(0,msg);  
         }
         $('#chat_panel').slideDown("slow");
+        // $("#chat_panel").toggle('scale');
         //$('#chat_panel').find('.panel-body').slideDown("fast");
         //$('#chat_panel').find('.panel-footer').slideDown("slow");
         $('.panel-heading span.icon_minim').removeClass('panel-collapsed');
         $('.panel-heading span.icon_minim').removeClass('glyphicon-plus').addClass('glyphicon-minus');
         $timeout(function(){
-            // $(".clickImage").hide();
-             $("#chat-circle").toggle('scale');
-        },0);
+            $("#chat-circle").hide();
+            //  $("#chat-circle").toggle('scale');
+        },500);
         $rootScope.chatOpen = true;
         $rootScope.scrollChatWindow();
         if($(".expandable2").hasClass('col-md-12')) //-- menu closed
@@ -81723,12 +82036,13 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         $rootScope.showTimeoutmsg = false;
         $rootScope.autocompletelist = [];
         $('#chat_panel').slideUp();
+        // $('#chat_panel').toggle('scale');
         //$('#chat_panel').find('.panel-body').slideUp("fast");
         //$('#chat_panel').find('.panel-footer').slideUp("fast");
         $('.panel-heading span.icon_minim').addClass('panel-collapsed');
         $('.panel-heading span.icon_minim').addClass('glyphicon-plus').removeClass('glyphicon-minus');
-        // $(".clickImage").show( "fadeIn");
-        $("#chat-circle").toggle('scale');
+        $("#chat-circle").show( "fadeIn");
+        // $("#chat-circle").toggle('scale');
         if($(".expandable2").hasClass('col-md-8')) //-- menu is closed
         {
             $(".expandable2").removeClass('col-md-8');
@@ -82647,21 +82961,19 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
 				branch:$rootScope.branch
             };
 			//PAN india blank column issue #bugfix 14-11
-            ////console.log(cl);
+            // console.log(cl);
             $rootScope.savehistory(obj,cl);
                 //$rootScope.chatlist[cl].gotresponse=true;
             ////$rootScope.chatlist[cl].gotresponse=true;
-                $rootScope.fstabs = [];
-                    $rootScope.fstabvalue =[];
-                    $(".fdashboard").hide();
-                    $(".fspanel").hide();
-                    $rootScope.seeallTopic();
-                    $("ul.nav.nav-list.tree").hide();
+            // $rootScope.fstabs = [];
+            // $rootScope.fstabvalue =[];
+            // $(".fdashboard").hide();
+            // $(".fspanel").hide();
+            // $rootScope.seeallTopic();
+            // $("ul.nav.nav-list.tree").hide();
             $rootScope.outprocessclick=1;
-                if(data.data.tiledlist[0].topic)
-                     $("#topic").text(data.data.tiledlist[0].topic);
             angular.forEach(data.data.tiledlist, function(value, key) {
-                //console.log(value);
+                
                 if(value.type=="text")
                 {
                     ////console.log(data.data.tiledlist[0].text);
@@ -82759,7 +83071,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                 }
                 else if(value.type=="DTHyperlink")
                 {
-                    ////console.log(data.data,"outprocessdata");
+                    // console.log(data.data,"outprocessdata");
                     $rootScope.DthResponse(0,data.data,'');  
                     if(data.data.tiledlist[0].DT.length==1) {
                         $timeout(function(){
@@ -82821,7 +83133,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
 					//return false;
                 }
             }).catch(function(reason){
-                //console.log(reason);
+                // console.log(reason);
             });
         });
     };
@@ -83466,7 +83778,10 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                 //delete tiledlist.FAQ;
 			if(formData.tiledlist.FAQ)
 				delete formData.tiledlist.FAQ;
-            if(tiledlist.connected_node) {
+            if(tiledlist.Find_Locator) {
+                $rootScope.nearme();
+            }
+            else if(tiledlist.connected_node) {
                 var topic2 = "";
                 var outputDate   = new Date();
                 var respdiff = (outputDate.getTime() - inputDate.getTime()) / 1000;
@@ -83684,6 +83999,13 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
 									});
                                     //return false;
                                 }
+                                if (value.type == "html_form") {
+                                    //$rootScope.pushSystemMsg(0, decryptedData);
+                                    
+                                    $rootScope.pushSystemMsg(0,data.data);
+                                    
+                                    $rootScope.showMsgLoader = false;
+                                }
                             });
                         });
                     }
@@ -83860,6 +84182,13 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
 								});
                                 //return false;
                             }
+                            if (value.type == "html_form") {
+                                    //$rootScope.pushSystemMsg(0, decryptedData);
+                                
+                                $rootScope.pushSystemMsg(0,data.data);
+                                
+                                $rootScope.showMsgLoader = false;
+                            }
                         });
                         // $scope.faqdtc=0;
                     }).catch(function(reason){
@@ -83960,6 +84289,14 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
     $rootScope.outprocessjourney="";
     $rootScope.outprocessjourneylist=[];
     $rootScope.DthResponse = function(id,data,dthlink) {
+        if(data.tiledlist[0].Steps && data.tiledlist[0].Steps=='download')
+        {
+            var link=document.createElement('a');
+            link.href="https://cingulariti.in:8096/rbl_backend/static/images/loan_application_form.pdf";
+            link.download="Form.pdf";
+            link.click();
+            link.remove();
+        }
 		$rootScope.script_data = [];
 		$rootScope.scrollprocess();
         // $rootScope.tabvalue.elements = [];
@@ -85957,7 +86294,13 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         angular.forEach(formdata, function(value, key) {
             ////console.log(value);
             
-            
+            if(value.name=='mobile' || value.name=='mobileno' || value.name=='phone' || value.name=='phoneno') {
+                if(fieldvalue[value.name].length == 10) {}
+                else {
+                    toastr.error("Please enter 10 digit mobile number", 'Error');
+                    return false;
+                }
+            }
             if(value.type=='date')
             {
                 ////console.log(fieldvalue[value.name]);
@@ -86220,7 +86563,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             // //console.log('User alert!', data);
             // });
             //io.socket.get('/Livechat/addconv');
-            if($rootScope.department == undefined || $rootScope.department == null ){//
+            /*if($rootScope.department == undefined || $rootScope.department == null ){//
                 var msg3 = {Text:"You are not authorized to query this bot since you are not mapped to any department. Please connect with the system admin",type:"SYS_EMPTY_RES"};
                 $rootScope.pushSystemMsg(0,msg3); 
                 $timeout(function() {
@@ -86228,7 +86571,8 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                 },500);
                 
             }
-            else{
+            else*/
+            {
                 
             apiService.getnewquestion({user_input:value.toLowerCase()}).then(function (unansdata){
                 if(unansdata.data.data)
@@ -88090,7 +88434,7 @@ myApp.controller('tpCtrl', function ($scope, $window, $rootScope, $resource, Tem
 
     console.log("HEY HEY ------CONNECTED-------");
 	$(document).ready(function(){
-		var url = "http://10.240.21.21:5000/";
+		var url = "http://cingulariti.in:5000/";
 		var socket = io.connect(url+"td");
 		socket.on("msg", function(){
 			console.log("HEY HEY CONNECTED");

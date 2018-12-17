@@ -765,8 +765,8 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 			}).catch(function (reason) {
                 
 				if(reason.status==403) {
-                    // $scope.sessionend();
-                    $rootScope.isLoggedIn = true;
+                    $scope.sessionend();
+                    // $rootScope.isLoggedIn = true;
 				}
 				else
 					$scope.getsessiondata();
