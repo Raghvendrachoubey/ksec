@@ -338,7 +338,7 @@
 																							</span>
 																						</div>
 																						<br>
-																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,faqlist.value,$faqindex);" />
+																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,chatRes,$faqindex);" />
 																						
 																					</form>
 																					<div class="calc_res{{$rowIndex}}_{{$faqindex}}" ng-if="faqlist.value.Type=='Calculators' && faqlist.value.form_data">
@@ -472,7 +472,7 @@
 																							</span>
 																						</div>
 																						<br>
-																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,faqlist.value,$faqindex);" />
+																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,chatRes,$faqindex);" />
 																						
 																					</form>
 																					<div class="calc_res{{$rowIndex}}_{{$faqindex}}" ng-if="faqlist.value.Type=='Calculators' && faqlist.value.form_data">
@@ -731,7 +731,7 @@
 																							</span>
 																						</div>
 																						<br>
-																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,faqlist.value,$faqindex);" />
+																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,chatRes,$faqindex);" />
 																						
 																					</form>
 																					<div class="calc_res{{$rowIndex}}_{{$faqindex}}" ng-if="faqlist.value.Type=='Calculators' && faqlist.value.form_data">
@@ -865,7 +865,7 @@
 																							</span>
 																						</div>
 																						<br>
-																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,faqlist.value,$faqindex);" />
+																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,chatRes,$faqindex);" />
 																						
 																					</form>
 																					<div class="calc_res{{$rowIndex}}_{{$faqindex}}" ng-if="faqlist.value.Type=='Calculators' && faqlist.value.form_data">
@@ -1049,8 +1049,9 @@
 															</span>
 														</div>
 														<br>
-														<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(chatRes.form_name,chatRes.form_data,chatRes.form_data.value,$rowIndex,chatRes.Journey_Name,chatRes,0);" />
-														
+														<!-- <input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(chatRes.form_name,chatRes.form_data,chatRes.form_data.value,$rowIndex,chatRes.Journey_Name,chatRes,0);" /> -->
+														<input class='hulbtn lastformbtn' id='policy_btn' ng-if="!chatRes.stage_details" type='submit' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(chatRes.form_name,chatRes.form_data,chatRes.form_data.value,$rowIndex,chatRes.Journey_Name,chatRes,0);" /> 
+														<button class="dthyperlink lastmsg lastformbtn changedthbg stage{{chatRes.stage_details.bgstage}}" ng-repeat="dthlink in chatRes.stage_details.DT" data-id="{{dthlink}}" data-url-id="innerLink" data-stage="{{chatRes.stage_details.Stage}}" data-bgstage="{{chatRes.stage_details.bgstage}}" ng-if="(chatRes.stage_details.DT.length > 0 && chatRes.stage_details)" data-index="{{$index}}" ng-click="htmlformsubmit(chatRes.form_name,chatRes.form_data,chatRes.form_data.value,$rowIndex,chatRes.Journey_Name,chatRes,0);" ng-disabled="htmlform_{{$index}}.$invalid">{{dthlink}}</button> 
 													</form>
 													<div class="calc_res{{$rowIndex}}_0" ng-if="chatRes.Type=='Calculators'">
 														<br>
@@ -1252,7 +1253,7 @@
 																							</span>
 																						</div>
 																						<br>
-																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,faqlist.value,$faqindex);" />
+																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,chatRes,$faqindex);" />
 																						
 																					</form>
 																					<div class="calc_res{{$rowIndex}}_{{$faqindex}}" ng-if="faqlist.value.Type=='Calculators' && faqlist.value.form_data">
@@ -1385,7 +1386,7 @@
 																							</span>
 																						</div>
 																						<br>
-																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,faqlist.value,$faqindex);" />
+																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,chatRes,$faqindex);" />
 																						
 																					</form>
 																					<div class="calc_res{{$rowIndex}}_{{$faqindex}}" ng-if="faqlist.value.Type=='Calculators' && faqlist.value.form_data">
@@ -1691,7 +1692,7 @@
 																							</span>
 																						</div>
 																						<br>
-																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,faqlist.value,$faqindex);" />
+																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,chatRes,$faqindex);" />
 																						
 																					</form>
 																					<div class="calc_res{{$rowIndex}}_{{$faqindex}}" ng-if="faqlist.value.Type=='Calculators' && faqlist.value.form_data">
@@ -1824,7 +1825,7 @@
 																							</span>
 																						</div>
 																						<br>
-																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,faqlist.value,$faqindex);" />
+																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,chatRes,$faqindex);" />
 																						
 																					</form>
 																					<div class="calc_res{{$rowIndex}}_{{$faqindex}}" ng-if="faqlist.value.Type=='Calculators' && faqlist.value.form_data">
@@ -1977,7 +1978,7 @@
 																							</span>
 																						</div>
 																						<br>
-																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,faqlist.value,$faqindex);" />
+																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,chatRes,$faqindex);" />
 																						
 																					</form>
 																					<div class="calc_res{{$rowIndex}}_{{$faqindex}}" ng-if="faqlist.value.Type=='Calculators' && faqlist.value.form_data">
@@ -2111,7 +2112,7 @@
 																							</span>
 																						</div>
 																						<br>
-																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,faqlist.value,$faqindex);" />
+																						<input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(faqlist.value.form_name,faqlist.value.form_data,faqlist.value.form_data.value,$rowIndex,faqlist.value.Journey_Name,chatRes,$faqindex);" />
 																						
 																					</form>
 																					<div class="calc_res{{$rowIndex}}_{{$faqindex}}" ng-if="faqlist.value.Type=='Calculators' && faqlist.value.form_data">

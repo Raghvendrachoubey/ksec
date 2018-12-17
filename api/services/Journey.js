@@ -23,6 +23,9 @@ var schema = new Schema({
 	image_data:{
         type:String
     },
+    URL: {
+        type:String
+    }
 });
 
 schema.plugin(deepPopulate, {
@@ -41,7 +44,7 @@ var model = {
     getproductlisting: function (data, callback) {
         Journey.find({
             Journey_Name:data.Journey_Name
-        },{image_name:1,details:1,Brand_Name:1,image_data:1}).sort({_id:1}).exec(function (err, found) { //bugfix 17-11  sort by column
+        },{image_name:1,details:1,Brand_Name:1,image_data:1,URL:1}).sort({_id:1}).exec(function (err, found) { //bugfix 17-11  sort by column
             if (err) {
                 callback(err, null);
             } 
