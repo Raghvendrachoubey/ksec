@@ -2737,7 +2737,10 @@
                             <div id= "suggestionList">
                                 <ul ng-if="autocompletelist.length > 0" class="{{autocompletelist.length}}  ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" id="ui-id-1">
                                     <div class="ui-menu-item-wrapper">
-                                        <li class="ui-menu-item autolist" data-id="{{list.id}}" data-value="{{list.value}}" data-answers="{{list.answers}}"  ng-repeat="list in autocompletelist | filter:chatText  " ng-click="pushMsg(list.id,list.value,list.answers);"  ng-bind-html="list.value | highlight:chatText" >{{list.value}}</li>
+                                        <li class="ui-menu-item autolist" data-id="{{list.id}}" data-value="{{list.value}}" data-answers="{{list.answers}}"  ng-repeat="list in autocompletelist | filter:chatText  " ng-click="pushMsg(list.id,list.value,list.answers);"  ng-bind-html="list.value | highlight:chatText" >
+											<!-- {{list.value}} -->
+											<myfilter filter-Translate="{{list.value}}"></myfilter>
+										</li>
                                     </div>
                                 </ul>
                             </div>

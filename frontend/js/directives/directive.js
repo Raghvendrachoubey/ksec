@@ -56,7 +56,7 @@ myApp.directive('img', function ($compile, $parse) {
             }
         };
     })
-    .directive('compTranslate', function ($compile, apiService,$sce) {
+    .directive('compTranslate', function ($compile, apiService,$sce,$rootScope) {
         return {
             restrict: 'A',
             scope: true,
@@ -90,6 +90,7 @@ myApp.directive('img', function ($compile, $parse) {
                                     element.html(hcont);
                                     // $( "ul.chat li:last-child" ).removeClass('langcase');
                                     $(parentid).removeClass("langcase");
+                                    $rootScope.scrollChatWindow();
                                 }
                                 else 
                                 {
@@ -99,12 +100,14 @@ myApp.directive('img', function ($compile, $parse) {
                                         
                                         element.html(response.data.data);
                                         $(parentid).removeClass("langcase");
+                                        $rootScope.scrollChatWindow();
                                         // $( "ul.chat li:last-child" ).removeClass('langcase');
                                         // $(element).parent().closest("li").removeClass('langcase');
                                     }).catch(function (reason) {
                                         hcont=$.parseHTML(value);
                                         element.html(hcont);
                                         $(parentid).removeClass("langcase");
+                                        $rootScope.scrollChatWindow();
                                         // $( "ul.chat li:last-child" ).removeClass('langcase');
                                     });
                                 }
@@ -167,7 +170,12 @@ myApp.directive('img', function ($compile, $parse) {
                                         texttoreplace=texttoreplace.replace('<span class = \"highlighted\">', '<span class = "highlighted">'); 
                                         texttoreplace=texttoreplace.replace('</ span>', '</span>'); 
                                         element.html(texttoreplace);
-                                        $( "ul.chat li:last-child" ).removeClass('langcase');
+                                        // $( "ul.chat li:last-child" ).removeClass('langcase');
+                                    }).catch(function (reason) {
+                                        hcont=$.parseHTML(value);
+                                        element.html(hcont);
+                                        
+                                        // $( "ul.chat li:last-child" ).removeClass('langcase');
                                     });
                                 }
                                     // if (scope.originalTooltip) {
@@ -188,7 +196,7 @@ myApp.directive('img', function ($compile, $parse) {
             }
         };
     })
-    .directive('compTranslater', function ($compile, apiService,$sce) {
+    .directive('compTranslater', function ($compile, apiService,$sce,$rootScope) {
         return {
             restrict: 'EA',
             scope: true,
@@ -229,6 +237,7 @@ myApp.directive('img', function ($compile, $parse) {
                                     element.html(hcont);
                                     // $( "ul.chat li:last-child" ).removeClass('langcase');
                                     $(parentid).removeClass("langcase");
+                                    $rootScope.scrollChatWindow();
                                 }
                                 else 
                                 {
@@ -242,10 +251,12 @@ myApp.directive('img', function ($compile, $parse) {
                                         element.html(hcont);
                                         // $( "ul.chat li:last-child" ).removeClass('langcase');
                                         $(parentid).removeClass("langcase");
+                                        $rootScope.scrollChatWindow();
                                     }).catch(function (reason) {
                                         hcont=$.parseHTML(contents);
                                         element.html(hcont);
                                         $(parentid).removeClass("langcase");
+                                        $rootScope.scrollChatWindow();
                                         // $( "ul.chat li:last-child" ).removeClass('langcase');
                                     });
                                 // if (scope.originalTooltip) {
