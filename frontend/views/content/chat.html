@@ -1083,7 +1083,13 @@
                                                                                 <img ng-src="{{imagelist.image_data}}" class="img-full">
                                                                             </a>
                                                                         </div>
-                                                                        
+                                                                        <div class="knowmore" ng-if="chatRes.product_list[$index].URL!='' && chatRes.product_list[$index].URL">
+                                                                            <div class="knowmore">
+                                                                                <a ng-href="{{chatRes.product_list[$index].URL}}"  >
+                                                                                    Click Here
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
                                                                         <!-- <div class="" >
                                                                             <div class="knowmore">
                                                                                 <a ng-href="http://exponentiadata.co.in/huldm/uploadexcel/uploads/100/productlisting/{{chatRes.product_list[$index].image_name}}"  data-fancybox="linkgroup" rel="gallary" fancybox data-caption="{{chatRes.product_list[$index].details}}" >

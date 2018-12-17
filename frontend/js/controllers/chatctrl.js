@@ -5025,7 +5025,41 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         else if(valid == 1) {
         var formData1 = {Journey_Name:Journey_Name,context_id: $rootScope.context_id,
             conversation_id: $rootScope.conversation_id,customer_name:$rootScope.fname,customer_id:$rootScope.email,user_input:"",csrfmiddlewaretoken:$rootScope.getCookie("csrftoken"),auto_id:"",auto_value:"",user_id:$rootScope.session_id,form_name:formname};
+
         var mergedObject = angular.extend(formData1, fd1);
+        if(tiledlist.stage_details) {
+            mergedObject.DTHlink = tiledlist.stage_details.DT[0];
+            mergedObject.DTHstage = tiledlist.stage_details.Stage;
+            apiService.getDthlinkRes(mergedObject).then( function (response) {
+                if(response.data.session_object)
+                    $rootScope.session_object = response.data.session_object;
+                angular.forEach(response.data.tiledlist, function(value, key) {
+                    if(value.type=="DTHyperlink")
+                    {
+                        if($scope.uploadimages.length>0)
+                            response.data.tiledlist[0]['uploadimages']=$scope.uploadimages;
+                        $scope.uploadimages=[];
+                        $rootScope.DthResponse(0,response.data);
+                        //console.log(response.data);
+                    }
+                    if(value.type=="order_status")
+                    {
+                        $rootScope.pushSystemMsg(0,response.data);
+                    }
+                    if(value.type=="text")
+                    {
+                        $rootScope.pushSystemMsg(0,response.data);
+                    }
+                    if(value.type=="html_form")
+                    {
+                        response.data.tiledlist[0].form_data.DTHlink = response.data.tiledlist[0].stage_details.DT[0];
+                        response.data.tiledlist[0].form_data.DTHstage = response.data.tiledlist[0].stage_details.Stage;
+                        $rootScope.pushSystemMsg(0,response.data);
+                    }
+                    $rootScope.showMsgLoader = false;
+                });
+            });
+        }
         ////console.log(mergedObject);
         //$.jStorage.get("DT");
         //$.jStorage.get("Stage");
@@ -5096,8 +5130,8 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                     $rootScope.showMsgLoader = false;
                 });
             });
-        }
-        else*/ {
+        }*/
+        else {
             apiService.htmlformsubmit(mergedObject).then( function (response) {
                 $rootScope.session_object = response.data.session_object;
                 angular.forEach(response.data.tiledlist, function(value, key) {
