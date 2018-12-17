@@ -86361,17 +86361,20 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             mergedObject.DTHlink = tiledlist.stage_details.DT[0];
             mergedObject.DTHstage = tiledlist.stage_details.Stage;
             mergedObject.Journey_Name = tiledlist.stage_details.Journey_Name;
+            mergedObject.tiledlist = angular.copy(tiledlist);
             apiService.getDthlinkRes(mergedObject).then( function (response) {
+
                 if(response.data.session_object)
                     $rootScope.session_object = response.data.session_object;
                 angular.forEach(response.data.tiledlist, function(value, key) {
+                    console.log(value);
                     if(value.type=="DTHyperlink")
                     {
-                        if($scope.uploadimages.length>0)
-                            response.data.tiledlist[0]['uploadimages']=$scope.uploadimages;
+                        // if($scope.uploadimages.length>0)
+                        //     response.data.tiledlist[0]['uploadimages']=$scope.uploadimages;
                         $scope.uploadimages=[];
                         $rootScope.DthResponse(0,response.data);
-                        //console.log(response.data);
+                        console.log(response.data);
                     }
                     if(value.type=="order_status")
                     {
