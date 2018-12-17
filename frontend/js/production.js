@@ -81503,6 +81503,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         $rootScope.agentlist = $.jStorage.get("agentlist");
     
     angular.element(document).ready(function() { 
+        $("body").append("<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDy_367PJeu1ykECzPAc7fZNPLF5bOTSlU&v=3.exp&sensor=true' async defer></script>");
         // $timeout(function(){
         // new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
         // },10000);

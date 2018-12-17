@@ -44,6 +44,9 @@ ul.dropdown-menu.pdm li a, .profilelist li a {
 .g_map {
     height: 400px;
     width: 300px;
+    img {
+      opacity:1 !important;
+    }
 }
 a.bottomarrow {
   position: absolute;
