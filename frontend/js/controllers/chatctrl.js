@@ -2688,6 +2688,9 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                         
                         $rootScope.session_object = data.data.session_object;
                         angular.forEach(data.data.tiledlist, function(value, key) {
+                            if(value.Find_Locator) {
+                                $rootScope.nearme();
+                            }
                             var topic2 = "";
                             var outputDate   = new Date();
                             var respdiff = (outputDate.getTime() - inputDate.getTime()) / 1000;
@@ -2860,9 +2863,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                                 
                                 $rootScope.showMsgLoader = false;
                             }
-                            if(value.Find_Locator) {
-                                $rootScope.nearme();
-                            }
+
                         });
                         // $scope.faqdtc=0;
                     }).catch(function(reason){
