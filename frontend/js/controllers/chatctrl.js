@@ -222,6 +222,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
     //  * as you want.
     //  */
     $rootScope.newuser = function() {
+        $rootScope.chatlist = [];
         $scope.userlogout();
          // ----------------
         // $rootScope.agentconnected = false;
