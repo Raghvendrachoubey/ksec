@@ -439,7 +439,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         
     });
     $timeout(function(){
-        if($rootScope.uipage =='dashboard' ) {}
+        if($rootScope.uipage =='dashboard' ) {
             // $rootScope.showChatwindow();
         }
     },2000);
