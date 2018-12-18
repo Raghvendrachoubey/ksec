@@ -9337,12 +9337,19 @@ ul.dropdown-menu.pdm li a, .profilelist li a {
 .knowmore {
   background-color: #442A70;
   border-color: #442A70;
-  color: #fff; }
+  color: #fff;
+  text-align: center;
+  padding: 5px 0px; }
+  .knowmore a {
+    color: #fff;
+    text-decoration: none; }
 
 .knowmore:hover {
   background-color: #fff;
   border-color: #442A70;
   color: #442A70; }
+  .knowmore:hover a {
+    color: #442A70 !important; }
 
 .btn-primary {
   background-color: #442A70;
