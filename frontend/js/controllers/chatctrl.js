@@ -4972,7 +4972,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             ////console.log(value);
             
             if(value.name=='mobile' || value.name=='mobileno' || value.name=='phone' || value.name=='phoneno') {
-                if(fieldvalue[value.name].length == 10) {}
+                if((fieldvalue[value.name].toString()).length == 10) {}
                 else {
                     valid = 0;
                     toastr.error("Please enter 10 digit mobile number", 'Error');
