@@ -79393,7 +79393,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 
                         valueMap = "The Branch nearest to you is shown in the map below";
                         // $rootScope.pushSystemMsg(0, valueMap);
-                        $rootScope.chatlist.push({id:"id",msg:valueMap,position:"right",curTime: $rootScope.getDatetime()});
+                        // $rootScope.chatlist.push({id:"id",msg:valueMap,position:"right",curTime: $rootScope.getDatetime()});
 
                         $.ajax({
                             url: "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDy_367PJeu1ykECzPAc7fZNPLF5bOTSlU&latlng="+callback["data"]["Result"]["latitude"]+","+callback["data"]["Result"]["longitude"]+"&sensor=true",
@@ -81769,8 +81769,9 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         
     });
     $timeout(function(){
-        if($rootScope.uipage =='dashboard' )
-            $rootScope.showChatwindow();
+        if($rootScope.uipage =='dashboard' ) {}
+            // $rootScope.showChatwindow();
+        }
     },2000);
     $rootScope.trustedHtml = function (plainText) {
         return $sce.trustAsHtml(plainText);
@@ -86303,11 +86304,12 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             if(value.name=='mobile' || value.name=='mobileno' || value.name=='phone' || value.name=='phoneno') {
                 if(fieldvalue[value.name].length == 10) {}
                 else {
+                    valid = 0;
                     toastr.error("Please enter 10 digit mobile number", 'Error');
                     return false;
                 }
             }
-            if(value.type=='date')
+            if(value.type=='date' && valid==0)
             {
                 ////console.log(fieldvalue[value.name]);
                 var datevalue = fieldvalue[value.name];

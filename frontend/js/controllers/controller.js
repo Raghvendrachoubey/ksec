@@ -456,7 +456,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
 
                         valueMap = "The Branch nearest to you is shown in the map below";
                         // $rootScope.pushSystemMsg(0, valueMap);
-                        $rootScope.chatlist.push({id:"id",msg:valueMap,position:"right",curTime: $rootScope.getDatetime()});
+                        // $rootScope.chatlist.push({id:"id",msg:valueMap,position:"right",curTime: $rootScope.getDatetime()});
 
                         $.ajax({
                             url: "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDy_367PJeu1ykECzPAc7fZNPLF5bOTSlU&latlng="+callback["data"]["Result"]["latitude"]+","+callback["data"]["Result"]["longitude"]+"&sensor=true",
