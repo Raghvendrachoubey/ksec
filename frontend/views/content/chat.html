@@ -8,10 +8,10 @@
                     <!-- <li ng-show="access_role == 2"><a href="#srtab" data-toggle="tab" ng-click="chat_tab=3">SR NO.</a></li>  -->
                 </ul>
                 <div class="btn-group pull-right">
-					<button type="button" class="btn btn-default dropdown-toggle not_but" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<button type="button" ng-if="isLoggedIn" class="btn btn-default dropdown-toggle not_but" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<i class="fa fa-bell" aria-hidden="true"></i>
 					</button>
-					<ul class="dropdown-menu not_menu">
+					<ul class="dropdown-menu not_menu" ng-if="isLoggedIn">
 						<li ng-repeat="notmsg in not_menu">
 							<a href="#" ng-click="shownotification(notmsg);"><span comp-translate="{{notmsg.msg}}"></span></a>
 						</li>
