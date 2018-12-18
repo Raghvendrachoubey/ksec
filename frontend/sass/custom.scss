@@ -22,6 +22,11 @@ ul.dropdown-menu.pdm li a, .profilelist li a {
   background-color: #442A70;
   border-color: #442A70;
   color:#fff;
+  a {
+    color:#fff;
+    text-decoration:none;
+    padding:5px 0px;
+  }
 }
 .knowmore:hover {
   background-color: #fff;
