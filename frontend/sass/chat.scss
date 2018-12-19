@@ -783,8 +783,8 @@ a.unanswered {
     // display: table;
     // float: right;
     // right: 0;
-    background: #F4F4F4;
-    color: #000;
+    background: #4C1F6D;
+    color: #fff;
     border-top-right-radius: 0;
     display: table;
     float: right;
@@ -835,7 +835,7 @@ a.unanswered {
     position: absolute;
     top: 13px;
     width: 0;
-    border-left: 8px solid #F4F4F4!important;
+    border-left: 8px solid #4C1F6D !important;
 }
 .left .chat-body{
     // border-top-left-radius: 0em;
@@ -1035,6 +1035,9 @@ height:30px!important;
 }
 .tab-con .processaccord:last-child {
     /*border-bottom: 5px solid #00458a;*/
+}
+.img-box2 {
+    height:150px;
 }
 .img-box
 {

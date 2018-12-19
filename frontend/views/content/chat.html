@@ -13,7 +13,12 @@
 					</button>
 					<ul class="dropdown-menu not_menu" ng-if="isLoggedIn">
 						<li ng-repeat="notmsg in not_menu">
-							<a href="#" ng-click="shownotification(notmsg);"><span comp-translate="{{notmsg.msg}}"></span></a>
+							<span ng-if="notmsg.msg !=='More'">
+							<a href="#" ng-click="shownotification(notmsg);"><span comp-translate="{{notmsg.msg}}"></a>
+							</span>
+							<span ng-if="notmsg.msg =='More'">
+							<a href="#" ><span comp-translate="{{notmsg.msg}}"></a>
+							</span>
 						</li>
 						
 						<!-- <li role="separator" class="divider"></li>
@@ -1559,7 +1564,7 @@
                                                     </div> -->
 													<div class="container-fluid dts{{$rowIndex}}" ng-if="!chatRes.conflict || (!chatRes.FAQ && !chatRes.conflict)"  ng-repeat="dthlink in chatRes.DT" ng-init="$dthindex = $index">
                                                         <div class="col-md-11 dthyperlink lastmsg changedthbg stage{{chatRes.bgstage}}"  data-id="{{dthlink}}" data-url-id="innerLink" data-stage="{{chatRes.Stage}}" data-bgstage="{{chatRes.bgstage}}" ng-if="chatRes.DT.length > 0 " data-index="{{$index}}"  ng-click="getDthlinkRes(chatRes.Stage,dthlink,chatRes);" >
-                                                            <span class="lefticon glyphicon glyphicon-chevron-left" style="display:none;"></span>
+                                                            <!-- <span class="lefticon glyphicon glyphicon-chevron-left" style="display:none;"></span> -->
                                                             <span comp-translate="{{dthlink}}" ></span>
                                                         </div>
                                                         <!-- <button type="button" class="btn btn-primary" ng-if="chatRes.Decision_Icon[$dthindex] !== '' && chatRes.Decision_Icon"  popover-placement="top" uib-popover-html="{{chatRes.Decision_Icon[$dthindex]}}" popover-title="{{dthlink}}" popover-class="dthpopover">
