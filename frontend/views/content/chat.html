@@ -987,7 +987,7 @@
 																<select ng-model="chatRes.form_data.value[fd.name]"     class="form-control hselect{{$rowIndex}}" name="{{fd.name}}" id=""  required autocomplete="off">
 																		<option ng-selected="true" value="" > Please select</option> 
 																	
-																		<option value="{{fc.value}}" ng-repeat="fc in fd.values" > {{fc.label}}</option> 
+																		<option ng-selected="false" value="{{fc.value}}" ng-repeat="fc in fd.values" > {{fc.label}}</option> 
 																	<!-- ng-selected="{{fc.selected}}" -->
 																</select>
 																<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
