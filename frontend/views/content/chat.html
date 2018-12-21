@@ -110,9 +110,9 @@
                                 
                                 
                                 <li class="{{list.position}} lastchat clearfix langcase" ng-hide="chatlist[$index].msg.hidelist" ng-repeat="list in chatlist track by $index"  ng-init="$rowIndex = $index"  ng-class="{'left':list.type=='agent','right':list.type=='user'}" id="chat_list_{{$index}}">
-                                    <span class="chat-img pull-{{list.position}}" ng-if="list.msg.type !== 'SYS_CONV_START' && list.msg.type !== 'SYS_CONV_END'">
+                                    <!-- <span class="chat-img pull-{{list.position}}" ng-if="list.msg.type !== 'SYS_CONV_START' && list.msg.type !== 'SYS_CONV_END'">
                                         <img ng-src="img/{{list.position == 'left' && 'Kairaprofile2.png' || 'logo7.png'}}" alt="BOT" class="img-circle " />
-                                    </span>
+                                    </span> -->
                                     <div class="start_conv" ng-if="list.msg.type=='SYS_CONV_START'">
                                         <span class="label label-success" ><span comp-translater="{{list.msg.Text}}"></span></span>
                                     </div>
@@ -985,10 +985,10 @@
 																<label><span comp-translate="{{fd.label}}" ></span></label>
 																<!--ng-options="ff as ff.label for ff in fd.values track by $index"-->
 																<select ng-model="chatRes.form_data.value[fd.name]"     class="form-control hselect{{$rowIndex}}" name="{{fd.name}}" id=""  required autocomplete="off">
+																		<option ng-selected="true" value="" > Please select</option> 
 																	
-																	
-																		<option value="{{fc.value}}" ng-repeat="fc in fd.values" ng-selected="{{fc.selected}}"> {{fc.label}}</option> 
-																	
+																		<option value="{{fc.value}}" ng-repeat="fc in fd.values" > {{fc.label}}</option> 
+																	<!-- ng-selected="{{fc.selected}}" -->
 																</select>
 																<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
 																	<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
@@ -1055,8 +1055,9 @@
 														</div>
 														<br>
 														<!-- <input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(chatRes.form_name,chatRes.form_data,chatRes.form_data.value,$rowIndex,chatRes.Journey_Name,chatRes,0);" /> -->
-														<input class='hulbtn lastformbtn' id='policy_btn' ng-if="!chatRes.stage_details" type='submit' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(chatRes.form_name,chatRes.form_data,chatRes.form_data.value,$rowIndex,chatRes.Journey_Name,chatRes,0);" /> 
-														<button class="dthyperlink lastmsg lastformbtn changedthbg stage{{chatRes.stage_details.bgstage}}" ng-repeat="dthlink in chatRes.stage_details.DT" data-id="{{dthlink}}" data-url-id="innerLink" data-stage="{{chatRes.stage_details.Stage}}" data-bgstage="{{chatRes.stage_details.bgstage}}" ng-if="(chatRes.stage_details.DT.length > 0 && chatRes.stage_details)" data-index="{{$index}}" ng-click="htmlformsubmit(chatRes.form_name,chatRes.form_data,chatRes.form_data.value,$rowIndex,chatRes.Journey_Name,chatRes,0);" ng-disabled="htmlform_{{$index}}.$invalid">{{dthlink}}</button> 
+														<input class='hulbtn lastformbtn' id='policy_btn' ng-if="!chatRes.stage_details" type='submit' value='Submit'   ng-click="htmlformsubmit(chatRes.form_name,chatRes.form_data,chatRes.form_data.value,$rowIndex,chatRes.Journey_Name,chatRes,0);" /> 
+														<button class="dthyperlink lastmsg lastformbtn changedthbg stage{{chatRes.stage_details.bgstage}}" ng-repeat="dthlink in chatRes.stage_details.DT" data-id="{{dthlink}}" data-url-id="innerLink" data-stage="{{chatRes.stage_details.Stage}}" data-bgstage="{{chatRes.stage_details.bgstage}}" ng-if="(chatRes.stage_details.DT.length > 0 && chatRes.stage_details)" data-index="{{$index}}" ng-click="htmlformsubmit(chatRes.form_name,chatRes.form_data,chatRes.form_data.value,$rowIndex,chatRes.Journey_Name,chatRes,0);" type='submit' >{{dthlink}}</button> 
+														<!-- ng-disabled="htmlform_{{$index}}.$invalid" -->
 													</form>
 													<div class="calc_res{{$rowIndex}}_0" ng-if="chatRes.Type=='Calculators'">
 														<br>
@@ -1066,6 +1067,9 @@
 													</div>
 												</div>
                                                 <div class="chatType" ng-if="list.msg.tiledlist[0].type==='product listing'">
+                                                	<p ng-if="chatRes.Text && chatRes.Text != ''">
+                                                		<span comp-translate="{{chatRes.Text}}" ></span>
+                                                	</p>
                                                     <div class='carousel slide'  id='myCarousel{{$rowIndex}}'>
                                                         <div class='carousel-inner'>
                                                             <div class='item carousel_item2' ng-class="{active:!$index}" ng-repeat="imagelist in chatRes.product_list track by $index">

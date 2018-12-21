@@ -75336,8 +75336,8 @@ $rootScope.sailscsrf="111";
     if ( bowser.msedge )
         $rootScope.browser = "msedge";
     $rootScope.serverip="https://cingulariti.in";
-    $rootScope.dmpdomain="RBLdm";
-    $rootScope.dmpurl="http://cingulariti.in/RBLdm";
+    $rootScope.dmpdomain="finodm";
+    $rootScope.dmpurl="http://cingulariti.in/finodm";
 	$rootScope.serverport = ":9003";
     $rootScope.transcript="";
     $rootScope.tabvalue={};
@@ -77920,7 +77920,7 @@ myApp.factory('NavigationService', function ($http) {
 });
 myApp.factory('apiService', function ($rootScope,$http, $q, $timeout,CsrfTokenService,$httpParamSerializer) {
     //adminurl = "http://wohlig.co.in/chatbotapi/index.php/json/";
-    adminurl = "https://cingulariti.in:8096/rbl_backend/";
+    adminurl = "https://cingulariti.in:8096/fino_backend/";
     var adminUrl2 = "http://wohlig.io/api/";
     var adminUrl3 = "https://cingulariti.in:9003/api/"
     //var adminUrl3 = "http://localhost:8080/api/";
@@ -81467,7 +81467,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         {msg:"Changes in the commission structure",img:"not1.png"},
         {msg:"Shubh Deepawali from Fino",img:"not2.jpg"},
         {msg:"Transact more to achieve more now",img:"not3.jpg"},
-        {msg:"More"},
+        // {msg:"More"},
     ];
     $scope.$noti_instance = {};
     $scope.shownotification = function(notdata) {
@@ -86300,46 +86300,52 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         var fd1 = {};
         angular.forEach(formdata, function(value, key) {
             ////console.log(value);
-            
-            if(value.name=='mobile' || value.name=='mobileno' || value.name=='phone' || value.name=='phoneno') {
-                if((fieldvalue[value.name].toString()).length == 10) {}
-                else {
-                    valid = 0;
-                    toastr.error("Please enter 10 digit mobile number", 'Error');
-                    return false;
-                }
+            if(fieldvalue[value.name] == "" || !fieldvalue[value.name]) {
+                valid = 0;
+                toastr.error("Please enter "+value.label, 'Error');
+                return false;
             }
-            if(value.type=='date' && valid==0)
-            {
-                ////console.log(fieldvalue[value.name]);
-                var datevalue = fieldvalue[value.name];
-                var dt = new Date(fieldvalue[value.name]);
-                var date = dt.getDate();
-                var month = dt.getMonth();
-                var year = dt.getFullYear();
-                month= month+1;
-                if (month.toString().length == 1) {
-                    month = "0" + month
+            else {
+                if(value.name=='mobile' || value.name=='mobileno' || value.name=='phone' || value.name=='phoneno') {
+                    if((fieldvalue[value.name].toString()).length == 10) {}
+                    else {
+                        valid = 0;
+                        toastr.error("Please enter 10 digit mobile number", 'Error');
+                        return false;
+                    }
                 }
-                if (date.toString().length == 1) {
-                    date = "0" + date
-                }
-                var dob= date.toString() + "-" + month.toString() + "-" +year.toString();
-                //fieldvalue[value.name]=dob;
-                fd1[value.name]=dob;
-                /*var today = new Date();
-                if(dt.withoutTime() < (today.withoutTime()))
+                if(value.type=='date' && valid==0)
                 {
-                    valid = 0;
-                    alert("Please Enter Valid Date");
-                    //return false;
-                }*/
-                
+                    ////console.log(fieldvalue[value.name]);
+                    var datevalue = fieldvalue[value.name];
+                    var dt = new Date(fieldvalue[value.name]);
+                    var date = dt.getDate();
+                    var month = dt.getMonth();
+                    var year = dt.getFullYear();
+                    month= month+1;
+                    if (month.toString().length == 1) {
+                        month = "0" + month
+                    }
+                    if (date.toString().length == 1) {
+                        date = "0" + date
+                    }
+                    var dob= date.toString() + "-" + month.toString() + "-" +year.toString();
+                    //fieldvalue[value.name]=dob;
+                    fd1[value.name]=dob;
+                    /*var today = new Date();
+                    if(dt.withoutTime() < (today.withoutTime()))
+                    {
+                        valid = 0;
+                        alert("Please Enter Valid Date");
+                        //return false;
+                    }*/
+                    
+                }
+                else if(value.type=='file')
+                    fd1[value.name]=$scope.uploadimages;
+                else 
+                    fd1[value.name]=fieldvalue[value.name];
             }
-            else if(value.type=='file')
-                fd1[value.name]=$scope.uploadimages;
-            else 
-                fd1[value.name]=fieldvalue[value.name];
         });
         ////console.log(tiledlist.Type);
         if(tiledlist.Type=="Calculators")

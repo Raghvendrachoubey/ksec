@@ -184,8 +184,8 @@ $rootScope.sailscsrf="111";
     if ( bowser.msedge )
         $rootScope.browser = "msedge";
     $rootScope.serverip="https://cingulariti.in";
-    $rootScope.dmpdomain="RBLdm";
-    $rootScope.dmpurl="http://cingulariti.in/RBLdm";
+    $rootScope.dmpdomain="finodm";
+    $rootScope.dmpurl="http://cingulariti.in/finodm";
 	$rootScope.serverport = ":9003";
     $rootScope.transcript="";
     $rootScope.tabvalue={};

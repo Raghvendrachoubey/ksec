@@ -1,6 +1,6 @@
 myApp.factory('apiService', function ($rootScope,$http, $q, $timeout,CsrfTokenService,$httpParamSerializer) {
     //adminurl = "http://wohlig.co.in/chatbotapi/index.php/json/";
-    adminurl = "https://cingulariti.in:8096/rbl_backend/";
+    adminurl = "https://cingulariti.in:8096/fino_backend/";
     var adminUrl2 = "http://wohlig.io/api/";
     var adminUrl3 = "https://cingulariti.in:9003/api/"
     //var adminUrl3 = "http://localhost:8080/api/";

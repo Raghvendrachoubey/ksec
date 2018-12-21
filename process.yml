@@ -1,6 +1,6 @@
 apps:
   - script: "app.js"
-    name: "RBL_Chatbot - 9003"
+    name: "FINO_Chatbot - 9003"
     watch: false
     args: "--prod"
     exec_mode: "cluster"
