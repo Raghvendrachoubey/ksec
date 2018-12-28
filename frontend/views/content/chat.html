@@ -50,9 +50,15 @@
                                 	<div class="col-sm-10 col-sm-offset-1">
 	                                    <div class="form-group">
 	                                        <label for="username" class="control-label">Name:</label>
-	                                        <input class="form-control username" id="username" type="text" name="username" placeholder="Name" ng-model="user.name" required>
+	                                        <input class="form-control username" ng-pattern="/^[a-zA-Z]*$/" id="username" type="text" name="username" placeholder="Name" ng-model="user.name" required>
 	                                        <div class="pull-right" ng-repeat="(field,value) in login_form.username.$error" ng-show="login_form.username.$touched">
                                                 <span class="label label-danger" ng-if="field=='required' && value">Please Enter Name</span>
+                                                
+                                            </div>
+                                            <div class="pull-right" ng-if="login_form.username.$error.pattern" ng-show="login_form.username.$touched">
+                                            	<span class="label label-danger" ng-if="login_form.username.$dirty && login_form.username.$invalid" class="ng-hide">   
+								                	Please Enter Valid  Name  
+								                </span>
                                             </div>
 	                                    </div>
                                     </div>
@@ -997,7 +1003,7 @@
 															</span>
 															<span ng-if="fd.type=='text'"> 
 																<label><span comp-translate="{{fd.label}}" ></span></label>
-																<input type="text"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
+																<input type="text"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id="" ng-pattern="/^[a-zA-Z0-9]*$/"  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
 																	<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																	<span ng-bind="htmlform_{{$index}}.$dirty">{{$dirty}}</span>

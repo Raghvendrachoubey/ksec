@@ -86299,10 +86299,10 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         var valid = 1;
         var fd1 = {};
         angular.forEach(formdata, function(value, key) {
-            ////console.log(value);
+            //console.log(fieldvalue[value.name]);
             if(fieldvalue[value.name] == "" || !fieldvalue[value.name]) {
                 valid = 0;
-                toastr.error("Please enter "+value.label, 'Error');
+                toastr.error("Please enter valid "+value.label, 'Error');
                 return false;
             }
             else {
