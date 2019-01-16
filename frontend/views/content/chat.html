@@ -3,12 +3,14 @@
             <div class="panel-heading container-fluid" id="accordion">
                 <!--<span class="glyphicon glyphicon-comment"></span> Chat-->
                 <ul class="nav nav-tabs" id="chatTabs">
-                    <li class="active"  ><a href="#chattab" data-toggle="tab" ng-click="chat_tab=1" class=""><i class="fa fa-comment-o"></i>&nbsp;&nbsp;<span comp-translate="Chat"></span> </a></li>
+                    <li class="active"  ><a href="#chattab" data-toggle="tab" ng-click="chat_tab=1" class="">
+                    	<img src="img/kotak.png" class="kseclogo">
+                     </a></li>
                     <!--<li ><a href="#crntab" data-toggle="tab" ng-click="chat_tab=2">CRN NO.</a></li>-->
                     <!-- <li ng-show="access_role == 2"><a href="#srtab" data-toggle="tab" ng-click="chat_tab=3">SR NO.</a></li>  -->
                 </ul>
                 <div class="btn-group pull-right">
-					<button type="button" ng-if="isLoggedIn" class="btn btn-default dropdown-toggle not_but" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<!-- <button type="button" ng-if="isLoggedIn" class="btn btn-default dropdown-toggle not_but" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<i class="fa fa-bell" aria-hidden="true"></i>
 					</button>
 					<ul class="dropdown-menu not_menu" ng-if="isLoggedIn">
@@ -21,9 +23,7 @@
 							</span>
 						</li>
 						
-						<!-- <li role="separator" class="divider"></li>
-						<li><a href="#">Separated link</a></li> -->
-					</ul>
+					</ul> -->
                     <a type="button" class="btn btn-default btn-xs hidden" href="#">
                         <span id="minim_chat_window " class="glyphicon glyphicon-minus icon_minim"></span>
                     </a>
@@ -71,7 +71,7 @@
                                             </div>
 	                                    </div>
                                     </div>
-                                    <div class="col-sm-10 col-sm-offset-1">
+                                    <div class="col-sm-10 col-sm-offset-1" style="display:none;">
 										<div class="form-group">
 											<label for="language_list" class="control-label">Language</label>
 											
@@ -971,7 +971,7 @@
                                                     
                                                 </div>-->
 												<div class=" clearfix" ng-if="list.msg.tiledlist[0].type==='html_form'">
-													<form class="{{chatRes.form_name}} htmlformss" name="htmlform_{{$index}}" id="{{chatRes.form_name}}">
+													<form class="{{chatRes.form_name}} htmlformss htmlforms_{{$rowIndex}}" name="htmlform_{{$index}}" id="{{chatRes.form_name}}">
 														<span ng-if="chatRes.stage_details">
 															<span comp-translater="{{chatRes.stage_details.Text}}" ></span>
 														</span>
@@ -979,7 +979,7 @@
 															 <span ng-if="fd.type=='text' && fd.name == 'share_location'" > 
 																<label><span comp-translate="{{fd.label}}" ></span></label>
 																<input type="text"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}" ng-init="chatRes.form_data.value[fd.name]=curaddress">
-																<div class="maplocation" ng-init="initMap($rowIndex)">
+																<div class="maplocation" ng-init="initMap(lat,long,curaddress,$rowIndex)">
 																	<div class="g_map" id="map_{{$rowIndex}}"></div>
 																</div>
 																<!-- <div class="pull-right" ng-repeat="(field,value) in htmlform_$index.fd.fieldname.$error" ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1011,7 +1011,7 @@
 															</span>
 															<span ng-if="fd.type=='number'"> 
 																<label><span comp-translate="{{fd.label}}" ></span></label>
-																<input type="number" step="0.01"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
+																<input type="number" step="any"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Enter {{fd.placeholder}}">
 																<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
 																	<span class="label label-danger" ng-if="field=='required' && value">Please Enter {{fd.fieldname}}</span>
 																</div>  -->
@@ -1041,7 +1041,8 @@
 															<span ng-if="fd.type=='checkbox-group'"> 
 																<label><span comp-translate="{{fd.label}}" ></span></label>
 																<div ng-repeat="fc in fd.values">
-																	<input type="checkbox"  ng-model="chatRes.form_data.value[fc.value]"  class=""  id=""   autocomplete="off"  ng-message="Please Upload {{fd.placeholder}}" ng-init='chatRes.form_data.value[fd.name]=fc.value'> <span comp-translate="{{fc.label}}" ></span>
+																	<input type="checkbox"  ng-model="chatRes.form_data.value[fc.value]"  class="" name="{{fd.name}}"  id=""   autocomplete="off"  value="{{fc.label}}"> <span comp-translate="{{fc.label}}" ></span>
+																	<!-- ng-init='chatRes.form_data.value[fd.name]=fc.value' -->
 																</div>
 																<!-- <input type="file"  ng-model="chatRes.form_data.value[fd.name]"  class="form-control " name="{{fd.name}}" id=""  required autocomplete="off" placeholder="Enter {{fd.placeholder}}" ng-required='true' ng-message="Please Upload {{fd.placeholder}}"> -->
 																<!-- <div class="pull-right"  ng-show="htmlform_$index.fd.fieldname.$touched">
@@ -1061,8 +1062,8 @@
 														</div>
 														<br>
 														<!-- <input class='hulbtn lastform btn btn btn-xs btn-primary' id='policy_btn' type='button' value='Submit' ng-disabled="htmlform_{{$index}}.$invalid"  ng-click="htmlformsubmit(chatRes.form_name,chatRes.form_data,chatRes.form_data.value,$rowIndex,chatRes.Journey_Name,chatRes,0);" /> -->
-														<input class='hulbtn lastformbtn' id='policy_btn' ng-if="!chatRes.stage_details" type='submit' value='Submit'   ng-click="htmlformsubmit(chatRes.form_name,chatRes.form_data,chatRes.form_data.value,$rowIndex,chatRes.Journey_Name,chatRes,0);" /> 
-														<button class="dthyperlink lastmsg lastformbtn changedthbg stage{{chatRes.stage_details.bgstage}}" ng-repeat="dthlink in chatRes.stage_details.DT" data-id="{{dthlink}}" data-url-id="innerLink" data-stage="{{chatRes.stage_details.Stage}}" data-bgstage="{{chatRes.stage_details.bgstage}}" ng-if="(chatRes.stage_details.DT.length > 0 && chatRes.stage_details)" data-index="{{$index}}" ng-click="htmlformsubmit(chatRes.form_name,chatRes.form_data,chatRes.form_data.value,$rowIndex,chatRes.Journey_Name,chatRes,0);" type='submit' >{{dthlink}}</button> 
+														<input class='btn btn-xs btn-primary lastformbtn' id='policy_btn' ng-if="!chatRes.stage_details" type='submit' value='Submit'   ng-click="htmlformsubmit(chatRes.form_name,chatRes.form_data,chatRes.form_data.value,$rowIndex,chatRes.Journey_Name,chatRes,-1);" /> 
+														<button class="dthyperlink lastmsg lastformbtn changedthbg stage{{chatRes.stage_details.bgstage}} btn btn-xs btn-primary" ng-repeat="dthlink in chatRes.stage_details.DT" data-id="{{dthlink}}" data-url-id="innerLink" data-stage="{{chatRes.stage_details.Stage}}" data-bgstage="{{chatRes.stage_details.bgstage}}" ng-if="(chatRes.stage_details.DT.length > 0 && chatRes.stage_details)" data-index="{{$index}}" ng-click="htmlformsubmit(chatRes.form_name,chatRes.form_data,chatRes.form_data.value,$rowIndex,chatRes.Journey_Name,chatRes,-1);" type='submit' >{{dthlink}}</button> 
 														<!-- ng-disabled="htmlform_{{$index}}.$invalid" -->
 													</form>
 													<div class="calc_res{{$rowIndex}}_0" ng-if="chatRes.Type=='Calculators'">
@@ -1558,6 +1559,32 @@
                                                         </p>
                                                     </ng-bind-html> -->
 													<span ng-if="chatRes.Text != '' && chatRes.Text" comp-translater="{{chatRes.Text}}" ></span>
+													<div ng-if = "chatRes.uploadimages.length>0">
+                                                        <div ng-repeat="imagelist in chatRes.uploadimages track by $index" class="dthcarousel">
+                                                            
+                                                            <div class='carousel slide' id='myCarousel{{$rowIndex}}'>
+                                                                <div class='carousel-inner'>
+                                                                    <div class='item carousel_item2 product_listing' ng-class="{active:!$index}" ng-repeat="imagelist_value in imagelist.value track by $index">
+                                                                        <div >
+                                                                            <div class="col-xs-12" >
+                                                                                <div class="img-box4">
+                                                                                    <a ng-href="{{imagelist_value|uploadpath}}"  data-fancybox="imggroup" rel="gallary" data-caption="{{imagelist.key|underscoreless}}" fancybox >
+                                                                                        <!-- {{imagelist_value}} -->
+                                                                                        <span class="glyphicon glyphicon-open-file"></span>{{imagelist.key|underscoreless}}
+                                                                                        <!-- <img ng-src="http://cingulariti.com/insudm/uploads/productlisting/{{chatRes.product_list[$index].image_name}}" class="img-full"> -->
+                                                                                    </a>
+                                                                                </div>
+                                                                                
+                                                                                    
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <a class='left carousel-control' href='#myCarousel{{$rowIndex}}' data-slide='prev'><i class='glyphicon glyphicon-chevron-left'></i></a>
+                                                                <a class='right carousel-control' href='#myCarousel{{$rowIndex}}' data-slide='next'><i class='glyphicon glyphicon-chevron-right'></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 													<!-- <p class="lastmsg redtext" ng-repeat="scrpttext in chatRes.Script">
                                                         <ng-bind-html ng-bind-html="scrpttext|newlines">
                                                             {{scrpttext}}
@@ -2434,7 +2461,7 @@
 										</div>
 										<div class="chat-body" ng-if="list.position==='left' && list.msg.type == 'SYS_MAP'">
                                         		<span class="bold"><span comp-translater="{{list.msg.Text}}"></span>  </span>
-	                                    	<div class="maplocation" ng-init="initMap($rowIndex)" style="height: 300px; width: 300px;">
+	                                    	<div class="maplocation" ng-init="initMap(list.msg.lat,list.msg.long,list.msg.address,$rowIndex)" style="height: 300px; width: 300px;">
 						                    	<div class="g_map" id="map_{{$rowIndex}}" style="height: 300px; width: 300px"></div>
 						                	</div>
 						                
@@ -2575,8 +2602,10 @@
                                         </div>
                                         <p class="lastmsg" ng-if="list.msg.type !== 'SYS_CONV_END' && list.msg.type !== 'SYS_CONV_START' && list.msg.type !== 'SYS_MAP'">
                                             <small class="chatTime">
-                                                <span class="glyphicon glyphicon-time">
-                                                </span>
+                                                <!-- <span class="glyphicon glyphicon-time">
+                                                </span> -->
+                                                <i class="fa fa-check" aria-hidden="true"></i>
+                                                <i class="fa fa-check whatsapptick" aria-hidden="true"></i>
                                                 {{list.curTime | date: 'HH:mm:ss'}}
                                             </small>
                                         </p>
@@ -2663,9 +2692,12 @@
                                                 </ul>
                                             </div>
                                         </div>-->
-										<button type="button" data-index="1" class="btn btn-default btn-xs hulbtn featurebtn" ng-click="outprocessdata('Self Help','Self Help');"><span class="ng-scope" comp-translate="Self Help">Self Help</span></button>
-										<button type="button" data-index="2" class="btn btn-default btn-xs hulbtn featurebtn" ng-click="outprocessdata('Customer Help','Customer Help');"><span class="ng-scope" comp-translate="Customer Help">Customer Help</span></button> 
-                                        <button type="button" data-index="3" class="btn btn-default btn-xs hulbtn featurebtn" ng-click="nearme();"><span class="ng-scope" comp-translate="Find Branch">Find Branch</span></button> 
+										<!-- <button type="button" data-index="1" class="btn btn-default btn-xs hulbtn featurebtn" ng-click="outprocessdata('Address Update','Address Updation');"><span class="ng-scope" comp-translate="Address Update">Address Update</span></button> -->
+										
+										<button type="button" data-index="1" class="btn btn-default btn-xs hulbtn featurebtn" ng-click="pushMsg('','CRM Tagging','');"><span class="ng-scope" comp-translate="CRM Tagging">CRM Tagging</span></button>
+										<button type="button" data-index="1" class="btn btn-default btn-xs hulbtn featurebtn" ng-click="pushMsg('','Brokerage Calculator','');"><span class="ng-scope" comp-translate="Brokerage Calculator">Brokerage Calculator</span></button>
+										<!-- <button type="button" data-index="2" class="btn btn-default btn-xs hulbtn featurebtn" ng-click="pushMsg('','Password Generation','');"><span class="ng-scope" comp-translate="Password Generation">Password Generation</span></button>  -->
+                                        <!-- <button type="button" data-index="3" class="btn btn-default btn-xs hulbtn featurebtn" ng-click="nearme();"><span class="ng-scope" comp-translate="Find Branch">Find Branch</span></button>  -->
 									</div>
 								</div>
 							</div> 
@@ -2735,12 +2767,15 @@
                                         
 									</audio> -->
 									<!-- ------------ -->
-									<div class="input-group-addon submit_btn chat_bot_btn_bckc" ng-speech-recognition-start="" ng-speech-recognition-end="speech.displayTranscript()">
-										<!-- <button class="btn chat_bot_btn_bckc chat_bot_btn_submit" ng-show="displaySubmitButton"
+									<div class="input-group-addon submit_btn chat_bot_btn_bckc" ng-if="displaySubmitButton" >
+										<button class="btn chat_bot_btn_bckc chat_bot_btn_submit" ng-if="displaySubmitButton"
 										ng-click="enterChatMessage()" ng-disabled="(!getallsessionid || chatEnterDisabled) && !agentconnected">
 										
 											<img ng-src="img/send.png" alt="send"/>
-										</button> -->
+										</button>
+									</div>
+									<div class="input-group-addon submit_btn chat_bot_btn_bckc" style="display:none;" ng-if="!displaySubmitButton" ng-speech-recognition-start="" ng-speech-recognition-end="speech.displayTranscript()">
+										
 										<!-- <div class="input-group-addon" > -->
                                         <span id="tooltip12" class="speechtotext fa fa-microphone fa-3" href="#" tooltip-placement="left" uib-tooltip="Hold to start,release to send"></span>    
                                         <!-- <span class="speechtotext"  >

@@ -43,15 +43,17 @@ var model = {
 					var tiledlist = data.tiledlist;
 					for(var j = 0 ; j <= tiledlist.form_data.length-1 ; j++)
 					{
-						var fname = tiledlist.form_data[j].name;
+						var fname = tiledlist.form_data[j].name.replace(/ /g,"");
+						var fvalue;
 						if(tiledlist.form_data[j].type=="date")
-							var fvalue =moment(eval('data[tiledlist.form_data[j].name]'),'DD/MM/YYYY');	
+							fvalue =moment(eval('data[tiledlist.form_data[j].name]'),'DD/MM/YYYY');	
 						//var fvalue = new Date(eval('data[tiledlist.form_data[j].name]'));
 						else
-							var fvalue = eval('data[tiledlist.form_data[j].name]');
+							fvalue = eval('data[tiledlist.form_data[j].name]');
 						parser.setVariable(fname,fvalue);
-						//console.log(fvalue,"value");
-						//console.log(eval('data[tiledlist.form_data[j].name]'),"vv");
+						// console.log(fvalue,fname);
+						console.log(parser.getVariable(fname));
+						// console.log(eval('data[tiledlist.form_data[j].name]'),"vv");
 					}
 					//console.log(formulas);
 					
@@ -110,6 +112,22 @@ var model = {
 								//done(333);
 							}
 						}
+						if (name === 'MAX_FIND') {
+							var minval1=params[0];
+							var minval2=params[1];
+							console.log(params,"min");
+							if(parseFloat(minval1)>parseFloat(minval2)) {
+								console.log("1st true");
+								done(minval1);
+								//done(1222);
+							}
+							else
+							{
+								console.log("2nd true");
+								done(minval2);
+								//done(333);
+							}
+						}
 						if(name==='NUMBER_COMPARISON') {
 							console.log(params,"n comp");
 							if(parseFloat(params[0])>parseFloat(params[1]))
@@ -127,7 +145,7 @@ var model = {
 							console.log(params,"ifcheckl");
 							//ifres=parser.parse(params[0]);
 							if(params[0])
-								done(params[1]);
+								done(params[0]);
 							else 
 								done("");
 						}
@@ -151,44 +169,65 @@ var model = {
 						//f_m=f_m.replace("\n","");
 						//console.log(f_m,"split");
 						var equal_f=removedtag.split("=");
-						output+=equal_f[0]+":";
-						
-						/*parser.on('callVariable', function(name, done) {
-						  if (name === 'TODAY()') {
-							done(new Date());
-						  }
-						});*/
-						
-						
-						
-						//console.log(require('hot-formula-parser').SUPPORTED_FORMULAS);
-						//console.log(equal_f[1],"after equal");
-						console.log(equal_f[1],"got res");
-						var result = parser.parse(equal_f[1]);
-						//eval(equal_f[0] + "=" + result.result);
-						var varname= equal_f[0].replace(" ","");
-						console.log(equal_f[0],"set dynamic");
-						console.log(result,"res dynamic");
-						if(result.result)
-						{
-							if(isNaN(result.result))
+						var outputresult = "";
+						equal_f[0]=equal_f[0].replace(/ /g,"");
+						// console.log(equal_f[0]+"-");
+						if(equal_f[1])
+							equal_f[1]=equal_f[1].replace(/ /g, "");
+						if(equal_f[0].toLowerCase() == 'output' &&  i == formulas.length-1) {
+							outputparams = equal_f[1].split(',');
+
+							for (var j = 0 ; j <= outputparams.length-1 ; j++) {
+								outputparamsval = outputparams[j].replace(/ /g,"");
+								// console.log(outputparams[j]+"op");
+								outputresult += "<b>"+outputparamsval+"</b>: "+parseFloat(parser.getVariable(outputparamsval)).toFixed(2)+"<br>";
+							}
+							outputresult = outputresult.replace(/_/g," ");
+						}
+						else {
+							output+=equal_f[0]+":";
+							
+							/*parser.on('callVariable', function(name, done) {
+							  if (name === 'TODAY()') {
+								done(new Date());
+							  }
+							});*/
+							
+							
+							
+							//console.log(require('hot-formula-parser').SUPPORTED_FORMULAS);
+							//console.log(equal_f[1],"after equal");
+							
+							
+								//equal_f[1]=equal_f[1].replace(" ","");
+							// console.log(equal_f[1],"got res");
+							var result = parser.parse(equal_f[1]);
+							//eval(equal_f[0] + "=" + result.result);
+							var varname= equal_f[0];
+							// console.log(equal_f[0],"set dynamic");
+							// console.log(result,"res dynamic");
+							if(result.result)
 							{
-								parser.setVariable(equal_f[0],result.result);
-								output+=" "+result.result+" <br>";
+								if(isNaN(result.result))
+								{
+									parser.setVariable(equal_f[0],parseFloat(result.result));
+									output+=" "+result.result+" <br>";
+								}
+								else
+								{
+									console.log(result.result);
+									parser.setVariable(equal_f[0],parseFloat(result.result).toFixed(4));
+									output+=" "+parseFloat(result.result).toFixed(4)+" <br>";
+								}
 							}
 							else
-							{
-								parser.setVariable(equal_f[0],result.result.toFixed(2));
-								output+=" "+result.result.toFixed(2)+" <br>";
+							{							
+								parser.setVariable(equal_f[0]," ");
+								output+="  <br>";
 							}
 						}
-						else
-						{							
-							parser.setVariable(equal_f[0]," ");
-							output+="  <br>";
-						}
 					}
-					callback(null, output);
+					callback(null, outputresult);
                 } else {
                     callback({
                         message: "-1"

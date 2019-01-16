@@ -432,7 +432,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
         });
     })
     myApp.controller('Dashboard5Ctrl', function ($scope,$rootScope, TemplateService, NavigationService,CsrfTokenService,Menuservice, $timeout,$http,apiService,$state,$cookies,$uibModal,Idle,$interval,toastr) {
-        $scope.template = TemplateService.getHTML("content/home.html");
+        $scope.template = TemplateService.getHTML("content/dashboard5.html");
         TemplateService.title = "Dashboard"; //This is the Title of the Website
         $scope.navigation = NavigationService.getNavigation();
 		$rootScope.getallsession=false;
@@ -442,6 +442,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
             
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
+                    
                   mysrclat = position.coords.latitude;
                   mysrclong = position.coords.longitude;
                 //   console.log("current-lat",mysrclat);
@@ -466,15 +467,18 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
                             timeout: 3000,
                             type: "GET",
                             success: function (data) {
-                                // console.log(data);
+                                
                                 if(data.status == "OK"){
                                     if(data.results.length>0){
                                         $rootScope.showMap = true;
-                                        var mymsgmap = { Text:"Address: "+callback["data"]["Result"]["address"] ,type:"SYS_MAP" };
+                                        var mymsgmap = { lat:callback["data"]["Result"]["latitude"],long:callback["data"]["Result"]["longitude"],address:"Address: "+callback["data"]["Result"]["address"] ,type:"SYS_MAP" };
+                                        if(callback["data"]["Result"]["Text"])
+                                            mymsgmap.Text = callback["data"]["Result"]["Text"];
                                         $rootScope.pushSystemMsg(0, mymsgmap);
                                         $.jStorage.set("lat",callback["data"]["Result"]["latitude"]);
                                         $.jStorage.set("long",callback["data"]["Result"]["longitude"]);
                                         $.jStorage.set("address",callback["data"]["Result"]["address"]);
+                                        
                                     }
                                 }
                             },
@@ -483,10 +487,10 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
                     });
                    // Use either $scope.$apply() or $scope.evalAsync not both for same result
                     //$scope.$apply()  
-                    $scope.$apply(function() {
+                    /*$scope.$apply(function() {
                         $rootScope.lat = mysrclat;
                         $rootScope.lan = mysrclong;
-                    })
+                    })*/
                     //$scope.$evalAsync()
                 });
             }
@@ -502,6 +506,8 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
                             $.jStorage.set("position",position);
                             $.jStorage.set("lat",position.coords.latitude);
                             $.jStorage.set("long",position.coords.longitude);
+                            $rootScope.lat = position.coords.latitude;
+                            $rootScope.lan = position.coords.longitude;
                             $.ajax({
                                 url: "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDy_367PJeu1ykECzPAc7fZNPLF5bOTSlU&latlng="+position.coords.latitude+","+position.coords.longitude+"&sensor=true",
                                 dataType: "json",
@@ -536,7 +542,7 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
                 $scope.position=$.jStorage.get("position");
             }
         };
-        $rootScope.initMap=function(map_index) {
+        $rootScope.initMap=function(lat,long,address,map_index) {
             $timeout(function(){
 
                 // var map;
@@ -555,7 +561,23 @@ myApp.controller('HomeCtrl', function ($scope,$rootScope, TemplateService, Navig
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 };
                 map = new google.maps.Map(document.getElementById('map_'+map_index), mapOptions);
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng( lat,long),
+                    map: map,
+                    title: ''
+                });
                 var geolocate = new google.maps.LatLng($.jStorage.get('lat'), $.jStorage.get('long'));
+                var contentString = '<div id="content"><p>'+address+'</p></div>';
+                var infowindow = new google.maps.InfoWindow({
+                    content: contentString,
+                    map: map,
+                });
+                google.maps.event.addListener(marker, 'click', function() {
+                  infowindow.open(map,marker);
+                });
+
+                // To add the marker to the map, call setMap();
+                marker.setMap(map);
                 // var infowindow = new google.maps.InfoWindow({
                 //     map: map,
                 //     position: geolocate,

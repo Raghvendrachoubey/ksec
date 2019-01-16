@@ -1,6 +1,6 @@
 apps:
   - script: "app.js"
-    name: "FINO_Chatbot - 9003"
+    name: "KOTAK_sec_Chatbot - 9005"
     watch: false
     args: "--prod"
     exec_mode: "cluster"

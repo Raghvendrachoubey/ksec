@@ -34,6 +34,66 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         {id:"te" , name:"Telugu"},
         {id:"bn" , name:"Bengali"},
     ];
+    $scope.uploadimages = [];
+    $scope.uploadNowf =function (image) {
+        $scope.uploadStatus = "uploading";
+        //image = $(this).val();
+        console.log($(image).parent().find(".lastformbtn"));
+        $(image).parents(".htmlformss").find(".lastformbtn").hide();
+        $(image).parent().find(".lastformbtn").addClass("addingc");
+        var Template = this;
+        //image.hide = true;
+        console.log(image.name); 
+        var files = image.files;
+        var l = files.length;
+        console.log(files);
+        var formData = new FormData();
+        var i_ind = 0;
+        _.forEach(files, function(fv) {
+
+            formData.append('file', fv, fv.name);
+            
+            i_ind++;
+        });
+        $http.post("https://cingulariti.in:9005/api/upload/", formData, {
+            headers: {
+                'Content-Type': undefined
+            },
+            transformRequest: angular.identity
+        }).then(function (data) {
+            $(image).parents(".htmlformss").find(".lastformbtn").show();
+            img_obj = {key:image.name,value:data.data.data};
+            $scope.uploadimages.push(img_obj);
+            console.log($scope.uploadimages);
+            data = data.data;
+            $scope.uploadStatus = "uploaded";
+            if ($scope.isMultiple) {
+                if ($scope.inObject) {
+                    $scope.model.push({
+                        "image": data.data[0]
+                    });
+                } else {
+                    if (!$scope.model) {
+                        $scope.clearOld();
+                    }
+                    $scope.model.push(data.data[0]);
+                }
+            } else {
+                if (_.endsWith(data.data[0], ".pdf")) {
+                    $scope.type = "pdf";
+                } else {
+                    $scope.type = "image";
+                }
+                $scope.model = data.data[0];
+                console.log($scope.model, 'model means blob');
+
+            }
+            // $timeout(function () {
+            //     $scope.callback();
+            // }, 100);
+
+        });
+    };
     $scope.login = function(username,email,sl)
     {
         
@@ -53,7 +113,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                     // console.log(callback.data.data);
                     $.jStorage.flush();
                     $timeout(function(){
-                        $scope.chatpanelheight = $("#chat_window_1").height()-160;
+                        $scope.chatpanelheight = $("#chat_window_1").height()-170;
                     },2000);
                     $rootScope.isLoggedIn = true;
                     
@@ -99,8 +159,27 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                         gb_matched_row_values:[],
                         gb_matched_col_values:[],
                     };
+                    if($rootScope.chatlist.length == 0) {
+                        var today = new Date();
+                        var hrs = today.getHours();
+
+                        var greet;
+
+                        if (hrs < 12)
+                            greet = 'Good Morning';
+                        else if (hrs >= 12 && hrs <= 17)
+                            greet = 'Good Afternoon';
+                        else if (hrs >= 17 && hrs <= 24)
+                            greet = 'Good Evening';
+                        //console.log(greet);
+                        msg = {Text:greet+",I'm a Bot, How can I help you today?",type:"SYS_FIRST"};
+                        $rootScope.pushSystemMsg(0,msg);
+                    }
                     $.jStorage.set("sessiondata",$scope.sessiondata);
-                    
+                    var formData = { "text": "Feet On Street","language":$rootScope.selectedLanguage.id };
+                    apiService.translate(formData).then( function (langresponse) {
+                        $.jStorage.set('langresp',langresponse.data.data);
+                    });
                 }
                 else if(callback.data.error.message == -1)
                     $scope.loginerror = -1;
@@ -143,28 +222,36 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
     $scope.shownotification = function(notdata) {
         
         $scope.notedata = notdata;
-        $scope.$noti_instance = $uibModal.open({
-            scope: $scope,
-            animation: true,
-            size: 'sm',
-            templateUrl: 'views/modal/notificationdata.html',
-            resolve: {
-                items: function () {
-                    return notdata;
-                }
-            },
-            //controller: 'CommonCtrl'
-        });
+        // $scope.$noti_instance = $uibModal.open({
+        //     scope: $scope,
+        //     animation: true,
+        //     size: 'sm',
+        //     templateUrl: 'views/modal/notificationdata.html',
+        //     resolve: {
+        //         items: function () {
+        //             return notdata;
+        //         }
+        //     },
+        //     //controller: 'CommonCtrl'
+        // });
+        var notimsg = {type:"SYS_NOTIFICATION"};
+        notimsg.Text = notdata.msg;
+        if(notdata.img)
+            notimsg.img = notdata.img;
+        $rootScope.pushSystemMsg(0, notimsg);
+        $timeout(function(){
+            $rootScope.scrollChatWindow();
+        },500);
     };
     $scope.noticancel = function() {
         ////console.log("dismissing");
         $scope.$noti_instance.dismiss('cancel');
     };
     $scope.failuremsg = [
-        {msg:"I'm glad that you are trying new functionalities. However, currently I'm equipped with information about Cash-In, New Products, Transaction Status, Commission & Charges and General Information about Account Opening Processes."},
-        {msg:"I'm glad that you are trying new functionalities. However, currently I'm equipped with information about Cash-In, New Products, Transaction Status, Commission & Charges and General Information about Account Opening Processes."},
+        {msg:"I'm glad that you are trying new functionalities. However, currently I'm equipped with information about Address Update, CRM Tagging , Password Generation & Brokerage Calculator."},
+        {msg:"I'm glad that you are trying new functionalities. However, currently I'm equipped with information about Address Update, CRM Tagging , Password Generation & Brokerage Calculator."},
         //{msg:"No hard feelings but I don't think I can answer that"},
-        {msg:"I'm glad that you are trying new functionalities. However, currently I'm equipped with information about Cash-In, New Products, Transaction Status, Commission & Charges and General Information about Account Opening Processes."},
+        {msg:"I'm glad that you are trying new functionalities. However, currently I'm equipped with information about Address Update, CRM Tagging , Password Generation & Brokerage Calculator."},
     ];
     $scope.lastfailure="";
     if($.jStorage.get("lastagent"))
@@ -280,7 +367,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         //     greet = 'Good Afternoon';
         // else if (hrs >= 17 && hrs <= 24)
         //     greet = 'Good Evening';
-        // msg = {Text:greet+",I'm Bandhu How can I help you today?",type:"SYS_FIRST"};
+        // msg = {Text:greet+",I'm a Bot, How can I help you today?",type:"SYS_FIRST"};
         // //msg = {Text:"Hi, How may I help you ?",type:"SYS_FIRST"};
         // $rootScope.pushSystemMsg(0,msg);
         
@@ -581,12 +668,14 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                         lastchar=str2.substr(str2.length-1);
                         ////console.log(lastchar,"lc");
                         ////console.log(str2,"str");
-                        if(lastchar == ' ') {
+                        // if(lastchar == ' ') 
+                        {
                             var topic = $("#topic").text();
                             $rootScope.chatdata = { string:$rootScope.chatText,topic:topic};
                             $scope.typecount++;
                             apiService.getautocomplete($rootScope.chatdata,$scope.typecount).then(function (response){
-                                if(response.typecount==$scope.typecount) {
+                                // console.log(response.typecount,$scope.typecount);
+                                if(response.typecount==$scope.typecount || $scope.typecount == 0) {
                                     if($(".chatinput").val() == '') {} 
                                     else {
                                         $rootScope.autocompletelist = response.data.data;
@@ -669,7 +758,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             else if (hrs >= 17 && hrs <= 24)
                 greet = 'Good Evening';
             //console.log(greet);
-            msg = {Text:greet+",I'm Bandhu How can I help you today?",type:"SYS_FIRST"};
+            msg = {Text:greet+",I'm a Bot, How can I help you today?",type:"SYS_FIRST"};
             $rootScope.pushSystemMsg(0,msg);  
         }
         $('#chat_panel').slideDown("slow");
@@ -699,7 +788,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
 		$(".fdashboard").hide();
         angular.element(document).ready(function(){
             $timeout(function(){
-                $scope.chatpanelheight = $("#chat_window_1").height()-160;
+                $scope.chatpanelheight = $("#chat_window_1").height()-170;
             },2000);
         });
     };
@@ -826,7 +915,8 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         $rootScope.chatlist.push({id:"SYS_CHARGE",msg:selected,position:"right",curTime: $rootScope.getDatetime()});
     
         if(selected == 'Yes') {
-            $rootScope.getSystemMsg('',"GSFC Final");
+            // $rootScope.getSystemMsg('',"GSFC Final");
+            $rootScope.nearme();
         }
         else {
 			
@@ -842,7 +932,10 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
 					//$rootScope.pushSystemMsg(0, decryptedData);
 					
 					$rootScope.pushSystemMsg(0,response);
-					
+					$timeout(function(){
+                        var lindex=$rootScope.chatlist.length-1;
+                        $(".hselect"+lindex).val("");
+                    },500);
 					$rootScope.showMsgLoader = false;
 				}
 				if(value.type=="rate card")
@@ -1657,6 +1750,10 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                 }
                 if (value.type == "html_form") {
                     $rootScope.pushSystemMsg(0, data.data);
+                    $timeout(function(){
+                        var lindex=$rootScope.chatlist.length-1;
+                        $(".hselect"+lindex).val("");
+                    },500);
                     $rootScope.showMsgLoader = false;
                 }
                 if(value.type=="rate card")
@@ -1958,6 +2055,10 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                 if(value.type=="html_form")
                 {
                     $rootScope.pushSystemMsg(0,response.data);
+                    $timeout(function(){
+                        var lindex=$rootScope.chatlist.length-1;
+                        $(".hselect"+lindex).val("");
+                    },500);
                     $rootScope.showMsgLoader=false;
                 }
                 if(value.type=="DTHyperlink")
@@ -2180,6 +2281,10 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             }
             if (value.type == "html_form") {
                 $rootScope.pushSystemMsg(0, decryptedData);
+                $timeout(function(){
+                    var lindex=$rootScope.chatlist.length-1;
+                    $(".hselect"+lindex).val("");
+                },500);
                 $rootScope.showMsgLoader = false;
             }
             if(value.type=="rate card")
@@ -2673,7 +2778,10 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                                     //$rootScope.pushSystemMsg(0, decryptedData);
                                     
                                     $rootScope.pushSystemMsg(0,data.data);
-                                    
+                                    $timeout(function(){
+                                        var lindex=$rootScope.chatlist.length-1;
+                                        $(".hselect"+lindex).val("");
+                                    },500);
                                     $rootScope.showMsgLoader = false;
                                 }
                                 if(value.Find_Locator) {
@@ -2862,7 +2970,10 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                                     //$rootScope.pushSystemMsg(0, decryptedData);
                                 
                                 $rootScope.pushSystemMsg(0,data.data);
-                                
+                                $timeout(function(){
+                                    var lindex=$rootScope.chatlist.length-1;
+                                    $(".hselect"+lindex).val("");
+                                },500);
                                 $rootScope.showMsgLoader = false;
                             }
 
@@ -2990,7 +3101,7 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             data.tiledlist[0].Text="";
         if(!data.tiledlist[0].DT)
             data.tiledlist[0].DT=[];
-        if(data.tiledlist[0].Text=="" && data.tiledlist[0].DT.length==0 && (!data.tiledlist[0].Process || data.tiledlist[0].Process.length == 0) && !data.tiledlist[0].table_data) {
+        if(data.tiledlist[0].Text=="" && data.tiledlist[0].DT.length==0 && (!data.tiledlist[0].Process || data.tiledlist[0].Process.length == 0) && !data.tiledlist[0].table_data && (!data.tiledlist[0].Script || data.tiledlist[0].Script.length == 0)) {
             //data.tiledlist[0].Text="Please go through process";
             var fmsg = $scope.getfailuremsg();
             data.tiledlist[0].Text = fmsg.msg;
@@ -4969,14 +5080,59 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         var valid = 1;
         var fd1 = {};
         angular.forEach(formdata, function(value, key) {
-            //console.log(fieldvalue[value.name]);
-            if(fieldvalue[value.name] == "" || !fieldvalue[value.name]) {
+            // if(fieldvalue[value.name])
+            console.log(fieldvalue[value.name]);
+            
+            if(value.type=='file') {
+                if(faqindex > 0) {
+
+                }
+                else {
+                    if($(".htmlforms_"+rowindex+" input[name='"+value.name+"']").val()=='')
+                    {
+                        valid = 0;
+                        toastr.error("Please submit documents ", 'Error');
+                        return false;
+                    }
+                    else 
+                        fd1[value.name]=$scope.uploadimages;
+                };
+            }
+            else if(value.type=='checkbox-group') {
+                if(faqindex > 0) {
+
+                }
+                else {
+                    if($(".htmlforms_"+rowindex+" input[name='"+value.name+"']:checked").val()=='' || !$(".htmlforms_"+rowindex+" input[name='"+value.name+"']:checked").val())
+                    {
+                        valid = 0;
+                        toastr.error("Please select  "+value.name, 'Error');
+                        return false;
+                    }
+                    else if(value.type=='checkbox-group') {
+                        var chckval = "";
+                        var chckind=0;
+                        $.each($(".htmlforms_"+rowindex+" input[name='"+value.name+"']:checked"), function(){ 
+                            if(chckind == 0)
+                                chckval = $(this).val();
+                            else 
+                                chckval += "|"+$(this).val();
+                            chckind++;
+                        });
+                        fd1[value.name]=chckval;
+                        chckval = "";
+                        // console.log(fd1);
+                    }
+                };
+            }
+            else if((fieldvalue[value.name] == "" || !fieldvalue[value.name]) && value.type != 'file' && value.type!='checkbox-group') {
+                
                 valid = 0;
                 toastr.error("Please enter valid "+value.label, 'Error');
                 return false;
             }
             else {
-                if(value.name=='mobile' || value.name=='mobileno' || value.name=='phone' || value.name=='phoneno') {
+                if(value.name=='mobile' || value.name=='mobileno' || value.name == 'mob_number' || value.name=='phone' || value.name=='phoneno') {
                     if((fieldvalue[value.name].toString()).length == 10) {}
                     else {
                         valid = 0;
@@ -5013,6 +5169,18 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                 }
                 else if(value.type=='file')
                     fd1[value.name]=$scope.uploadimages;
+                else if(value.type=='checkbox-group') {
+                    var chckval = "";
+                    var chckind=0;
+                    $.each($(".htmlforms_"+rowindex+" input[name='"+value.name+"']:checked"), function(){ 
+                        if(chckind == 0)
+                            chckval = $(this).val();
+                        else 
+                            chckval += "|"+$(this).val();
+                    });
+                    fd1[value.name]=chckval;
+                    chckval = "";
+                }
                 else 
                     fd1[value.name]=fieldvalue[value.name];
             }
@@ -5024,35 +5192,44 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
             conversation_id: $rootScope.conversation_id,customer_name:$rootScope.fname,customer_id:$rootScope.email,user_input:"",csrfmiddlewaretoken:$rootScope.getCookie("csrftoken"),auto_id:"",auto_value:"",user_id:$rootScope.session_id,form_name:formname};
             var mergedObject = angular.extend(formData1, fd1);
             apiService.calculate(mergedObject).then(function (data) {
-                ////console.log(data);
+                // console.log(data);
                 if(data.data.data)
                 {
-                    $(".calc_res"+rowindex+"_"+faqindex+" p").html(data.data.data);
+                    newfaqindex = faqindex;
+                    if(faqindex == -1)
+                        newfaqindex=0;
+                    
+
+                    $(".calc_res"+rowindex+"_"+newfaqindex+" p").html(data.data.data);
                 }
             });
         }
         else if(valid == 1) {
         var formData1 = {Journey_Name:Journey_Name,context_id: $rootScope.context_id,
             conversation_id: $rootScope.conversation_id,customer_name:$rootScope.fname,customer_id:$rootScope.email,user_input:"",csrfmiddlewaretoken:$rootScope.getCookie("csrftoken"),auto_id:"",auto_value:"",user_id:$rootScope.session_id,form_name:formname};
-
+            
         var mergedObject = angular.extend(formData1, fd1);
         if(tiledlist.stage_details) {
             mergedObject.DTHlink = tiledlist.stage_details.DT[0];
             mergedObject.DTHstage = tiledlist.stage_details.Stage;
             mergedObject.Journey_Name = tiledlist.stage_details.Journey_Name;
             mergedObject.tiledlist = angular.copy(tiledlist);
+            
             apiService.getDthlinkRes(mergedObject).then( function (response) {
 
                 if(response.data.session_object)
                     $rootScope.session_object = response.data.session_object;
                 angular.forEach(response.data.tiledlist, function(value, key) {
-                    console.log(value);
+                    // console.log(value);
+
                     if(value.type=="DTHyperlink")
                     {
-                        // if($scope.uploadimages.length>0)
-                        //     response.data.tiledlist[0]['uploadimages']=$scope.uploadimages;
-                        $scope.uploadimages=[];
+                        
+                        if($scope.uploadimages.length>0)
+                            response.data.tiledlist[0]['uploadimages']=$scope.uploadimages;
+                      
                         $rootScope.DthResponse(0,response.data);
+                        $scope.uploadimages=[];
                         console.log(response.data);
                     }
                     if(value.type=="order_status")
@@ -5061,13 +5238,20 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                     }
                     if(value.type=="text")
                     {
+                        if($scope.uploadimages.length>0)
+                            response.data.tiledlist[0]['uploadimages']=$scope.uploadimages;
                         $rootScope.pushSystemMsg(0,response.data);
+                        $scope.uploadimages=[];
                     }
                     if(value.type=="html_form")
                     {
                         response.data.tiledlist[0].form_data.DTHlink = response.data.tiledlist[0].stage_details.DT[0];
                         response.data.tiledlist[0].form_data.DTHstage = response.data.tiledlist[0].stage_details.Stage;
                         $rootScope.pushSystemMsg(0,response.data);
+                        $timeout(function(){
+                            var lindex=$rootScope.chatlist.length-1;
+                            $(".hselect"+lindex).val("");
+                        },500);
                     }
                     $rootScope.showMsgLoader = false;
                 });
@@ -5100,12 +5284,6 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                     {
                         $rootScope.pushSystemMsg(0,response.data);
                     }
-                    if(value.type=="html_form")
-                    {
-                        response.data.tiledlist[0].form_data.DTHlink = response.data.tiledlist[0].stage_details.DT[0];
-                        response.data.tiledlist[0].form_data.DTHstage = response.data.tiledlist[0].stage_details.Stage;
-                        $rootScope.pushSystemMsg(0,response.data);
-                    }
                     $rootScope.showMsgLoader = false;
                 });
             });
@@ -5134,12 +5312,6 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                     {
                         $rootScope.pushSystemMsg(0,response.data);
                     }
-                    if(value.type=="html_form")
-                    {
-                        response.data.tiledlist[0].form_data.DTHlink = response.data.tiledlist[0].stage_details.DT[0];
-                        response.data.tiledlist[0].form_data.DTHstage = response.data.tiledlist[0].stage_details.Stage;
-                        $rootScope.pushSystemMsg(0,response.data);
-                    }
                     $rootScope.showMsgLoader = false;
                 });
             });
@@ -5165,6 +5337,10 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                         response.data.tiledlist[0].form_data.DTHlink = response.data.tiledlist[0].stage_details.DT[0];
                         response.data.tiledlist[0].form_data.DTHstage = response.data.tiledlist[0].stage_details.Stage;
                         $rootScope.pushSystemMsg(0,response.data);
+                        $timeout(function(){
+                            var lindex=$rootScope.chatlist.length-1;
+                            $(".hselect"+lindex).val("");
+                        },500);
                     }
                     $rootScope.showMsgLoader = false;
                 });
@@ -5233,18 +5409,19 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
         chrgarr = chrgstr.split(" ");
 		var i_ind = $rootScope.chatlist[$rootScope.chatlist.length-1].id;
 		////console.log(chrgarr);
-		if(chrgstr.includes('General schedule of features & charges') || chrgstr.includes('gsfc') || chrgstr.includes('gsfc final'))
-			chargefound=false;
-		else if(chrgstr.includes('average monthly balance') ) {
-			////console.log("inside amb");
-			chargefound=true;
-		}
-		else if(chrgstr.includes('minimum balance') || chrgstr.includes('min balance') || chrgstr.includes('min bal')) {
-			////console.log("inside amb");
-			chargefound=true;
-		}
-		else {
-			c_index=_.findIndex(chrgarr, function(o) { return o == 'charges' || o == 'charge' || o == 'chrg' ||  o == 'chrgs' || o=='amb'; });
+		// if(chrgstr.includes('find branch') || chrgstr.includes('branch') || chrgstr.includes('find branch'))
+		// 	chargefound=false;
+		// else if(chrgstr.includes('average monthly balance') ) {
+		// 	////console.log("inside amb");
+		// 	chargefound=true;
+		// }
+		// else if(chrgstr.includes('minimum balance') || chrgstr.includes('min balance') || chrgstr.includes('min bal')) {
+		// 	////console.log("inside amb");
+		// 	chargefound=true;
+		// }
+		// else 
+        {
+			c_index=_.findIndex(chrgarr, function(o) { return o == 'branches' || o == 'branch' || o == 'brnch' ||  o == 'brnchs'; });
 			//if((chrgstr.includes("charges ") || chrgstr.includes(" charges") || chrgstr.includes(" charges ") || chrgstr.includes("charge ") || chrgstr.includes(" charge") || chrgstr.includes(" charge ") || chrgstr.includes(" chrg") || chrgstr.includes(" chrg ") || chrgstr.includes(" chrgs") || chrgstr.includes(" chrgs ")) && id !='SYS_CHARGE_JOURNEY') 
 			if(c_index > -1)
 			{
@@ -5327,6 +5504,8 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
                             ////console.log(value);
 							if(value.unanswered) {
 								unanstag=1;
+                                var fmsg = $scope.getfailuremsg();
+                                decryptedData.tiledlist[0].Text=fmsg.msg;
 							}
                             if(value.type=="text")
                             { 
@@ -5421,6 +5600,13 @@ myApp.controller('ChatCtrl', function ($scope, $rootScope,TemplateService,livech
 								}
                                 else {
 									$rootScope.pushSystemMsg(0,decryptedData);
+                                    
+
+                                    $timeout(function(){
+                                        var lindex=$rootScope.chatlist.length-1;
+                                        $(".hselect"+lindex).val("");
+                                    },500);
+                                    
 								}
                                 $rootScope.showMsgLoader = false;
                             }

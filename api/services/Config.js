@@ -110,6 +110,7 @@ var models = {
         if (extension == "jpeg") {
             extension = "jpg";
         }
+        filename = ".tmp\\uploads\\"+filename;
         var newFilename = id + "." + extension;
 
         var writestream = gfs.createWriteStream({

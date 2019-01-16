@@ -11,7 +11,36 @@ myApp.filter('myFilter', function () {
     };
 
 });
-
+myApp.filter('underscoreless', function () {
+  return function (input) {
+      return input.replace(/_/g, ' ');
+  };
+});
+myApp.filter('uploadpath', function () {
+  console.log("in upload !!!!!!!!!!!")
+  return function (input, width, height, style) {
+    console.log("in upload !!!!!!!!!!!")
+    var other = "";
+    var imgpath = "https://cingulariti.in:9005/api/upload/readFile";
+    if (width && width !== "") {
+      other += "&width=" + width;
+    }
+    if (height && height !== "") {
+      other += "&height=" + height;
+    }
+    if (style && style !== "") {
+      other += "&style=" + style;
+    }
+    if (input) {
+      console.log("@@@@@@@", input)
+      // if (input.indexOf('https://') == -1) {
+      return imgpath + "?file=" + input + other;
+      // } else {
+      // return input;
+      // }
+    }
+  };
+});
 myApp.filter('indianCurrency', function () {
   return function (getNumber) {
     if (!isNaN(getNumber)) {
